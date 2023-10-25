@@ -62,4 +62,11 @@ NodoABB<T, menor, igual>::NodoABB(T dato) {
     hijo_izquierdo = nullptr;
 }
 
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+NodoABB<T, menor, igual>::~NodoABB() {
+    padre = nullptr;
+    hijo_derecho = nullptr;
+    hijo_izquierdo = nullptr;
+}
+
 #endif
