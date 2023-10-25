@@ -54,4 +54,12 @@ public:
     ~NodoABB();
 };
 
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+NodoABB<T, menor, igual>::NodoABB(T dato) {
+    this->dato = dato;
+    padre = nullptr;
+    hijo_derecho = nullptr;
+    hijo_izquierdo = nullptr;
+}
+
 #endif
