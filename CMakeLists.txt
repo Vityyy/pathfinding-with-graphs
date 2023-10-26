@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.22)
-project(ayp2_plantilla_tp_grupal_2c2023)
+project(TP3_Grupo_Nullptrs)
 
 set(CMAKE_C_STANDARD 23)
 
@@ -13,7 +13,7 @@ include_directories(include)
 include_directories(src)
 include_directories(bGVjdG9y)
 
-add_executable(ayp2_plantilla_tp_grupal_2c2023
+add_executable(TP3_Grupo_Nullptrs
         src/Placa.cpp
         bGVjdG9y/bGVjdG9y.cpp
         bGVjdG9y/ZGVjb2Rl.cpp
