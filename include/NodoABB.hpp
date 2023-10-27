@@ -104,7 +104,7 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
         hijo_derecho->metodo();
     }
 
-    metodo();
+    this->metodo();
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
