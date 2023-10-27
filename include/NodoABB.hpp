@@ -121,6 +121,19 @@ void NodoABB<T, menor, igual>::preorder(std::vector<T> &datos) {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+void NodoABB<T, menor, igual>::postorder(std::vector<T> &datos) {
+    if (hijo_izquierdo != nullptr) {
+        hijo_izquierdo->postorder(datos);
+    }
+
+    if (hijo_derecho != nullptr) {
+        hijo_derecho->postorder(datos);
+    }
+
+    datos.push_back(dato);
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     if (hijo_izquierdo != nullptr) {
         hijo_izquierdo->metodo();
