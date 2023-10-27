@@ -76,4 +76,9 @@ ABB<T, menor, igual>::ABB() {
     cantidad_datos = 0;
 }
 
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+bool ABB<T, menor, igual>::consulta(T dato) {
+    return raiz->consulta(dato);
+}
+
 #endif
