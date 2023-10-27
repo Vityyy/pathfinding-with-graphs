@@ -9,9 +9,9 @@ class NodoABB {
 
 private:
     T dato{};
-    NodoABB<T, menor, igual>* padre;
-    NodoABB<T, menor, igual>* hijo_izquierdo;
-    NodoABB<T, menor, igual>* hijo_derecho;
+    NodoABB<T, menor, igual> *padre;
+    NodoABB<T, menor, igual> *hijo_izquierdo;
+    NodoABB<T, menor, igual> *hijo_derecho;
 public:
     // Constructor.
     NodoABB(T dato);
@@ -24,7 +24,7 @@ public:
     // Pre: -
     // Post: Elimina el dato del árbol y devuelve la nueva raiz, de haberla.
     // NOTA: Ya se debería haber revisado si el dato está o no.
-    NodoABB<T, menor, igual>* baja(T dato_bajar);
+    NodoABB<T, menor, igual> *baja(T dato_bajar);
 
     // Pre: -
     // Post: Devuelve true si el dato está en el subárbol.
@@ -32,19 +32,19 @@ public:
 
     // Pre: -
     // Post: Carga los datos, respetando el recorrido inorder.
-    void inorder(std::vector<T>& datos);
+    void inorder(std::vector<T> &datos);
 
     // Pre: -
     // Post: Carga los datos, respetando el recorrido preorder.
-    void preorder(std::vector<T>& datos);
+    void preorder(std::vector<T> &datos);
 
     // Pre: -
     // Post: Carga los datos, respetando el recorrido postorder.
-    void postorder(std::vector<T>& datos);
+    void postorder(std::vector<T> &datos);
 
     // Pre: -
     // Post: Carga los datos, respetando el recorrido en ancho.
-    void ancho(std::queue<NodoABB<T, menor, igual>*>& nodos, std::vector<T>& datos);
+    void ancho(std::queue<NodoABB<T, menor, igual> *> &nodos, std::vector<T> &datos);
 
     // Pre: -
     // Post: Ejecuta el método/función en el subárbol.
@@ -63,14 +63,33 @@ NodoABB<T, menor, igual>::NodoABB(T dato) {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+void NodoABB<T, menor, igual>::alta(T dato_insertar) {
+    if (menor(dato_insertar, dato)) {
+        if (hijo_izquierdo != nullptr) {
+            hijo_izquierdo->alta(dato_insertar);
+        } else {
+            hijo_izquierdo = new NodoABB<T, menor, igual>(dato_insertar);
+            hijo_izquierdo->padre = this;
+        }
+    } else {
+        if (hijo_derecho != nullptr) {
+            hijo_derecho->alta(dato_insertar);
+        } else {
+            hijo_derecho = new NodoABB<T, menor, igual>(dato_insertar);
+            hijo_derecho->padre = this;
+        }
+    }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::inorder(std::vector<T> &datos) {
-    if(hijo_izquierdo != nullptr){
+    if (hijo_izquierdo != nullptr) {
         hijo_izquierdo->inorder(datos);
     }
 
     datos.push_back(dato);
 
-    if(hijo_derecho != nullptr){
+    if (hijo_derecho != nullptr) {
         hijo_derecho->inorder(datos);
     }
 }
