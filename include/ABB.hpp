@@ -10,7 +10,7 @@ class ABB_exception : public std::exception {
 template<typename T, bool menor(T, T), bool igual(T, T)>
 class ABB {
 private:
-    NodoABB<T, menor, igual>* raiz;
+    NodoABB<T, menor, igual> *raiz;
     std::size_t cantidad_datos;
 public:
     // Constructor.
@@ -61,13 +61,19 @@ public:
     bool vacio();
 
     // El constructor de copia está deshabilitado.
-    ABB(const ABB& abb) = delete;
+    ABB(const ABB &abb) = delete;
 
     // El operador = (asignación) está deshabilitado.
-    void operator=(const ABB& abb) = delete;
+    void operator=(const ABB &abb) = delete;
 
     // Destructor.
     ~ABB();
 };
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+ABB<T, menor, igual>::ABB() {
+    raiz = nullptr;
+    cantidad_datos = 0;
+}
 
 #endif
