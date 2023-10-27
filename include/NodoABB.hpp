@@ -82,6 +82,19 @@ void NodoABB<T, menor, igual>::alta(T dato_insertar) {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+bool NodoABB<T, menor, igual>::consulta(T dato_consultar) {
+    if (igual(dato_consultar, dato)) {
+        return true;
+    }
+
+    if (menor(dato_consultar, dato)) {
+        return hijo_izquierdo->consulta(dato_consultar);
+    }
+
+    return hijo_derecho->consulta(dato_consultar);
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::inorder(std::vector<T> &datos) {
     if (hijo_izquierdo != nullptr) {
         hijo_izquierdo->inorder(datos);
