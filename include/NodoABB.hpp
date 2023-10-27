@@ -421,8 +421,8 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     if (hijo_derecho != nullptr) {
         hijo_derecho->metodo();
     }
-
-    this->metodo();
+    
+    metodo();
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
