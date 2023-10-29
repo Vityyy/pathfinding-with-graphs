@@ -166,6 +166,8 @@ std::vector<T> ABB<T, menor, igual>::ancho() {
         nodo_actual->ancho(nodos, datos);
         nodos.pop();
     }
+
+    return datos;
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
