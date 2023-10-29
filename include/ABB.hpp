@@ -123,6 +123,17 @@ std::vector<T> ABB<T, menor, igual>::preorder() {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::vector<T> ABB<T, menor, igual>::postorder() {
+    if (vacio()) {
+        throw ABB_exception();
+    }
+
+    std::vector<T> datos;
+    raiz->postorder(datos);
+    return datos;
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 bool ABB<T, menor, igual>::vacio() {
     return cantidad_datos == 0;
 }
