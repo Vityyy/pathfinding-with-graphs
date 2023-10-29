@@ -83,6 +83,10 @@ bool ABB<T, menor, igual>::consulta(T dato) {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 std::vector<T> ABB<T, menor, igual>::inorder() {
+    if (vacio()) {
+        throw ABB_exception();
+    }
+    
     std::vector<T> datos;
     raiz->inorder(datos);
     return datos;
