@@ -88,10 +88,18 @@ bool NodoABB<T, menor, igual>::consulta(T dato_consultar) {
     }
 
     if (menor(dato_consultar, dato)) {
-        return hijo_izquierdo->consulta(dato_consultar);
+        if (hijo_izquierdo != nullptr) {
+            return hijo_izquierdo->consulta(dato_consultar);
+        }
+
+        return false;
     }
 
-    return hijo_derecho->consulta(dato_consultar);
+    if (hijo_derecho != nullptr) {
+        return hijo_derecho->consulta(dato_consultar);
+    }
+
+    return false;
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
