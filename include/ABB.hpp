@@ -71,15 +71,6 @@ public:
 };
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void ABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
-    if (vacio()) {
-        throw ABB_exception();
-    }
-
-    raiz->ejecutar(metodo);
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 ABB<T, menor, igual>::ABB() {
     raiz = nullptr;
     cantidad_datos = 0;
@@ -162,6 +153,15 @@ std::vector<T> ABB<T, menor, igual>::ancho() {
         nodo_actual->ancho(nodos, datos);
         nodos.pop();
     }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+void ABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
+    if (vacio()) {
+        throw ABB_exception();
+    }
+
+    raiz->ejecutar(metodo);
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
