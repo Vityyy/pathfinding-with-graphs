@@ -113,11 +113,12 @@ std::vector<T> ABB<T, menor, igual>::inorder() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 std::vector<T> ABB<T, menor, igual>::preorder() {
+    std::vector<T> datos{};
+
     if (vacio()) {
-        throw ABB_exception();
+        return datos;
     }
 
-    std::vector<T> datos;
     raiz->preorder(datos);
     return datos;
 }
