@@ -156,4 +156,23 @@ bool ABB<T, menor, igual>::vacio() {
     return cantidad_datos == 0;
 }
 
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+ABB<T, menor, igual>::~ABB() {
+    std::vector<T> datos;
+    std::queue<NodoABB<T, menor, igual> *> nodos;
+    nodos.push(raiz);
+
+    NodoABB<T, menor, igual> *nodo_actual;
+    while (!nodos.empty()) {
+        nodo_actual = nodos.front();
+        nodo_actual->ancho(nodos, datos);
+        nodos.pop();
+        delete nodo_actual;
+    }
+
+    nodo_actual = nullptr;
+    raiz = nullptr;
+    cantidad_datos = 0;
+}
+
 #endif
