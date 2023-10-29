@@ -134,6 +134,24 @@ std::vector<T> ABB<T, menor, igual>::postorder() {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::vector<T> ABB<T, menor, igual>::ancho() {
+    if (vacio()) {
+        throw ABB_exception();
+    }
+
+    std::vector<T> datos;
+    std::queue<NodoABB<T, menor, igual> *> nodos;
+    nodos.push(raiz);
+
+    NodoABB<T, menor, igual> *nodo_actual;
+    while (!nodos.empty()) {
+        nodo_actual = nodos.front();
+        nodo_actual->ancho(nodos, datos);
+        nodos.pop();
+    }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 bool ABB<T, menor, igual>::vacio() {
     return cantidad_datos == 0;
 }
