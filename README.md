@@ -6,7 +6,7 @@ Trabajo Práctico Grupal de Algoritmos y Programación 2 2c2023.
 
 1. BERSI, Valentín - 110749 - vbersi@fi.uba.ar
 2. RAMIREZ, Ignacio - 111167 - igramirez@fi.uba.ar
-3. APELLIDO, Nombre - Padron - Mail_FIUBA
+3. SASSONE IRRAZABAL, Camilo - 111135 - csassone@fi.uba.ar
 4. APELLIDO, Nombre - Padron - Mail_FIUBA
 
 ### Corrector asignado:
