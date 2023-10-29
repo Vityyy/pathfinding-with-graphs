@@ -76,12 +76,27 @@ ABB<T, menor, igual>::ABB() {
     cantidad_datos = 0;
 }
 
+template<typename T, bool (menor)(T, T), bool (igual)(T, T)>
+void ABB<T, menor, igual>::alta(T dato) {
+    if (consulta(dato)) {
+        throw ABB_exception();
+    }
+
+    if (vacio()) {
+        raiz = new NodoABB<T, menor, igual>(dato);
+    } else {
+        raiz->alta(dato);
+    }
+
+    cantidad_datos++;
+}
+
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 bool ABB<T, menor, igual>::consulta(T dato) {
     if (vacio()) {
         throw ABB_exception();
     }
-    
+
     return raiz->consulta(dato);
 }
 
@@ -90,7 +105,7 @@ std::vector<T> ABB<T, menor, igual>::inorder() {
     if (vacio()) {
         throw ABB_exception();
     }
-    
+
     std::vector<T> datos;
     raiz->inorder(datos);
     return datos;
