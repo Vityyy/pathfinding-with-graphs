@@ -78,6 +78,10 @@ ABB<T, menor, igual>::ABB() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 bool ABB<T, menor, igual>::consulta(T dato) {
+    if (vacio()) {
+        throw ABB_exception();
+    }
+    
     return raiz->consulta(dato);
 }
 
