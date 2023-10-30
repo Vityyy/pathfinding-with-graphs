@@ -92,6 +92,19 @@ void ABB<T, menor, igual>::alta(T dato) {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+void ABB<T, menor, igual>::baja(T dato) {
+    if (consulta(dato)) {
+        NodoABB<T, menor, igual> *baja = raiz->baja(dato);
+
+        if (baja != nullptr || cantidad_datos == 1) {
+            raiz = baja;
+        }
+
+        cantidad_datos--;
+    }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 bool ABB<T, menor, igual>::consulta(T dato) {
     if (vacio()) {
         throw ABB_exception();
