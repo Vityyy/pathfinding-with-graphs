@@ -47,11 +47,11 @@ private:
 
     // Pre: padre == nullptr
     // Pos: Elimina la raiz y devuelve la nueva raiz.
-    NodoABB<T, menor, igual> *baja_raiz(T dato_bajar);
+    NodoABB<T, menor, igual> *baja_raiz();
 
     // Pre: padre != nullptr
     // Pos: elimina el nodo
-    void baja_interna(T dato_bajar);
+    void baja_interna();
 
 public:
     // Constructor.
@@ -194,7 +194,7 @@ void NodoABB<T, menor, igual>::reemplazar(NodoABB<T, menor, igual> *nodo_reempla
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz(T dato_bajar) {
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
     switch (cantidad_hijos()) {
         case SIN_HIJOS:
             delete this;
@@ -238,7 +238,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz(T dato_bajar) {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::baja_interna(T dato_bajar) {
+void NodoABB<T, menor, igual>::baja_interna() {
     switch (cantidad_hijos()) {
         case SIN_HIJOS:
             if (es_hijo_izquierdo()) {
@@ -332,10 +332,10 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja(T dato_bajar) {
     }
 
     if (padre == nullptr) {
-        return baja_raiz(dato_bajar);
+        return baja_raiz();
     }
 
-    baja_interna(dato_bajar);
+    baja_interna();
     return nullptr;
 }
 
