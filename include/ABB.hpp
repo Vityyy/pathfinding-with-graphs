@@ -158,12 +158,7 @@ bool ABB<T, menor, igual>::vacio() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 ABB<T, menor, igual>::~ABB() {
-    std::vector<T> datos_arbol = postorder();
-
-    while (!datos_arbol.empty()) {
-        baja(datos_arbol[0]);
-        datos_arbol.erase(datos_arbol.begin());
-    }
+    delete raiz;
 }
 
 #endif
