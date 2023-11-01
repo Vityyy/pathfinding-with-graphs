@@ -459,45 +459,6 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::postorder(std::vector<T> &datos) {
-    if (hijo_izquierdo != nullptr) {
-        hijo_izquierdo->postorder(datos);
-    }
-
-    if (hijo_derecho != nullptr) {
-        hijo_derecho->postorder(datos);
-    }
-
-    datos.push_back(dato);
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::ancho(std::queue<NodoABB<T, menor, igual> *> &nodos, std::vector<T> &datos) {
-    datos.push_back(dato);
-
-    if (hijo_izquierdo != nullptr) {
-        nodos.push(hijo_izquierdo);
-    }
-
-    if (hijo_derecho != nullptr) {
-        nodos.push(hijo_derecho);
-    }
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
-    if (hijo_izquierdo != nullptr) {
-        hijo_izquierdo->ejecutar(metodo);
-    }
-
-    if (hijo_derecho != nullptr) {
-        hijo_derecho->ejecutar(metodo);
-    }
-    
-    metodo();
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual>::~NodoABB() {
     padre = nullptr;
     delete hijo_izquierdo;
