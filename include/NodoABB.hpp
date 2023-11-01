@@ -428,6 +428,8 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual>::~NodoABB() {
     padre = nullptr;
+    delete hijo_izquierdo;
+    delete hijo_derecho;
     hijo_derecho = nullptr;
     hijo_izquierdo = nullptr;
 }
