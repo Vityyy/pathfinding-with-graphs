@@ -205,12 +205,14 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz(T dato_bajar) {
             if (hijo_izquierdo != nullptr) {
                 hijo_izquierdo->padre = nullptr;
                 nueva_raiz = hijo_izquierdo;
+                hijo_izquierdo = nullptr;
                 delete this;
                 return nueva_raiz;
             }
 
             hijo_derecho->padre = nullptr;
             nueva_raiz = hijo_derecho;
+            hijo_derecho = nullptr;
             delete this;
             return nueva_raiz;
 
@@ -228,6 +230,8 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz(T dato_bajar) {
 
             reemplazar(nodo_reemplazo);
 
+            hijo_izquierdo = nullptr;
+            hijo_derecho = nullptr;
             delete this;
             return nodo_reemplazo;
     }
@@ -265,6 +269,8 @@ void NodoABB<T, menor, igual>::baja_interna(T dato_bajar) {
                 hijo_derecho->padre = padre;
             }
 
+            hijo_izquierdo = nullptr;
+            hijo_derecho = nullptr;
             delete this;
             break;
 
@@ -282,6 +288,8 @@ void NodoABB<T, menor, igual>::baja_interna(T dato_bajar) {
 
             reemplazar(nodo_reemplazo);
 
+            hijo_derecho = nullptr;
+            hijo_izquierdo = nullptr;
             delete this;
     }
 }
