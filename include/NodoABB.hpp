@@ -23,7 +23,7 @@ private:
 
     // Pre: nodo != nullptr
     // Pos: devuelve el mínimo del subarbol
-    NodoABB<T, menor, igual> *minimo();
+    NodoABB<T, menor, igual> *minimo(NodoABB<T, menor, igual> *nodo);
 
     // Pre: ~
     // Pos: retorna el nodo sucesor al nodo que contiene dato
@@ -32,18 +32,6 @@ private:
     // Pre: ~
     // Pos: retorna true si el nodo es hijo izquierdo de su nodo padre
     bool es_hijo_izquierdo();
-
-    // Pre: el nodo es hoja
-    // Pos: desconecta al nodo de su padre
-    void desconectar();
-
-    // Pre: el nodo tiene un hijo
-    // Pos: conecta al hijo correspondiente del nodo con su padre, asignando el hijo correcto al padre
-    void bypass();
-
-    // Pre: ~
-    // Pos: reemplaza el nodo por nodo_reemplazo
-    void reemplazar(NodoABB<T, menor, igual> *nodo_reemplazo);
 
     // Pre: padre == nullptr
     // Pos: Elimina la raiz y devuelve la nueva raiz.
@@ -109,18 +97,18 @@ size_t NodoABB<T, menor, igual>::cantidad_hijos() {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::minimo() {
-    if (hijo_izquierdo != nullptr) {
-        return hijo_izquierdo->minimo();
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::minimo(NodoABB<T, menor, igual> *nodo) {
+    if (nodo->hijo_izquierdo != nullptr) {
+        return nodo->minimo(nodo->hijo_izquierdo);
     }
 
-    return this;
+    return nodo;
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::sucesor() {
     if (hijo_derecho != nullptr) {
-        return hijo_derecho->minimo();
+        return minimo(hijo_derecho);
     }
 
     NodoABB<T, menor, igual> *padre_aux = padre;
@@ -221,14 +209,34 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
 
             switch (nodo_reemplazo->cantidad_hijos()) {
                 case SIN_HIJOS:
-                    nodo_reemplazo->desconectar();
+                    if (nodo_reemplazo->es_hijo_izquierdo()) {
+                        nodo_reemplazo->padre->hijo_izquierdo = nullptr;
+                    } else {
+                        nodo_reemplazo->padre->hijo_derecho = nullptr;
+                    }
                     break;
 
                 default:
-                    nodo_reemplazo->bypass();
+                    if (nodo_reemplazo->es_hijo_izquierdo()) {
+                        nodo_reemplazo->padre->hijo_izquierdo = nodo_reemplazo->hijo_derecho;
+                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
+                    } else {
+                        nodo_reemplazo->padre->hijo_derecho = nodo_reemplazo->hijo_derecho;
+                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
+                    }
             }
 
-            reemplazar(nodo_reemplazo);
+            nodo_reemplazo->padre = nullptr;
+            nodo_reemplazo->hijo_derecho = hijo_derecho;
+            nodo_reemplazo->hijo_izquierdo = hijo_izquierdo;
+
+            if (nodo_reemplazo->hijo_izquierdo != nullptr) {
+                nodo_reemplazo->hijo_izquierdo->padre = nodo_reemplazo;
+            }
+
+            if (nodo_reemplazo->hijo_derecho != nullptr) {
+                nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo;
+            }
 
             hijo_izquierdo = nullptr;
             hijo_derecho = nullptr;
@@ -279,14 +287,39 @@ void NodoABB<T, menor, igual>::baja_interna() {
 
             switch (nodo_reemplazo->cantidad_hijos()) {
                 case SIN_HIJOS:
-                    nodo_reemplazo->desconectar();
-                    break;
+                    if (nodo_reemplazo->es_hijo_izquierdo()) {
+                        nodo_reemplazo->padre->hijo_izquierdo = nullptr;
+                    } else {
+                        nodo_reemplazo->padre->hijo_derecho = nullptr;
+                    }
 
                 default:
-                    nodo_reemplazo->bypass();
+                    if (nodo_reemplazo->es_hijo_izquierdo()) {
+                        nodo_reemplazo->padre->hijo_izquierdo = nodo_reemplazo->hijo_derecho;
+                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
+                    } else {
+                        nodo_reemplazo->padre->hijo_derecho = nodo_reemplazo->hijo_derecho;
+                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
+                    }
             }
 
-            reemplazar(nodo_reemplazo);
+            nodo_reemplazo->padre = padre;
+            nodo_reemplazo->hijo_derecho = hijo_derecho;
+            nodo_reemplazo->hijo_izquierdo = hijo_izquierdo;
+
+            if (es_hijo_izquierdo()) {
+                nodo_reemplazo->padre->hijo_izquierdo = nodo_reemplazo;
+            } else {
+                nodo_reemplazo->padre->hijo_derecho = nodo_reemplazo;
+            }
+
+            if (nodo_reemplazo->hijo_izquierdo != nullptr) {
+                nodo_reemplazo->hijo_izquierdo->padre = nodo_reemplazo;
+            }
+
+            if (nodo_reemplazo->hijo_derecho != nullptr) {
+                nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo;
+            }
 
             hijo_derecho = nullptr;
             hijo_izquierdo = nullptr;
@@ -402,39 +435,6 @@ void NodoABB<T, menor, igual>::postorder(std::vector<T> &datos) {
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::ancho(std::queue<NodoABB<T, menor, igual> *> &nodos, std::vector<T> &datos) {
     datos.push_back(dato);
-    nodos.push(hijo_izquierdo);
-    nodos.push(hijo_derecho);
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
-    if (hijo_izquierdo != nullptr) {
-        hijo_izquierdo->ejecutar(metodo);
-    }
-
-    if (hijo_derecho != nullptr) {
-        hijo_derecho->ejecutar(metodo);
-    }
-
-    metodo();
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::postorder(std::vector<T> &datos) {
-    if (hijo_izquierdo != nullptr) {
-        hijo_izquierdo->postorder(datos);
-    }
-
-    if (hijo_derecho != nullptr) {
-        hijo_derecho->postorder(datos);
-    }
-
-    datos.push_back(dato);
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::ancho(std::queue<NodoABB<T, menor, igual> *> &nodos, std::vector<T> &datos) {
-    datos.push_back(dato);
 
     if (hijo_izquierdo != nullptr) {
         nodos.push(hijo_izquierdo);
@@ -454,7 +454,7 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     if (hijo_derecho != nullptr) {
         hijo_derecho->ejecutar(metodo);
     }
-    
+
     metodo();
 }
 
