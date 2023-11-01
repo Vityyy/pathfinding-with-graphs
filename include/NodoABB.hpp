@@ -415,11 +415,11 @@ void NodoABB<T, menor, igual>::ancho(std::queue<NodoABB<T, menor, igual> *> &nod
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     if (hijo_izquierdo != nullptr) {
-        hijo_izquierdo->metodo();
+        hijo_izquierdo->ejecutar(metodo);
     }
 
     if (hijo_derecho != nullptr) {
-        hijo_derecho->metodo();
+        hijo_derecho->ejecutar(metodo);
     }
     
     metodo();
