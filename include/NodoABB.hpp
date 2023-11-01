@@ -221,34 +221,14 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
 
             switch (nodo_reemplazo->cantidad_hijos()) {
                 case SIN_HIJOS:
-                    if (nodo_reemplazo->es_hijo_izquierdo()) {
-                        nodo_reemplazo->padre->hijo_izquierdo = nullptr;
-                    } else {
-                        nodo_reemplazo->padre->hijo_derecho = nullptr;
-                    }
+                    nodo_reemplazo->desconectar();
                     break;
 
                 default:
-                    if (nodo_reemplazo->es_hijo_izquierdo()) {
-                        nodo_reemplazo->padre->hijo_izquierdo = nodo_reemplazo->hijo_derecho;
-                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
-                    } else {
-                        nodo_reemplazo->padre->hijo_derecho = nodo_reemplazo->hijo_derecho;
-                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
-                    }
+                    nodo_reemplazo->bypass();
             }
 
-            nodo_reemplazo->padre = nullptr;
-            nodo_reemplazo->hijo_derecho = hijo_derecho;
-            nodo_reemplazo->hijo_izquierdo = hijo_izquierdo;
-
-            if (nodo_reemplazo->hijo_izquierdo != nullptr) {
-                nodo_reemplazo->hijo_izquierdo->padre = nodo_reemplazo;
-            }
-
-            if (nodo_reemplazo->hijo_derecho != nullptr) {
-                nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo;
-            }
+            reemplazar(nodo_reemplazo);
 
             hijo_izquierdo = nullptr;
             hijo_derecho = nullptr;
@@ -299,39 +279,13 @@ void NodoABB<T, menor, igual>::baja_interna() {
 
             switch (nodo_reemplazo->cantidad_hijos()) {
                 case SIN_HIJOS:
-                    if (nodo_reemplazo->es_hijo_izquierdo()) {
-                        nodo_reemplazo->padre->hijo_izquierdo = nullptr;
-                    } else {
-                        nodo_reemplazo->padre->hijo_derecho = nullptr;
-                    }
+                    nodo_reemplazo->desconectar();
 
                 default:
-                    if (nodo_reemplazo->es_hijo_izquierdo()) {
-                        nodo_reemplazo->padre->hijo_izquierdo = nodo_reemplazo->hijo_derecho;
-                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
-                    } else {
-                        nodo_reemplazo->padre->hijo_derecho = nodo_reemplazo->hijo_derecho;
-                        nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo->padre;
-                    }
+                    nodo_reemplazo->bypass();
             }
 
-            nodo_reemplazo->padre = padre;
-            nodo_reemplazo->hijo_derecho = hijo_derecho;
-            nodo_reemplazo->hijo_izquierdo = hijo_izquierdo;
-
-            if (es_hijo_izquierdo()) {
-                nodo_reemplazo->padre->hijo_izquierdo = nodo_reemplazo;
-            } else {
-                nodo_reemplazo->padre->hijo_derecho = nodo_reemplazo;
-            }
-
-            if (nodo_reemplazo->hijo_izquierdo != nullptr) {
-                nodo_reemplazo->hijo_izquierdo->padre = nodo_reemplazo;
-            }
-
-            if (nodo_reemplazo->hijo_derecho != nullptr) {
-                nodo_reemplazo->hijo_derecho->padre = nodo_reemplazo;
-            }
+            reemplazar(nodo_reemplazo);
 
             hijo_derecho = nullptr;
             hijo_izquierdo = nullptr;
