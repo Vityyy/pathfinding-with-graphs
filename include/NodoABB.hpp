@@ -33,6 +33,18 @@ private:
     // Pos: retorna true si el nodo es hijo izquierdo de su nodo padre
     bool es_hijo_izquierdo();
 
+    // Pre: el nodo es hoja
+    // Pos: desconecta al nodo de su padre
+    void desconectar();
+
+    // Pre: el nodo tiene un hijo
+    // Pos: conecta al hijo correspondiente del nodo con su padre, asignando el hijo correcto al padre
+    void bypass();
+
+    // Pre: ~
+    // Pos: reemplaza el nodo por nodo_reemplazo
+    void reemplazar(NodoABB<T, menor, igual> *nodo_reemplazo);
+
     // Pre: padre == nullptr
     // Pos: Elimina la raiz y devuelve la nueva raiz.
     NodoABB<T, menor, igual> *baja_raiz();
