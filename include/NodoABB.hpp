@@ -37,6 +37,10 @@ private:
     // Pos: desconecta al nodo de su padre
     void desconectar();
 
+    //pre:
+    //post: desconecta a los hijos de su padre
+    void desconectar_hijos();
+
     // Pre: el nodo tiene un hijo
     // Pos: conecta al hijo correspondiente del nodo con su padre, asignando el hijo correcto al padre
     void bypass();
@@ -94,6 +98,7 @@ public:
     // Destructor.
     ~NodoABB();
 };
+
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
@@ -157,6 +162,12 @@ void NodoABB<T, menor, igual>::desconectar() {
     } else {
         padre->hijo_derecho = nullptr;
     }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+void NodoABB<T, menor, igual>::desconectar_hijos() {
+    hijo_izquierdo = nullptr;
+    hijo_derecho = nullptr;
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
@@ -230,8 +241,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
 
             reemplazar(nodo_reemplazo);
 
-            hijo_izquierdo = nullptr;
-            hijo_derecho = nullptr;
+            desconectar_hijos();
             delete this;
             return nodo_reemplazo;
     }
@@ -269,8 +279,7 @@ void NodoABB<T, menor, igual>::baja_interna() {
                 hijo_derecho->padre = padre;
             }
 
-            hijo_izquierdo = nullptr;
-            hijo_derecho = nullptr;
+            desconectar_hijos();
             delete this;
             break;
 
@@ -286,9 +295,7 @@ void NodoABB<T, menor, igual>::baja_interna() {
             }
 
             reemplazar(nodo_reemplazo);
-
-            hijo_derecho = nullptr;
-            hijo_izquierdo = nullptr;
+            desconectar_hijos();
             delete this;
     }
 }
