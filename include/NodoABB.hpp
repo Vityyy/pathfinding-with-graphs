@@ -216,14 +216,14 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
             if (hijo_izquierdo != nullptr) {
                 hijo_izquierdo->padre = nullptr;
                 nueva_raiz = hijo_izquierdo;
-                hijo_izquierdo = nullptr;
+                desconectar_hijos();
                 delete this;
                 return nueva_raiz;
             }
 
             hijo_derecho->padre = nullptr;
             nueva_raiz = hijo_derecho;
-            hijo_derecho = nullptr;
+            desconectar_hijos();
             delete this;
             return nueva_raiz;
 
