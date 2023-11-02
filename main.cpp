@@ -17,6 +17,7 @@ int main() {
 
     for (size_t i = 0; i < mensaje_descifrado.size(); i++) {
         delete mensaje_descifrado[i];
+        mensaje_descifrado[i] = nullptr;
     }
 
     return 0;
