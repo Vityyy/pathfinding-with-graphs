@@ -57,6 +57,8 @@ private:
     // Pos: elimina el nodo
     void baja_interna();
 
+    NodoABB<T, menor, igual> *baja_0_hijos();
+
 public:
     // Constructor.
     NodoABB(T dato);
@@ -208,8 +210,7 @@ template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
     switch (cantidad_hijos()) {
         case SIN_HIJOS:
-            delete this;
-            return nullptr;
+            baja_0_hijos();
 
         case UN_HIJO:
             NodoABB<T, menor, igual> *nueva_raiz;
@@ -251,13 +252,7 @@ template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::baja_interna() {
     switch (cantidad_hijos()) {
         case SIN_HIJOS:
-            if (es_hijo_izquierdo()) {
-                padre->hijo_izquierdo = nullptr;
-            } else {
-                padre->hijo_derecho = nullptr;
-            }
-
-            delete this;
+            baja_0_hijos();
             break;
 
         case UN_HIJO:
@@ -298,6 +293,20 @@ void NodoABB<T, menor, igual>::baja_interna() {
             desconectar_hijos();
             delete this;
     }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_0_hijos() {
+    if (padre != nullptr) {
+        if (es_hijo_izquierdo()) {
+            padre->hijo_izquierdo = nullptr;
+        } else {
+            padre->hijo_derecho = nullptr;
+        }
+    }
+
+    delete this;
+    return nullptr;
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
