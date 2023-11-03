@@ -59,6 +59,8 @@ private:
 
     NodoABB<T, menor, igual> *baja_0_hijos();
 
+    NodoABB<T, menor, igual> *baja_1_hijo();
+
 public:
     // Constructor.
     NodoABB(T dato);
@@ -100,7 +102,6 @@ public:
     // Destructor.
     ~NodoABB();
 };
-
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
@@ -213,20 +214,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
             baja_0_hijos();
 
         case UN_HIJO:
-            NodoABB<T, menor, igual> *nueva_raiz;
-            if (hijo_izquierdo != nullptr) {
-                hijo_izquierdo->padre = nullptr;
-                nueva_raiz = hijo_izquierdo;
-                desconectar_hijos();
-                delete this;
-                return nueva_raiz;
-            }
-
-            hijo_derecho->padre = nullptr;
-            nueva_raiz = hijo_derecho;
-            desconectar_hijos();
-            delete this;
-            return nueva_raiz;
+            baja_1_hijo();
 
         default:
             NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
@@ -253,30 +241,9 @@ void NodoABB<T, menor, igual>::baja_interna() {
     switch (cantidad_hijos()) {
         case SIN_HIJOS:
             baja_0_hijos();
-            break;
 
         case UN_HIJO:
-            if (hijo_izquierdo != nullptr) {
-                if (es_hijo_izquierdo()) {
-                    padre->hijo_izquierdo = hijo_izquierdo;
-                } else {
-                    padre->hijo_derecho = hijo_izquierdo;
-                }
-
-                hijo_izquierdo->padre = padre;
-            } else {
-                if (es_hijo_izquierdo()) {
-                    padre->hijo_izquierdo = hijo_derecho;
-                } else {
-                    padre->hijo_derecho = hijo_derecho;
-                }
-
-                hijo_derecho->padre = padre;
-            }
-
-            desconectar_hijos();
-            delete this;
-            break;
+            baja_1_hijo();
 
         default:
             NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
@@ -305,6 +272,48 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_0_hijos() {
         }
     }
 
+    delete this;
+    return nullptr;
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
+    if (padre == nullptr) {
+        NodoABB<T, menor, igual> *nueva_raiz;
+        if (hijo_izquierdo != nullptr) {
+            hijo_izquierdo->padre = nullptr;
+            nueva_raiz = hijo_izquierdo;
+            desconectar_hijos();
+            delete this;
+            return nueva_raiz;
+        }
+
+        hijo_derecho->padre = nullptr;
+        nueva_raiz = hijo_derecho;
+        desconectar_hijos();
+        delete this;
+        return nueva_raiz;
+    }
+
+    if (hijo_izquierdo != nullptr) {
+        if (es_hijo_izquierdo()) {
+            padre->hijo_izquierdo = hijo_izquierdo;
+        } else {
+            padre->hijo_derecho = hijo_izquierdo;
+        }
+
+        hijo_izquierdo->padre = padre;
+    } else {
+        if (es_hijo_izquierdo()) {
+            padre->hijo_izquierdo = hijo_derecho;
+        } else {
+            padre->hijo_derecho = hijo_derecho;
+        }
+
+        hijo_derecho->padre = padre;
+    }
+
+    desconectar_hijos();
     delete this;
     return nullptr;
 }
