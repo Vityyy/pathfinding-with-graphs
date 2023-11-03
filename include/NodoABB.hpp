@@ -61,6 +61,8 @@ private:
 
     NodoABB<T, menor, igual> *baja_1_hijo();
 
+    NodoABB<T, menor, igual> *baja_2_hijos();
+
 public:
     // Constructor.
     NodoABB(T dato);
@@ -217,22 +219,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
             baja_1_hijo();
 
         default:
-            NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
-
-            switch (nodo_reemplazo->cantidad_hijos()) {
-                case SIN_HIJOS:
-                    nodo_reemplazo->desconectar();
-                    break;
-
-                default:
-                    nodo_reemplazo->bypass();
-            }
-
-            reemplazar(nodo_reemplazo);
-
-            desconectar_hijos();
-            delete this;
-            return nodo_reemplazo;
+            baja_2_hijos();
     }
 }
 
@@ -246,19 +233,7 @@ void NodoABB<T, menor, igual>::baja_interna() {
             baja_1_hijo();
 
         default:
-            NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
-
-            switch (nodo_reemplazo->cantidad_hijos()) {
-                case SIN_HIJOS:
-                    nodo_reemplazo->desconectar();
-
-                default:
-                    nodo_reemplazo->bypass();
-            }
-
-            reemplazar(nodo_reemplazo);
-            desconectar_hijos();
-            delete this;
+            baja_2_hijos();
     }
 }
 
@@ -313,6 +288,42 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
         hijo_derecho->padre = padre;
     }
 
+    desconectar_hijos();
+    delete this;
+    return nullptr;
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
+    if (padre == nullptr) {
+        NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
+
+        switch (nodo_reemplazo->cantidad_hijos()) {
+            case SIN_HIJOS:
+                nodo_reemplazo->desconectar();
+                break;
+
+            default:
+                nodo_reemplazo->bypass();
+        }
+
+        reemplazar(nodo_reemplazo);
+
+        desconectar_hijos();
+        delete this;
+        return nodo_reemplazo;
+    }
+
+    NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
+
+    switch (nodo_reemplazo->cantidad_hijos()) {
+        case SIN_HIJOS:
+            nodo_reemplazo->desconectar();
+
+        default:
+            nodo_reemplazo->bypass();
+    }
+    reemplazar(nodo_reemplazo);
     desconectar_hijos();
     delete this;
     return nullptr;
