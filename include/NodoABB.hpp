@@ -51,17 +51,16 @@ private:
 
     // Pre: padre == nullptr
     // Pos: Elimina la raiz y devuelve la nueva raiz.
-    NodoABB<T, menor, igual> *baja_raiz();
-
-    // Pre: padre != nullptr
-    // Pos: elimina el nodo
-    void baja_interna();
 
     NodoABB<T, menor, igual> *baja_0_hijos();
 
     NodoABB<T, menor, igual> *baja_1_hijo();
 
     NodoABB<T, menor, igual> *baja_2_hijos();
+
+    // Pre: padre != nullptr
+    // Pos: elimina el nodo
+    void baja_interna();
 
 public:
     // Constructor.
@@ -210,34 +209,6 @@ void NodoABB<T, menor, igual>::reemplazar(NodoABB<T, menor, igual> *nodo_reempla
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_raiz() {
-    switch (cantidad_hijos()) {
-        case SIN_HIJOS:
-            baja_0_hijos();
-
-        case UN_HIJO:
-            baja_1_hijo();
-
-        default:
-            baja_2_hijos();
-    }
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::baja_interna() {
-    switch (cantidad_hijos()) {
-        case SIN_HIJOS:
-            baja_0_hijos();
-
-        case UN_HIJO:
-            baja_1_hijo();
-
-        default:
-            baja_2_hijos();
-    }
-}
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_0_hijos() {
     if (padre != nullptr) {
         if (es_hijo_izquierdo()) {
@@ -330,6 +301,20 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+void NodoABB<T, menor, igual>::baja_interna() {
+    switch (cantidad_hijos()) {
+        case SIN_HIJOS:
+            baja_0_hijos();
+
+        case UN_HIJO:
+            baja_1_hijo();
+
+        default:
+            baja_2_hijos();
+    }
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual>::NodoABB(T dato) {
     this->dato = dato;
     padre = nullptr;
@@ -365,11 +350,6 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja(T dato_bajar) {
     if (!igual(dato_bajar, dato) && hijo_derecho != nullptr) {
         return hijo_derecho->baja(dato_bajar);
     }
-
-    if (padre == nullptr) {
-        return baja_raiz();
-    }
-
     baja_interna();
     return nullptr;
 }
