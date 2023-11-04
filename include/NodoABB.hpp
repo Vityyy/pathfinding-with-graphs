@@ -60,7 +60,7 @@ private:
 
     // Pre: padre != nullptr
     // Pos: elimina el nodo
-    void baja_interna();
+    NodoABB<T, menor, igual> *baja_interna();
 
 public:
     // Constructor.
@@ -266,9 +266,9 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
-    if (padre == nullptr) {
-        NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
+    NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
 
+    if (padre == nullptr) {
         switch (nodo_reemplazo->cantidad_hijos()) {
             case SIN_HIJOS:
                 nodo_reemplazo->desconectar();
@@ -285,8 +285,6 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
         return nodo_reemplazo;
     }
 
-    NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
-
     switch (nodo_reemplazo->cantidad_hijos()) {
         case SIN_HIJOS:
             nodo_reemplazo->desconectar();
@@ -301,16 +299,16 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-void NodoABB<T, menor, igual>::baja_interna() {
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_interna() {
     switch (cantidad_hijos()) {
         case SIN_HIJOS:
-            baja_0_hijos();
+            return baja_0_hijos();
 
         case UN_HIJO:
-            baja_1_hijo();
+            return baja_1_hijo();
 
         default:
-            baja_2_hijos();
+            return baja_2_hijos();
     }
 }
 
@@ -350,8 +348,8 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja(T dato_bajar) {
     if (!igual(dato_bajar, dato) && hijo_derecho != nullptr) {
         return hijo_derecho->baja(dato_bajar);
     }
-    baja_interna();
-    return nullptr;
+
+    return baja_interna();
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
