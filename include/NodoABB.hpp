@@ -64,10 +64,6 @@ private:
     //Pos: elimina el nodo con dos hijos y, si el nodo era raíz, se devuelve la nueva raíz.
     NodoABB<T, menor, igual> *baja_2_hijos();
 
-    // Pre: ~
-    // Pos: se encarga de ejecutar el método indicado según la cantidad de hijos que tenga el nodo/raíz.
-    NodoABB<T, menor, igual> *baja_interna();
-
 public:
     // Constructor.
     NodoABB(T dato);
@@ -246,13 +242,11 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
         if (hijo_izquierdo != nullptr) {
             hijo_izquierdo->padre = nullptr;
             nueva_raiz = hijo_izquierdo;
-            desconectar_hijos();
-            delete this;
-            return nueva_raiz;
-        }
 
-        hijo_derecho->padre = nullptr;
-        nueva_raiz = hijo_derecho;
+        }else {
+            hijo_derecho->padre = nullptr;
+            nueva_raiz = hijo_derecho;
+        }
         desconectar_hijos();
         delete this;
         return nueva_raiz;
@@ -264,8 +258,8 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
         } else {
             padre->hijo_derecho = hijo_izquierdo;
         }
-
         hijo_izquierdo->padre = padre;
+
     } else {
         if (es_hijo_izquierdo()) {
             padre->hijo_izquierdo = hijo_derecho;
@@ -286,49 +280,25 @@ template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
     NodoABB<T, menor, igual> *nodo_reemplazo = sucesor();
 
-    if (padre == nullptr) {
-        switch (nodo_reemplazo->cantidad_hijos()) {
-            case SIN_HIJOS:
-                nodo_reemplazo->desconectar();
-                break;
-
-            default:
-                nodo_reemplazo->bypass();
-        }
-
-        reemplazar(nodo_reemplazo);
-
-        desconectar_hijos();
-        delete this;
-        return nodo_reemplazo;
-    }
-
     switch (nodo_reemplazo->cantidad_hijos()) {
         case SIN_HIJOS:
             nodo_reemplazo->desconectar();
+            break;
 
         default:
             nodo_reemplazo->bypass();
     }
+
     reemplazar(nodo_reemplazo);
     desconectar_hijos();
+
+    if (padre == nullptr) {
+        delete this;
+        return nodo_reemplazo;
+    }
+
     delete this;
     return nullptr;
-}
-
-
-template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_interna() {
-    switch (cantidad_hijos()) {
-        case SIN_HIJOS:
-            return baja_0_hijos();
-
-        case UN_HIJO:
-            return baja_1_hijo();
-
-        default:
-            return baja_2_hijos();
-    }
 }
 
 
@@ -372,7 +342,16 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja(T dato_bajar) {
         return hijo_derecho->baja(dato_bajar);
     }
 
-    return baja_interna();
+    switch (cantidad_hijos()) {
+        case SIN_HIJOS:
+            return baja_0_hijos();
+
+        case UN_HIJO:
+            return baja_1_hijo();
+
+        default:
+            return baja_2_hijos();
+    }
 }
 
 
