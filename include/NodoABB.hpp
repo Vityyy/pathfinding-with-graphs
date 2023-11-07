@@ -21,24 +21,24 @@ private:
     // Pos: retorna la cantidad de hijos que tiene un nodo
     size_t cantidad_hijos();
 
-    // Pre: nodo != nullptr
+    // Pre: ~
     // Pos: devuelve el mínimo del subarbol
-    NodoABB<T, menor, igual> *minimo(NodoABB<T, menor, igual> *nodo);
+    NodoABB<T, menor, igual> *minimo();
 
     // Pre: ~
-    // Pos: retorna el nodo sucesor al nodo que contiene dato
+    // Pos: retorna el nodo sucesor
     NodoABB<T, menor, igual> *sucesor();
 
     // Pre: ~
     // Pos: retorna true si el nodo es hijo izquierdo de su nodo padre
     bool es_hijo_izquierdo();
 
-    // Pre: el nodo es hoja
-    // Pos: desconecta al nodo de su padre
+    // Pre: el nodo es un nodo hoja
+    // Pos: desconecta al padre del nodo de su hijo correspondiente
     void desconectar();
 
-    //Pre: ~
-    //Pos: desconecta a los hijos de su padre
+    // Pre: ~
+    // Pos: desconecta a los hijos
     void desconectar_hijos();
 
     // Pre: el nodo tiene un hijo
@@ -104,7 +104,6 @@ public:
 };
 
 
-
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
     if (hijo_izquierdo != nullptr && hijo_derecho != nullptr) {
@@ -120,19 +119,19 @@ size_t NodoABB<T, menor, igual>::cantidad_hijos() {
 
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
-NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::minimo(NodoABB<T, menor, igual> *nodo) {
-    if (nodo->hijo_izquierdo != nullptr) {
-        return nodo->minimo(nodo->hijo_izquierdo);
+NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::minimo() {
+    if (hijo_izquierdo != nullptr) {
+        return hijo_izquierdo->minimo();
     }
 
-    return nodo;
+    return this;
 }
 
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::sucesor() {
     if (hijo_derecho != nullptr) {
-        return minimo(hijo_derecho);
+        return hijo_derecho->minimo();
     }
 
     NodoABB<T, menor, igual> *padre_aux = padre;
@@ -240,10 +239,11 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
             hijo_izquierdo->padre = nullptr;
             nueva_raiz = hijo_izquierdo;
 
-        }else {
+        } else {
             hijo_derecho->padre = nullptr;
             nueva_raiz = hijo_derecho;
         }
+        
         desconectar_hijos();
         delete this;
         return nueva_raiz;
