@@ -49,9 +49,6 @@ private:
     // Pos: reemplaza el nodo por nodo_reemplazo
     void reemplazar(NodoABB<T, menor, igual> *nodo_reemplazo);
 
-    // Pre: padre == nullptr
-    // Pos: elimina la raiz y devuelve la nueva raiz.
-
     //Pre: ~
     //Pos: elimina el nodo sin hijos y, si el nodo era raíz, se devuelve la nueva raíz.
     NodoABB<T, menor, igual> *baja_0_hijos();
