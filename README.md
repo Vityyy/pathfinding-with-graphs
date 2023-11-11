@@ -2,7 +2,7 @@
 
 Trabajo Práctico Grupal de Algoritmos y Programación 2 2c2023.
 
-### Integrantes del grupo NOMBRE_GRUPO:
+### Integrantes del grupo Nullptrs:
 
 1. BERSI, Valentín - 110749 - vbersi@fi.uba.ar
 2. RAMIREZ, Ignacio - 111167 - igramirez@fi.uba.ar
