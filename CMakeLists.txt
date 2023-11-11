@@ -15,6 +15,11 @@ include_directories(bGVjdG9y)
 
 add_executable(TP3_Grupo_Nullptrs
         src/Placa.cpp
+        src/Arma.cpp
+        src/Grafo.cpp
+        src/Floyd.cpp
+        src/Dijkstra.cpp
+        src/Matriz.cpp
         bGVjdG9y/bGVjdG9y.cpp
         bGVjdG9y/ZGVjb2Rl.cpp
         main.cpp
