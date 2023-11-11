@@ -14,6 +14,10 @@ include_directories(src)
 include_directories(bGVjdG9y)
 
 add_executable(TP3_Grupo_Nullptrs
+        include/ABB.hpp
+        include/CaminoMinimo.hpp
+        include/Heap.hpp
+        include/NodoABB.hpp
         src/Placa.cpp
         src/Arma.cpp
         src/Grafo.cpp
