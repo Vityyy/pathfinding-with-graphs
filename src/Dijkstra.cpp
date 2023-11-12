@@ -47,14 +47,13 @@ std::vector<size_t> Dijkstra::obtener_camino(size_t origen, size_t destino) {
     bool terminado = false;
     size_t actual = destino;
     while (!terminado) {
+        camino.insert(camino.begin(), actual);
         actual = recorrido[actual];
-        if (recorrido[actual] == origen || actual == origen) {
+        if (actual == origen) {
+            camino.insert(camino.begin(), origen);
             terminado = true;
         }
-        camino.insert(camino.begin(), actual);
     }
-    camino.insert(camino.begin(), origen);
-    camino.push_back(destino);
 
     return camino;
 }
