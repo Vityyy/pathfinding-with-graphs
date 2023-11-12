@@ -87,4 +87,9 @@ bool Heap<T, comp>::vacio() {
     return datos.empty();
 }
 
+template<typename T, bool (*comp)(T, T)>
+size_t Heap<T, comp>::tamanio() {
+    return datos.size();
+}
+
 #endif
