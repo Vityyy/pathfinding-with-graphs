@@ -93,6 +93,33 @@ void Heap<T, comp>::upheap(size_t &index_insertado, size_t index_padre) {
 }
 
 template<typename T, bool (*comp)(T, T)>
+void Heap<T, comp>::downheap(size_t &index_movido) {
+    if (index_movido >= tamanio()) {
+        throw Heap_exception();
+    }
+
+    size_t intercambio = index_movido;
+
+    if ((index_movido * 2) + 1 < tamanio()) {
+        if (!comp(datos[intercambio], datos[(index_movido * 2) + 1])) {
+            intercambio = (index_movido * 2) + 1;
+        }
+    }
+
+    if ((index_movido * 2) + 2 < tamanio()) {
+        if (!comp(datos[intercambio], datos[(index_movido * 2) + 2])) {
+            intercambio = (index_movido * 2) + 2;
+        }
+    }
+
+    if (intercambio != index_movido) {
+        swap(index_movido, intercambio);
+        downheap(intercambio);
+    }
+
+}
+
+template<typename T, bool (*comp)(T, T)>
 Heap<T, comp>::Heap() {
     datos = {};
 }
@@ -106,6 +133,24 @@ void Heap<T, comp>::alta(T dato) {
         upheap(index_nuevo_elemento, (index_nuevo_elemento - 1) / 2);
     }
 
+}
+
+template<typename T, bool (*comp)(T, T)>
+T Heap<T, comp>::baja() {
+    if (vacio()) {
+        throw Heap_exception();
+    }
+
+    T baja = datos[PRIMER_ELEMENTO];
+    datos[PRIMER_ELEMENTO] = datos[tamanio() - 1];
+    datos.pop_back();
+    size_t posicion_elemento_a_bajar = PRIMER_ELEMENTO;
+    
+    if (!vacio()) {
+        downheap(posicion_elemento_a_bajar);
+    }
+
+    return baja;
 }
 
 template<typename T, bool (*comp)(T, T)>
