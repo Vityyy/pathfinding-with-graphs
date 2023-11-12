@@ -92,4 +92,11 @@ size_t Heap<T, comp>::tamanio() {
     return datos.size();
 }
 
+template<typename T, bool (*comp)(T, T)>
+Heap<T, comp>::~Heap() {
+    while (!vacio()) {
+        baja();
+    }
+}
+
 #endif
