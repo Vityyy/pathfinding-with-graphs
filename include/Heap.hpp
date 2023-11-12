@@ -73,4 +73,13 @@ Heap<T, comp>::Heap() {
     datos = {};
 }
 
+template<typename T, bool (*comp)(T, T)>
+T Heap<T, comp>::primero() {
+    if (vacio()) {
+        throw Heap_exception();
+    }
+
+    return datos[PRIMER_ELEMENTO];
+}
+
 #endif
