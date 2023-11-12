@@ -80,8 +80,32 @@ void Heap<T, comp>::swap(size_t index_1, size_t index_2) {
 }
 
 template<typename T, bool (*comp)(T, T)>
+void Heap<T, comp>::upheap(size_t &index_insertado, size_t index_padre) {
+    if (index_insertado >= tamanio() || index_padre >= tamanio()) {
+        throw Heap_exception();
+    }
+
+    while (index_insertado > PRIMER_ELEMENTO && comp(datos[index_insertado], datos[index_padre])) {
+        swap(index_insertado, index_padre);
+        index_insertado = index_padre;
+        index_padre = (index_padre - 1) / 2;
+    }
+}
+
+template<typename T, bool (*comp)(T, T)>
 Heap<T, comp>::Heap() {
     datos = {};
+}
+
+template<typename T, bool (*comp)(T, T)>
+void Heap<T, comp>::alta(T dato) {
+    datos.push_back(dato);
+
+    size_t index_nuevo_elemento = tamanio() - 1;
+    if (index_nuevo_elemento > 1) {
+        upheap(index_nuevo_elemento, (index_nuevo_elemento - 1) / 2);
+    }
+
 }
 
 template<typename T, bool (*comp)(T, T)>
