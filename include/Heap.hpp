@@ -82,4 +82,9 @@ T Heap<T, comp>::primero() {
     return datos[PRIMER_ELEMENTO];
 }
 
+template<typename T, bool (*comp)(T, T)>
+bool Heap<T, comp>::vacio() {
+    return datos.empty();
+}
+
 #endif
