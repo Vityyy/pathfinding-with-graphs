@@ -69,6 +69,17 @@ public:
 };
 
 template<typename T, bool (*comp)(T, T)>
+void Heap<T, comp>::swap(size_t index_1, size_t index_2) {
+    if (index_1 >= tamanio() || index_2 >= tamanio()) {
+        throw Heap_exception();
+    }
+
+    T aux = datos[index_1];
+    datos[index_1] = datos[index_2];
+    datos[index_2] = aux;
+}
+
+template<typename T, bool (*comp)(T, T)>
 Heap<T, comp>::Heap() {
     datos = {};
 }
