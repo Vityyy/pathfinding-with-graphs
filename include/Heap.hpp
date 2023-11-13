@@ -85,10 +85,12 @@ void Heap<T, comp>::upheap(size_t &index_insertado, size_t index_padre) {
         throw Heap_exception();
     }
 
-    while (index_insertado > PRIMER_ELEMENTO && comp(datos[index_insertado], datos[index_padre])) {
+    if (comp(datos[index_insertado], datos[index_padre])) {
         swap(index_insertado, index_padre);
-        index_insertado = index_padre;
-        index_padre = (index_padre - 1) / 2;
+
+        if (index_padre > PRIMER_ELEMENTO) {
+            upheap(index_padre, (index_padre - 1) / 2);
+        }
     }
 }
 
@@ -129,10 +131,9 @@ void Heap<T, comp>::alta(T dato) {
     datos.push_back(dato);
 
     size_t index_nuevo_elemento = tamanio() - 1;
-    if (index_nuevo_elemento > 1) {
+    if (index_nuevo_elemento > PRIMER_ELEMENTO) {
         upheap(index_nuevo_elemento, (index_nuevo_elemento - 1) / 2);
     }
-
 }
 
 template<typename T, bool (*comp)(T, T)>
@@ -145,7 +146,7 @@ T Heap<T, comp>::baja() {
     datos[PRIMER_ELEMENTO] = datos[tamanio() - 1];
     datos.pop_back();
     size_t posicion_elemento_a_bajar = PRIMER_ELEMENTO;
-    
+
     if (!vacio()) {
         downheap(posicion_elemento_a_bajar);
     }
