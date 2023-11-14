@@ -27,6 +27,8 @@ add_executable(TP3_Grupo_Nullptrs
         bGVjdG9y/bGVjdG9y.cpp
         bGVjdG9y/ZGVjb2Rl.cpp
         main.cpp
+        src/Inventario_de_prioridad.cpp
+        include/Inventario_de_prioridad.hpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "main")
