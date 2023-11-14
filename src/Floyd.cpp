@@ -20,10 +20,10 @@ std::vector<size_t> Floyd::obtener_camino(size_t origen, size_t destino) {
     size_t actual = origen;
 
     while (!terminado) {
-        actual = matriz_caminos.elemento(actual, destino);
+        actual = size_t(matriz_caminos.elemento(actual, destino));
         camino.push_back(actual);
 
-        if (matriz_caminos.elemento(actual, destino) == destino) {
+        if (size_t(matriz_caminos.elemento(actual, destino)) == destino) {
             terminado = true;
             camino.insert(camino.begin(), origen);
             camino.push_back(destino);
