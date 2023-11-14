@@ -15,3 +15,7 @@ Arma InventarioDePrioridad::baja_arma_fuerte() {
     delete armas.baja();
     return arma_fuerte;
 }
+
+bool InventarioDePrioridad::vacio() {
+    return armas.vacio();
+}
