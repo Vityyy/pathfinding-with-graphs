@@ -16,6 +16,27 @@ Arma InventarioDePrioridad::baja_arma_fuerte() {
     return arma_fuerte;
 }
 
+Arma InventarioDePrioridad::baja_arma_debil() {
+    if (vacio()) {
+        return ARMA_NO_VALIDA;
+    }
+
+    Heap<Arma *, Arma::menor> armas_aux;
+
+    while (!armas.vacio()) {
+        armas_aux.alta(armas.baja());
+    }
+
+    Arma arma_debil = *armas_aux.primero();
+    delete armas_aux.baja();
+
+    while (!armas_aux.vacio()) {
+        armas.alta(armas_aux.baja());
+    }
+
+    return arma_debil;
+}
+
 bool InventarioDePrioridad::vacio() {
     return armas.vacio();
 }
