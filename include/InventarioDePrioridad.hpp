@@ -21,12 +21,20 @@ public:
     void alta(const Arma &nuevo_arma);
 
     // Pre: ~
-    // Pos: retorna el arma más fuerte, si el inventario está vacío retorna un arma no válida
+    // Pos: baja y devuelve el arma más fuerte, si el inventario está vacío devuelve un arma no válida
     Arma baja_arma_fuerte();
 
     // Pre: ~
-    // Pos: retorna el arma más debil, si el inventario está vacío retorna un arma no válida
+    // Pos: baja y devuelve el arma más debil, si el inventario está vacío devuelve un arma no válida
     Arma baja_arma_debil();
+
+    // Pre: ~
+    // Pos: devuelve el arma más fuerte, si el inventario está vacío devuelve un arma no válida
+    Arma consulta_arma_fuerte();
+
+    // Pre: ~
+    // Pos: devuelve el arma más debil, si el inventario está vacío devuelve un arma no válida
+    Arma consulta_arma_debil();
 
     // Pre: ~
     // Pos: retorna true si el inventario está vacío
