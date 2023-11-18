@@ -29,6 +29,8 @@ private:
     // Pos: devuelve el valor relacionado a opcion, si la opción no es válida devuelve el máximo del tipo 'unsigned int'
     static unsigned int procesar_opcion(std::string &opcion);
 
+    static void pedir_arma(std::string &nombre_nuevo_arma, std::size_t &potencia_nuevo_arma);
+
 public:
 
     // Pre: ~

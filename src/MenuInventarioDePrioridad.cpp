@@ -50,3 +50,48 @@ unsigned int MenuInventarioDePrioridad::procesar_opcion(std::string &opcion) {
 
     return opciones_menu.find(opcion)->second;
 }
+
+void MenuInventarioDePrioridad::ejecutar(InventarioDePrioridad &inventario) {
+    std::string opcion;
+    unsigned int opcion_procesada = 0;
+
+    std::string nombre_nuevo_arma;
+    std::size_t potencia_nuevo_arma;
+
+    do {
+        imprimir();
+        pedir_opcion(opcion);
+        opcion_procesada = procesar_opcion(opcion);
+
+        switch (opcion_procesada) {
+            case ALTA:
+                pedir_arma(nombre_nuevo_arma, potencia_nuevo_arma);
+                inventario.alta(Arma(nombre_nuevo_arma, potencia_nuevo_arma));
+                break;
+
+            case BAJA_ARMA_FUERTE:
+                std::cout << "El arma " << inventario.baja_arma_fuerte() << " fue dada de baja con exito" << std::endl;
+                break;
+
+            case BAJA_ARMA_DEBIL:
+                std::cout << "El arma " << inventario.baja_arma_debil() << " fue dada de baja con exito" << std::endl;
+                break;
+
+            case CONSULTA_ARMA_FUERTE:
+                std::cout << "Arma mas fuerte: " << inventario.consulta_arma_fuerte() << std::endl;
+                break;
+
+            case CONSULTA_ARMA_DEBIL:
+                std::cout << "Arma mas debil: " << inventario.consulta_arma_debil() << std::endl;
+                break;
+
+            case VOLVER:
+                system("clear");
+                break;
+
+            default:
+                std::cout << "Esa opción no es válida" << std::endl;
+        }
+
+    } while (opcion_procesada != VOLVER);
+}
