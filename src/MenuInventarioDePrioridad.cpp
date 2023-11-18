@@ -37,3 +37,8 @@ void MenuInventarioDePrioridad::imprimir() {
     std::cout << "[" << CONSULTA_ARMA_DEBIL << "] Consulta arma debil" << std::endl;
     std::cout << "[" << VOLVER << "] Volver" << std::endl;
 }
+
+void MenuInventarioDePrioridad::pedir_opcion(std::string &opcion) {
+    std::cout << "Opcion: ";
+    getline(std::cin >> std::ws, opcion);
+}
