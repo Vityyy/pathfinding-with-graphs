@@ -23,14 +23,14 @@ private:
     static void pedir_opcion(std::string &opcion);
 
     // Pre: ~
-    // Pos: devuelve el valor relacionado a opcion, si la opción no es válida devuelve el máximo del tipo 'unsigned int'
-    static unsigned int procesar_opcion(const std::string &opcion);
+    // Pos: devuelve el valor relacionado con opcion, si la opción no es válida devuelve el máximo del tipo 'unsigned int'
+    static unsigned int procesar_opcion(std::string &opcion);
 
 public:
 
     // Pre: ~
     // Pos: ejecuta el menu
-    static void ejecutar(std::string mensaje_descifrado, InventarioDePrioridad &inventario);
+    static void ejecutar(std::string &mensaje_descifrado, InventarioDePrioridad &inventario);
 };
 
 #endif //MENU_HPP
