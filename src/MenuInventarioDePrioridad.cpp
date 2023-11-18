@@ -51,6 +51,14 @@ unsigned int MenuInventarioDePrioridad::procesar_opcion(std::string &opcion) {
     return opciones_menu.find(opcion)->second;
 }
 
+void MenuInventarioDePrioridad::pedir_arma(std::string &nombre_nuevo_arma, size_t &potencia_nuevo_arma) {
+    std::cout << "Nombre del arma: ";
+    getline(std::cin >> std::ws, nombre_nuevo_arma);
+
+    std::cout << "Potencia del arma: ";
+    std::cin >> potencia_nuevo_arma;
+}
+
 void MenuInventarioDePrioridad::ejecutar(InventarioDePrioridad &inventario) {
     std::string opcion;
     unsigned int opcion_procesada = 0;
