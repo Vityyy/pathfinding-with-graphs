@@ -40,6 +40,26 @@ unsigned int MenuDescifrarMensaje::procesar_opcion(std::string &opcion) {
     return opciones_menu.find(opcion)->second;
 }
 
+void MenuDescifrarMensaje::descifrar_mensaje(std::string &mensaje_descifrado) {
+    ABB<Placa *, Placa::menor, Placa::igual> mensaje_desordenado{};
+    bGVjdG9y::Y2FyZ2Fy(mensaje_desordenado);
+
+    std::vector<Placa *> mensaje_ordenado = mensaje_desordenado.preorder();
+
+    std::stringstream stream_mensaje_descifrado;
+
+    for (auto & i : mensaje_ordenado) {
+        stream_mensaje_descifrado << *i << std::endl;
+    }
+
+    mensaje_descifrado = stream_mensaje_descifrado.str();
+
+    for (auto & i : mensaje_ordenado) {
+        delete i;
+        i = nullptr;
+    }
+}
+
 void MenuDescifrarMensaje::ejecutar(std::string &mensaje_descifrado) {
     std::string opcion;
     unsigned int opcion_procesada = 0;
