@@ -23,7 +23,7 @@ private:
 
     // Pre: ~
     // Pos: devuelve el valor relacionado a opcion, si la opción no es válida devuelve el máximo del tipo 'unsigned int'
-    static unsigned int procesar_opcion(const std::string &opcion);
+    static unsigned int procesar_opcion(std::string &opcion);
 
 public:
 
