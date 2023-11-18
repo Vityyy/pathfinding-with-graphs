@@ -1,6 +1,7 @@
 #include "bGVjdG9y.hpp"
 #include "Placa.hpp"
 #include "ABB.hpp"
+#include "InventarioDePrioridad.hpp"
 #include <iostream>
 
 using namespace std;
