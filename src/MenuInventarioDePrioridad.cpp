@@ -42,3 +42,11 @@ void MenuInventarioDePrioridad::pedir_opcion(std::string &opcion) {
     std::cout << "Opcion: ";
     getline(std::cin >> std::ws, opcion);
 }
+
+unsigned int MenuInventarioDePrioridad::procesar_opcion(std::string &opcion) {
+    for(char & i : opcion){
+        i = (char) tolower(i);
+    }
+
+    return opciones_menu.find(opcion)->second;
+}
