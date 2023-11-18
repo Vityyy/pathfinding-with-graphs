@@ -49,11 +49,11 @@ void Menu::ejecutar(std::string &mensaje_descifrado, InventarioDePrioridad &inve
 
         switch (opcion_procesada) {
             case DESCIFRAR_MENSAJE:
-                MenuDescifrarMensaje::ejecutar();
+                MenuDescifrarMensaje::ejecutar(mensaje_descifrado);
                 break;
 
             case INVENTARIO_DE_PRIORIDAD:
-                MenuInventarioDePrioridad::ejecutar();
+                MenuInventarioDePrioridad::ejecutar(inventario);
                 break;
 
             case SALIR:
