@@ -15,6 +15,8 @@ private:
     static const unsigned int CONSULTA_ARMA_DEBIL;
     static const unsigned int VOLVER;
 
+    static const std::string MENSAJE_INVENTARIO_VACIO;
+
     static const std::map<std::string, unsigned int> opciones_menu;
 
     // Pre: ~

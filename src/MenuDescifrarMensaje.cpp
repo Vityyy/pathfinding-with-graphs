@@ -5,34 +5,36 @@
 #include "bGVjdG9y.hpp"
 #include <sstream>
 
+using namespace std;
+
 const unsigned int MenuDescifrarMensaje::DESCIFRAR_MENSAJE = 0;
 const unsigned int MenuDescifrarMensaje::IMPRIMIR_MENSAJE = 1;
 const unsigned int MenuDescifrarMensaje::VOLVER = 2;
 
-const std::map<std::string, unsigned int> MenuDescifrarMensaje::opciones_menu{
-        std::pair<std::string, unsigned int>("descifrar mensaje", DESCIFRAR_MENSAJE),
-        std::pair<std::string, unsigned int>("0", DESCIFRAR_MENSAJE),
+const map<string, unsigned int> MenuDescifrarMensaje::opciones_menu{
+        pair<string, unsigned int>("descifrar mensaje", DESCIFRAR_MENSAJE),
+        pair<string, unsigned int>("0", DESCIFRAR_MENSAJE),
 
-        std::pair<std::string, unsigned int>("imprimir_mensaje", IMPRIMIR_MENSAJE),
-        std::pair<std::string, unsigned int>("1", IMPRIMIR_MENSAJE),
+        pair<string, unsigned int>("imprimir_mensaje", IMPRIMIR_MENSAJE),
+        pair<string, unsigned int>("1", IMPRIMIR_MENSAJE),
 
-        std::pair<std::string, unsigned int>("volver", VOLVER),
-        std::pair<std::string, unsigned int>("2", VOLVER)
+        pair<string, unsigned int>("volver", VOLVER),
+        pair<string, unsigned int>("2", VOLVER)
 };
 
 void MenuDescifrarMensaje::imprimir() {
-    std::cout << ".:MENU DE TESTEO DE DESCIFRADO DE MENSAJES:." << std::endl;
-    std::cout << "[" << DESCIFRAR_MENSAJE << "] Descifrar Mensaje" << std::endl;
-    std::cout << "[" << IMPRIMIR_MENSAJE << "] Imprimir mensaje" << std::endl;
-    std::cout << "[" << VOLVER << "] Volver" << std::endl;
+    cout << ".:MENU DE TESTEO DE DESCIFRADO DE MENSAJES:." << endl;
+    cout << "[" << DESCIFRAR_MENSAJE << "] Descifrar Mensaje" << endl;
+    cout << "[" << IMPRIMIR_MENSAJE << "] Imprimir mensaje" << endl;
+    cout << "[" << VOLVER << "] Volver" << endl;
 }
 
-void MenuDescifrarMensaje::pedir_opcion(std::string &opcion) {
-    std::cout << "Opcion: ";
-    getline(std::cin >> std::ws, opcion);
+void MenuDescifrarMensaje::pedir_opcion(string &opcion) {
+    cout << "Opcion: ";
+    getline(cin >> ws, opcion);
 }
 
-unsigned int MenuDescifrarMensaje::procesar_opcion(std::string &opcion) {
+unsigned int MenuDescifrarMensaje::procesar_opcion(string &opcion) {
     for(char & i : opcion){
         i = (char) tolower(i);
     }
@@ -40,16 +42,16 @@ unsigned int MenuDescifrarMensaje::procesar_opcion(std::string &opcion) {
     return opciones_menu.find(opcion)->second;
 }
 
-void MenuDescifrarMensaje::descifrar_mensaje(std::string &mensaje_descifrado) {
+void MenuDescifrarMensaje::descifrar_mensaje(string &mensaje_descifrado) {
     ABB<Placa *, Placa::menor, Placa::igual> mensaje_desordenado{};
     bGVjdG9y::Y2FyZ2Fy(mensaje_desordenado);
 
-    std::vector<Placa *> mensaje_ordenado = mensaje_desordenado.preorder();
+    vector<Placa *> mensaje_ordenado = mensaje_desordenado.preorder();
 
-    std::stringstream stream_mensaje_descifrado;
+    stringstream stream_mensaje_descifrado;
 
     for (auto & i : mensaje_ordenado) {
-        stream_mensaje_descifrado << *i << std::endl;
+        stream_mensaje_descifrado << *i;
     }
 
     mensaje_descifrado = stream_mensaje_descifrado.str();
@@ -58,6 +60,8 @@ void MenuDescifrarMensaje::descifrar_mensaje(std::string &mensaje_descifrado) {
         delete i;
         i = nullptr;
     }
+
+    cout << "El mensaje fue descifrado con éxito" << endl << endl;
 }
 
 void MenuDescifrarMensaje::ejecutar(std::string &mensaje_descifrado) {
@@ -75,15 +79,14 @@ void MenuDescifrarMensaje::ejecutar(std::string &mensaje_descifrado) {
                 break;
 
             case IMPRIMIR_MENSAJE:
-                std::cout << mensaje_descifrado;
+                (mensaje_descifrado.empty()) ? (cout << "El mensaje no ha sido descifrado" << endl << endl) : (cout << mensaje_descifrado << endl);
                 break;
 
             case VOLVER:
-                system("clear");
                 break;
 
             default:
-                std::cout << "Esa opción no es válida" << std::endl;
+                cout << "Esa opción no es válida" << endl;
         }
 
     } while (opcion_procesada != VOLVER);
