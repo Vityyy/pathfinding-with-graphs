@@ -18,9 +18,14 @@ const std::map<std::string, unsigned int> Menu::opciones_menu = {
         std::pair<std::string, unsigned int>("2", SALIR)
 };
 
-void Menu::imprimir_menu() {
+void Menu::imprimir() {
     std::cout << ".:MENU DE TESTEO DEL REMAKE DE SILENT HILL 2:." << std::endl;
     std::cout << "[" << DESCIFRAR_MENSAJE << "] Descifrar Mensaje" << std::endl;
     std::cout << "[" << INVENTARIO_DE_PRIORIDAD << "] Inventario de prioridad" << std::endl;
     std::cout << "[" << SALIR << "] Salir" << std::endl;
+}
+
+void Menu::pedir_opcion(std::string &opcion) {
+    std::cout << "Opcion: ";
+    getline(std::cin >> std::ws, opcion);
 }
