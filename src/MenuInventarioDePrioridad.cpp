@@ -1,4 +1,5 @@
 #include "MenuInventarioDePrioridad.hpp"
+#include <iostream>
 
 const unsigned int MenuInventarioDePrioridad::ALTA = 0;
 const unsigned int MenuInventarioDePrioridad::BAJA_ARMA_FUERTE = 1;
@@ -26,3 +27,13 @@ const std::map<std::string, unsigned int> MenuInventarioDePrioridad::opciones_me
         std::pair<std::string, unsigned int>("volver", VOLVER),
         std::pair<std::string, unsigned int>("5", VOLVER)
 };
+
+void MenuInventarioDePrioridad::imprimir() {
+    std::cout << ".:MENU DE TESTEO DEL INVENTARIO DE PRIORIDAD:." << std::endl;
+    std::cout << "[" << ALTA << "] Alta" << std::endl;
+    std::cout << "[" << BAJA_ARMA_FUERTE << "] Baja arma fuerte" << std::endl;
+    std::cout << "[" << BAJA_ARMA_DEBIL << "] Baja arma debil" << std::endl;
+    std::cout << "[" << CONSULTA_ARMA_FUERTE << "] Consulta arma fuerte" << std::endl;
+    std::cout << "[" << CONSULTA_ARMA_DEBIL << "] Consulta arma debil" << std::endl;
+    std::cout << "[" << VOLVER << "] Volver" << std::endl;
+}
