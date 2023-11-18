@@ -25,11 +25,15 @@ private:
     // Pos: devuelve el valor relacionado a opcion, si la opción no es válida devuelve el máximo del tipo 'unsigned int'
     static unsigned int procesar_opcion(std::string &opcion);
 
+    // Pre: ~
+    // Pos: descifra el mensaje almacenado en el archivo 666.bin
+    static void descifrar_mensaje(std::string &mensaje_descifrado);
+
 public:
 
     // Pre: ~
     // Pos: ejecuta el menu para descifrar el mensaje
-    static void ejecutar(std::string mensaje_descifrado);
+    static void ejecutar(std::string &mensaje_descifrado);
 };
 
 #endif //MENU_DESCIFRAR_MENSAJE_HPP

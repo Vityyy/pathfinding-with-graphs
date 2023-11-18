@@ -1,5 +1,9 @@
 #include "MenuDescifrarMensaje.hpp"
 #include <iostream>
+#include "ABB.hpp"
+#include "Placa.hpp"
+#include "bGVjdG9y.hpp"
+#include <sstream>
 
 const unsigned int MenuDescifrarMensaje::DESCIFRAR_MENSAJE = 0;
 const unsigned int MenuDescifrarMensaje::IMPRIMIR_MENSAJE = 1;
@@ -34,4 +38,33 @@ unsigned int MenuDescifrarMensaje::procesar_opcion(std::string &opcion) {
     }
 
     return opciones_menu.find(opcion)->second;
+}
+
+void MenuDescifrarMensaje::ejecutar(std::string &mensaje_descifrado) {
+    std::string opcion;
+    unsigned int opcion_procesada = 0;
+
+    do {
+        imprimir();
+        pedir_opcion(opcion);
+        opcion_procesada = procesar_opcion(opcion);
+
+        switch (opcion_procesada) {
+            case DESCIFRAR_MENSAJE:
+                descifrar_mensaje(mensaje_descifrado);
+                break;
+
+            case IMPRIMIR_MENSAJE:
+                std::cout << mensaje_descifrado;
+                break;
+
+            case VOLVER:
+                system("clear");
+                break;
+
+            default:
+                std::cout << "Esa opción no es válida" << std::endl;
+        }
+
+    } while (opcion_procesada != VOLVER);
 }
