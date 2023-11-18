@@ -22,3 +22,8 @@ void MenuDescifrarMensaje::imprimir() {
     std::cout << "[" << IMPRIMIR_MENSAJE << "] Imprimir mensaje" << std::endl;
     std::cout << "[" << VOLVER << "] Volver" << std::endl;
 }
+
+void MenuDescifrarMensaje::pedir_opcion(std::string &opcion) {
+    std::cout << "Opcion: ";
+    getline(std::cin >> std::ws, opcion);
+}
