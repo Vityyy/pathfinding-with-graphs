@@ -37,3 +37,31 @@ unsigned int Menu::procesar_opcion(std::string &opcion) {
 
     return opciones_menu.find(opcion)->second;
 }
+
+void Menu::ejecutar(std::string &mensaje_descifrado, InventarioDePrioridad &inventario) {
+    std::string opcion;
+    unsigned int opcion_procesada = 0;
+
+    do {
+        imprimir();
+        pedir_opcion(opcion);
+        opcion_procesada = procesar_opcion(opcion);
+
+        switch (opcion_procesada) {
+            case DESCIFRAR_MENSAJE:
+                MenuDescifrarMensaje::ejecutar();
+                break;
+
+            case INVENTARIO_DE_PRIORIDAD:
+                MenuInventarioDePrioridad::ejecutar();
+                break;
+
+            case SALIR:
+                break;
+
+            default:
+                std::cout << "Esa opción no es válida" << std::endl;
+        }
+
+    } while (opcion_procesada != SALIR);
+}
