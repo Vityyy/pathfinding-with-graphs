@@ -106,11 +106,11 @@ public:
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
-    if (hijo_izquierdo != nullptr && hijo_derecho != nullptr) {
+    if (hijo_izquierdo && hijo_derecho) {
         return DOS_HIJOS;
     }
 
-    if (hijo_izquierdo != nullptr || hijo_derecho != nullptr) {
+    if (hijo_izquierdo || hijo_derecho) {
         return UN_HIJO;
     }
 
@@ -120,7 +120,7 @@ size_t NodoABB<T, menor, igual>::cantidad_hijos() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::minimo() {
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         return hijo_izquierdo->minimo();
     }
 
@@ -130,18 +130,18 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::minimo() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::sucesor() {
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         return hijo_derecho->minimo();
     }
 
     NodoABB<T, menor, igual> *padre_aux = padre;
     NodoABB<T, menor, igual> *this_aux = this;
-    while (padre_aux != nullptr && this_aux == padre->hijo_derecho) {
+    while (padre_aux && this_aux == padre->hijo_derecho) {
         this_aux = padre_aux;
         padre_aux = this_aux->padre;
     }
 
-    if (padre_aux != nullptr) {
+    if (padre_aux) {
         return padre_aux;
     }
 
@@ -151,7 +151,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::sucesor() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 bool NodoABB<T, menor, igual>::es_hijo_izquierdo() {
-    if (padre == nullptr) {
+    if (!padre) {
         return false;
     }
 
@@ -198,7 +198,7 @@ void NodoABB<T, menor, igual>::reemplazar(NodoABB<T, menor, igual> *nodo_reempla
     nodo_reemplazo->hijo_derecho = hijo_derecho;
     nodo_reemplazo->hijo_izquierdo = hijo_izquierdo;
 
-    if (padre != nullptr) {
+    if (padre) {
         if (es_hijo_izquierdo()) {
             padre->hijo_izquierdo = nodo_reemplazo;
         } else {
@@ -206,11 +206,11 @@ void NodoABB<T, menor, igual>::reemplazar(NodoABB<T, menor, igual> *nodo_reempla
         }
     }
 
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         hijo_izquierdo->padre = nodo_reemplazo;
     }
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         hijo_derecho->padre = nodo_reemplazo;
     }
 }
@@ -218,7 +218,7 @@ void NodoABB<T, menor, igual>::reemplazar(NodoABB<T, menor, igual> *nodo_reempla
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_0_hijos() {
-    if (padre != nullptr) {
+    if (padre) {
         if (es_hijo_izquierdo()) {
             padre->hijo_izquierdo = nullptr;
         } else {
@@ -233,9 +233,9 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_0_hijos() {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
-    if (padre == nullptr) {
+    if (!padre) {
         NodoABB<T, menor, igual> *nueva_raiz;
-        if (hijo_izquierdo != nullptr) {
+        if (hijo_izquierdo) {
             hijo_izquierdo->padre = nullptr;
             nueva_raiz = hijo_izquierdo;
 
@@ -249,7 +249,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
         return nueva_raiz;
     }
 
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         if (es_hijo_izquierdo()) {
             padre->hijo_izquierdo = hijo_izquierdo;
         } else {
@@ -289,7 +289,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_2_hijos() {
     reemplazar(nodo_reemplazo);
     desconectar_hijos();
 
-    if (padre == nullptr) {
+    if (!padre) {
         delete this;
         return nodo_reemplazo;
     }
@@ -311,7 +311,7 @@ NodoABB<T, menor, igual>::NodoABB(T dato) {
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::alta(T dato_insertar) {
     if (menor(dato_insertar, dato)) {
-        if (hijo_izquierdo != nullptr) {
+        if (hijo_izquierdo) {
             hijo_izquierdo->alta(dato_insertar);
         } else {
             hijo_izquierdo = new NodoABB<T, menor, igual>(dato_insertar);
@@ -319,7 +319,7 @@ void NodoABB<T, menor, igual>::alta(T dato_insertar) {
         }
 
     } else {
-        if (hijo_derecho != nullptr) {
+        if (hijo_derecho) {
             hijo_derecho->alta(dato_insertar);
         } else {
             hijo_derecho = new NodoABB<T, menor, igual>(dato_insertar);
@@ -331,11 +331,11 @@ void NodoABB<T, menor, igual>::alta(T dato_insertar) {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja(T dato_bajar) {
-    if (menor(dato_bajar, dato) && hijo_izquierdo != nullptr) {
+    if (menor(dato_bajar, dato) && hijo_izquierdo) {
         return hijo_izquierdo->baja(dato_bajar);
     }
 
-    if (!igual(dato_bajar, dato) && hijo_derecho != nullptr) {
+    if (!igual(dato_bajar, dato) && hijo_derecho) {
         return hijo_derecho->baja(dato_bajar);
     }
 
@@ -359,14 +359,14 @@ bool NodoABB<T, menor, igual>::consulta(T dato_consultar) {
     }
 
     if (menor(dato_consultar, dato)) {
-        if (hijo_izquierdo != nullptr) {
+        if (hijo_izquierdo) {
             return hijo_izquierdo->consulta(dato_consultar);
         }
 
         return false;
     }
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         return hijo_derecho->consulta(dato_consultar);
     }
 
@@ -376,13 +376,13 @@ bool NodoABB<T, menor, igual>::consulta(T dato_consultar) {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::inorder(std::vector<T> &datos) {
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         hijo_izquierdo->inorder(datos);
     }
 
     datos.push_back(dato);
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         hijo_derecho->inorder(datos);
     }
 }
@@ -392,11 +392,11 @@ template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::preorder(std::vector<T> &datos) {
     datos.push_back(dato);
 
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         hijo_izquierdo->preorder(datos);
     }
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         hijo_derecho->preorder(datos);
     }
 }
@@ -404,11 +404,11 @@ void NodoABB<T, menor, igual>::preorder(std::vector<T> &datos) {
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::postorder(std::vector<T> &datos) {
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         hijo_izquierdo->postorder(datos);
     }
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         hijo_derecho->postorder(datos);
     }
 
@@ -420,11 +420,11 @@ template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::ancho(std::queue<NodoABB<T, menor, igual> *> &nodos, std::vector<T> &datos) {
     datos.push_back(dato);
 
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         nodos.push(hijo_izquierdo);
     }
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         nodos.push(hijo_derecho);
     }
 }
@@ -432,11 +432,11 @@ void NodoABB<T, menor, igual>::ancho(std::queue<NodoABB<T, menor, igual> *> &nod
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
-    if (hijo_izquierdo != nullptr) {
+    if (hijo_izquierdo) {
         hijo_izquierdo->ejecutar(metodo);
     }
 
-    if (hijo_derecho != nullptr) {
+    if (hijo_derecho) {
         hijo_derecho->ejecutar(metodo);
     }
 
