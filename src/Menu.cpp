@@ -3,31 +3,33 @@
 #include "MenuDescifrarMensaje.hpp"
 #include "MenuInventarioDePrioridad.hpp"
 
+using namespace std;
+
 const unsigned int Menu::DESCIFRAR_MENSAJE = 0;
 const unsigned int Menu::INVENTARIO_DE_PRIORIDAD = 1;
 const unsigned int Menu::SALIR = 2;
 
-const std::map<std::string, unsigned int> Menu::opciones_menu = {
-        std::pair<std::string, unsigned int>("descifrar mensaje", DESCIFRAR_MENSAJE),
-        std::pair<std::string, unsigned int>("0", DESCIFRAR_MENSAJE),
+const map<string, unsigned int> Menu::opciones_menu = {
+        pair<string, unsigned int>("descifrar mensaje", DESCIFRAR_MENSAJE),
+        pair<string, unsigned int>("0", DESCIFRAR_MENSAJE),
 
-        std::pair<std::string, unsigned int>("inventario de prioridad", INVENTARIO_DE_PRIORIDAD),
-        std::pair<std::string, unsigned int>("1", INVENTARIO_DE_PRIORIDAD),
+        pair<string, unsigned int>("inventario de prioridad", INVENTARIO_DE_PRIORIDAD),
+        pair<string, unsigned int>("1", INVENTARIO_DE_PRIORIDAD),
 
-        std::pair<std::string, unsigned int>("salir", SALIR),
-        std::pair<std::string, unsigned int>("2", SALIR)
+        pair<string, unsigned int>("salir", SALIR),
+        pair<string, unsigned int>("2", SALIR)
 };
 
 void Menu::imprimir() {
-    std::cout << ".:MENU DE TESTEO DEL REMAKE DE SILENT HILL 2:." << std::endl;
-    std::cout << "[" << DESCIFRAR_MENSAJE << "] Descifrar Mensaje" << std::endl;
-    std::cout << "[" << INVENTARIO_DE_PRIORIDAD << "] Inventario de prioridad" << std::endl;
-    std::cout << "[" << SALIR << "] Salir" << std::endl;
+    cout << ".:MENU DE TESTEO DEL REMAKE DE SILENT HILL 2:." << endl;
+    cout << "[" << DESCIFRAR_MENSAJE << "] Descifrar Mensaje" << endl;
+    cout << "[" << INVENTARIO_DE_PRIORIDAD << "] Inventario de prioridad" << endl;
+    cout << "[" << SALIR << "] Salir" << endl;
 }
 
-void Menu::pedir_opcion(std::string &opcion) {
-    std::cout << "Opcion: ";
-    getline(std::cin >> std::ws, opcion);
+void Menu::pedir_opcion(string &opcion) {
+    cout << "Opcion: ";
+    getline(cin >> ws, opcion);
 }
 
 unsigned int Menu::procesar_opcion(std::string &opcion) {
@@ -60,7 +62,7 @@ void Menu::ejecutar(std::string &mensaje_descifrado, InventarioDePrioridad &inve
                 break;
 
             default:
-                std::cout << "Esa opción no es válida" << std::endl;
+                cout << "Esa opción no es válida" << endl;
         }
 
     } while (opcion_procesada != SALIR);
