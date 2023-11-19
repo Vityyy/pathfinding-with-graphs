@@ -29,6 +29,12 @@ add_executable(TP3_Grupo_Nullptrs
         main.cpp
         src/InventarioDePrioridad.cpp
         include/InventarioDePrioridad.hpp
+        src/Menu.cpp
+        include/Menu.hpp
+        src/MenuDescifrarMensaje.cpp
+        include/MenuDescifrarMensaje.hpp
+        src/MenuInventarioDePrioridad.cpp
+        include/MenuInventarioDePrioridad.hpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "main")
