@@ -18,6 +18,10 @@ private:
     static const size_t SIN_HIJOS = 0;
 
     // Pre: ~
+    // Pos: devuelve el valor del máximo de dos enteros positivos
+    std::size_t max(std::size_t num1, std::size_t num2);
+
+    // Pre: ~
     // Pos: retorna la cantidad de hijos que tiene un nodo
     size_t cantidad_hijos();
 
@@ -99,10 +103,18 @@ public:
     // Post: Ejecuta el método/función en el subárbol.
     void ejecutar(void metodo(T));
 
+    // Pre: ~
+    // Pos: devuelve la altura del nodo
+    std::size_t altura();
+
     // Destructor.
     ~NodoABB();
 };
 
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::size_t NodoABB<T, menor, igual>::max(std::size_t num1, std::size_t num2) {
+    return (num1 > num2) ? (num1) : (num2);
+}
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
@@ -243,7 +255,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
             hijo_derecho->padre = nullptr;
             nueva_raiz = hijo_derecho;
         }
-        
+
         desconectar_hijos();
         delete this;
         return nueva_raiz;
@@ -443,6 +455,22 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     metodo();
 }
 
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::size_t NodoABB<T, menor, igual>::altura() {
+    if (hijo_derecho && hijo_izquierdo) {
+        return max(hijo_derecho->altura(), hijo_izquierdo->altura()) + 1;
+    }
+
+    if (hijo_izquierdo) {
+        return hijo_izquierdo->altura() + 1;
+    }
+
+    if (hijo_derecho) {
+        return hijo_derecho->altura() + 1;
+    }
+
+    return 1;
+}
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual>::~NodoABB() {
@@ -452,6 +480,5 @@ NodoABB<T, menor, igual>::~NodoABB() {
     hijo_derecho = nullptr;
     hijo_izquierdo = nullptr;
 }
-
 
 #endif

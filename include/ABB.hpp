@@ -56,6 +56,10 @@ public:
     // Post: Devuelve la cantidad de datos en el árbol.
     std::size_t tamanio();
 
+    // Pre: ~
+    // Pos: devuelve la altura del árbol, si el árbol está vacío devuelve 0
+    std::size_t altura();
+
     // Pre: -
     // Post: Devuelve true si el árbol está vacio.
     bool vacio();
@@ -182,6 +186,15 @@ void ABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 std::size_t ABB<T, menor, igual>::tamanio() {
     return cantidad_datos;
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::size_t ABB<T, menor, igual>::altura() {
+    if (vacio()) {
+        return 0;
+    }
+
+    return raiz->altura();
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
