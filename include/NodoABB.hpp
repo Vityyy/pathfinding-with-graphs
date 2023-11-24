@@ -112,6 +112,11 @@ public:
 };
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::size_t NodoABB<T, menor, igual>::max(std::size_t num1, std::size_t num2) {
+    return (num1 > num2) ? (num1) : (num2);
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
     if (hijo_izquierdo && hijo_derecho) {
         return DOS_HIJOS;
