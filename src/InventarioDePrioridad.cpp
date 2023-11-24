@@ -69,6 +69,10 @@ bool InventarioDePrioridad::vacio() {
     return armas.vacio();
 }
 
+size_t InventarioDePrioridad::cantidad_armas() {
+    return armas.tamanio();
+}
+
 InventarioDePrioridad::~InventarioDePrioridad() {
     while (!armas.vacio()) {
         delete armas.baja();
