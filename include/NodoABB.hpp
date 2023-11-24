@@ -103,7 +103,6 @@ public:
     ~NodoABB();
 };
 
-
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 size_t NodoABB<T, menor, igual>::cantidad_hijos() {
     if (hijo_izquierdo && hijo_derecho) {
@@ -243,7 +242,7 @@ NodoABB<T, menor, igual> *NodoABB<T, menor, igual>::baja_1_hijo() {
             hijo_derecho->padre = nullptr;
             nueva_raiz = hijo_derecho;
         }
-        
+
         desconectar_hijos();
         delete this;
         return nueva_raiz;
@@ -443,7 +442,6 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     metodo();
 }
 
-
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
 NodoABB<T, menor, igual>::~NodoABB() {
     padre = nullptr;
@@ -452,6 +450,5 @@ NodoABB<T, menor, igual>::~NodoABB() {
     hijo_derecho = nullptr;
     hijo_izquierdo = nullptr;
 }
-
 
 #endif

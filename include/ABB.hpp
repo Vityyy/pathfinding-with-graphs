@@ -56,6 +56,10 @@ public:
     // Post: Devuelve la cantidad de datos en el árbol.
     std::size_t tamanio();
 
+    // Pre: ~
+    // Pos: devuelve la altura del árbol, si el árbol está vacío devuelve 0
+    std::size_t altura();
+
     // Pre: -
     // Post: Devuelve true si el árbol está vacio.
     bool vacio();
