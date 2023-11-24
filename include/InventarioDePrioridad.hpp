@@ -40,6 +40,10 @@ public:
     // Pos: retorna true si el inventario está vacío
     bool vacio();
 
+    // Pre: ~
+    // Pos: devuelve la cantidad de armas del inventario
+    size_t cantidad_armas();
+
     // Destructor
     ~InventarioDePrioridad();
 };
