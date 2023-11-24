@@ -65,10 +65,6 @@ private:
     //Pos: elimina el nodo con dos hijos y, si el nodo era raíz, se devuelve la nueva raíz.
     NodoABB<T, menor, igual> *baja_2_hijos();
 
-    // Pre: ~
-    // Pos: devuelve la altura del nodo
-    std::size_t altura();
-
 public:
     // Constructor.
     NodoABB(T dato);
@@ -106,6 +102,10 @@ public:
     // Pre: -
     // Post: Ejecuta el método/función en el subárbol.
     void ejecutar(void metodo(T));
+
+    // Pre: ~
+    // Pos: devuelve la altura del nodo
+    std::size_t altura();
 
     // Destructor.
     ~NodoABB();
@@ -453,6 +453,23 @@ void NodoABB<T, menor, igual>::ejecutar(void (*metodo)(T)) {
     }
 
     metodo();
+}
+
+template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
+std::size_t NodoABB<T, menor, igual>::altura() {
+    if (hijo_derecho && hijo_izquierdo) {
+        return max(hijo_derecho->altura(), hijo_izquierdo->altura()) + 1;
+    }
+
+    if (hijo_izquierdo) {
+        return hijo_izquierdo->altura() + 1;
+    }
+
+    if (hijo_derecho) {
+        return hijo_derecho->altura() + 1;
+    }
+
+    return 1;
 }
 
 template<typename T, bool (*menor)(T, T), bool (*igual)(T, T)>
