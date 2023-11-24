@@ -18,6 +18,10 @@ private:
     static const size_t SIN_HIJOS = 0;
 
     // Pre: ~
+    // Pos: devuelve el valor del máximo de dos enteros positivos
+    std::size_t max(std::size_t num1, std::size_t num2);
+
+    // Pre: ~
     // Pos: retorna la cantidad de hijos que tiene un nodo
     size_t cantidad_hijos();
 
@@ -60,6 +64,10 @@ private:
     //Pre: ~
     //Pos: elimina el nodo con dos hijos y, si el nodo era raíz, se devuelve la nueva raíz.
     NodoABB<T, menor, igual> *baja_2_hijos();
+
+    // Pre: ~
+    // Pos: devuelve la altura del nodo
+    std::size_t altura();
 
 public:
     // Constructor.
