@@ -192,3 +192,11 @@ void Juego::ejecutar() {
         cout << i << " ";
     }
 }
+
+void Juego::cargar_nivel(const int layout[Tablero::TAMANIO_TABLERO][Tablero::TAMANIO_TABLERO]) {
+    for (size_t i = 0; i < Tablero::TAMANIO_TABLERO; i++) {
+        for (size_t j = 0; j < Tablero::TAMANIO_TABLERO; j++) {
+            layout_actual.elemento(i, j) = layout[i][j];
+        }
+    }
+}
