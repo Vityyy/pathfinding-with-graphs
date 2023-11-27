@@ -38,14 +38,18 @@ void Pyramid_head::set(size_t nueva_coordenada_x, size_t nueva_coordenada_y, Mat
     }
 }
 
-std::size_t Pyramid_head::posicion() const {
+size_t Pyramid_head::posicion() const {
     return localizacion;
 }
 
-std::size_t Pyramid_head::x() const {
+size_t Pyramid_head::x() const {
     return coordenada_x;
 }
 
-std::size_t Pyramid_head::y() const {
+size_t Pyramid_head::y() const {
     return coordenada_y;
+}
+
+vector<size_t> Pyramid_head::adyacentes() {
+    return casillas_adyacentes;
 }
