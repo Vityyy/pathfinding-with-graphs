@@ -45,3 +45,7 @@ std::size_t Pyramid_head::posicion() const {
 std::size_t Pyramid_head::x() const {
     return coordenada_x;
 }
+
+std::size_t Pyramid_head::y() const {
+    return coordenada_y;
+}
