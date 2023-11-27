@@ -37,3 +37,7 @@ void Pyramid_head::set(size_t nueva_coordenada_x, size_t nueva_coordenada_y, Mat
         casillas_adyacentes.push_back(size_t(layout_actual.elemento(nueva_coordenada_y + 1, nueva_coordenada_x)));
     }
 }
+
+std::size_t Pyramid_head::posicion() const {
+    return localizacion;
+}
