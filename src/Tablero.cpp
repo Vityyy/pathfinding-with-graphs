@@ -37,3 +37,8 @@ void Tablero::conectar_vertices(Matriz tablero) {
 void Tablero::desconectar_casillas(std::size_t casilla1, std::size_t casilla2) {
     casillas.eliminar_arista(casilla1, casilla2);
 }
+
+std::pair<std::vector<std::size_t>, int> Tablero::camino_minimo(std::size_t origen, std::size_t destino) {
+    casillas.usar_dijkstra();
+    return casillas.obtener_camino_minimo(origen, destino);
+}
