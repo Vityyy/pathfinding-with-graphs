@@ -38,4 +38,6 @@ Arma *Juego::arma_actual = nullptr;
 
 vector<Pyramid_head> Juego::pyramid_heads = std::vector<Pyramid_head>{};
 
-
+bool Juego::hay_pyramid_head(size_t casilla) {
+    return pyramid_heads[0].posicion() == casilla || pyramid_heads[1].posicion() == casilla;
+}
