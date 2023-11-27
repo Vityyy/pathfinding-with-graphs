@@ -78,3 +78,68 @@ pair<size_t, size_t> Juego::ubicacion_en_matriz(int casilla) {
 
     return ubicacion;
 }
+
+vector<size_t> Juego::calcular_camino_minimo(size_t origen, size_t destino) {
+    Tablero tablero_actual = tablero_de_juego;
+    bool tiene_arma = arma_actual;
+    pair<vector<size_t>, int> mejor_camino_minimo;
+    mejor_camino_minimo.second = INFINITO;
+
+    size_t indice_ultima_casilla_adyacente;
+
+    pair<vector<size_t>, int> camino_minimo;
+
+    bool hay_pyramid_head_en_casilla = false;
+    bool es_adyacente = false;
+    bool pasa_por_adyacente = false;
+    bool hubo_cambios = false;
+
+    size_t iterador_casillas = 0;
+
+    bool camino_encontrado = false;
+    while (!camino_encontrado) {
+        camino_minimo = tablero_actual.camino_minimo(origen, destino);
+        tiene_arma = arma_actual;
+        hay_pyramid_head_en_casilla = false;
+        es_adyacente = false;
+        hubo_cambios = false;
+        pasa_por_adyacente = false;
+
+        while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
+            hay_pyramid_head_en_casilla = hay_pyramid_head(camino_minimo.first[iterador_casillas]);
+            if (hay_pyramid_head_en_casilla) {
+                if (!tiene_arma) {
+                    desconectar_casilla(tablero_actual, camino_minimo.first[iterador_casillas]);
+                } else {
+                    tiene_arma = false;
+                    hay_pyramid_head_en_casilla = false;
+                }
+            } else {
+                es_adyacente = es_adyacente_a_pyramid_head(camino_minimo.first[iterador_casillas]);
+                if (es_adyacente) {
+                    if (!tiene_arma) {
+                        camino_minimo.second += 40;
+                        indice_ultima_casilla_adyacente = iterador_casillas;
+                    }
+                    pasa_por_adyacente = true;
+                }
+            }
+            iterador_casillas++;
+        }
+
+        if (pasa_por_adyacente) {
+            desconectar_casilla(tablero_actual, camino_minimo.first[indice_ultima_casilla_adyacente]);
+        }
+
+        if (!hay_pyramid_head_en_casilla && camino_minimo.second < mejor_camino_minimo.second) {
+            mejor_camino_minimo = camino_minimo;
+            hubo_cambios = true;
+        }
+
+        if (!hay_pyramid_head_en_casilla && camino_minimo.second >= mejor_camino_minimo.second && !hubo_cambios) {
+            camino_encontrado = true;
+        }
+    }
+
+    return ((mejor_camino_minimo.second != INFINITO) ? (mejor_camino_minimo.first) : (vector<size_t>()));
+}
