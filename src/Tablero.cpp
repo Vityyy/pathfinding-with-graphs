@@ -42,3 +42,10 @@ std::pair<std::vector<std::size_t>, int> Tablero::camino_minimo(std::size_t orig
     casillas.usar_dijkstra();
     return casillas.obtener_camino_minimo(origen, destino);
 }
+
+void Tablero::modificar(Matriz tablero) {
+    for (size_t i = 0; i < MAXIMO_TAMANIO_TABLERO - 1; i++) {
+        casillas.eliminar_arista(i, i + 1);
+    }
+    conectar_vertices(tablero);
+}
