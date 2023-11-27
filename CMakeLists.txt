@@ -35,6 +35,9 @@ add_executable(TP3_Grupo_Nullptrs
         include/MenuDescifrarMensaje.hpp
         src/MenuInventarioDePrioridad.cpp
         include/MenuInventarioDePrioridad.hpp
+        src/Juego.cpp
+        src/Tablero.cpp
+        src/Pyramid_head.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "main")
