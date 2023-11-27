@@ -13,10 +13,6 @@ private:
     Grafo casillas{};
 
     // Pre: ~
-    // Pos: crea 81 vertices (la mayor cantidad que puede tener un tablero) dentro del grafo casillas.
-    void crear_vertices();
-
-    // Pre: ~
     // Pos: conecta los vertices de casillas basandose en tablero
     void conectar_vertices(Matriz tablero);
 

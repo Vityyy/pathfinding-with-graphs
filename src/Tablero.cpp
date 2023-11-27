@@ -5,3 +5,31 @@ using namespace std;
 Tablero::Tablero() {
     casillas = Grafo(MAXIMO_TAMANIO_TABLERO);
 }
+
+void Tablero::conectar_vertices(Matriz tablero) {
+    for (size_t i = 0; i < TAMANIO_TABLERO; i++) {
+        for (size_t j = 0; j < TAMANIO_TABLERO; j++) {
+            if (tablero.elemento(i, j) != PARED) {
+                // Comprobación derecha
+                if (j < (TAMANIO_TABLERO - 1) && tablero.elemento(i, j + 1) != PARED) {
+                    casillas.cambiar_arista(size_t(tablero.elemento(i, j)), size_t(tablero.elemento(i, j + 1)), 10);
+                }
+
+                // Comprobación izquierda
+                if (j != 0 && tablero.elemento(i, j - 1) != PARED) {
+                    casillas.cambiar_arista(size_t(tablero.elemento(i, j)), size_t(tablero.elemento(i, j - 1)), 10);
+                }
+
+                // Comprobación abajo
+                if (i < (TAMANIO_TABLERO - 1) && tablero.elemento(i + 1, j) != PARED) {
+                    casillas.cambiar_arista(size_t(tablero.elemento(i, j)), size_t(tablero.elemento(i + 1, j)), 10);
+                }
+
+                // Comprobación arriba
+                if (i != 0 && tablero.elemento(i - 1, j) != PARED) {
+                    casillas.cambiar_arista(size_t(tablero.elemento(i, j)), size_t(tablero.elemento(i - 1, j)), 10);
+                }
+            }
+        }
+    }
+}
