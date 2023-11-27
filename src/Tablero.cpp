@@ -33,3 +33,7 @@ void Tablero::conectar_vertices(Matriz tablero) {
         }
     }
 }
+
+void Tablero::desconectar_casillas(std::size_t casilla1, std::size_t casilla2) {
+    casillas.eliminar_arista(casilla1, casilla2);
+}
