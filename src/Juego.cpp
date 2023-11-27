@@ -177,3 +177,18 @@ void Juego::desconectar_casilla(Tablero &tablero, std::size_t casilla) {
     }
     //@formatter:on
 }
+
+void Juego::ejecutar() {
+    for (int _ = 0; _ < Tablero::TAMANIO_TABLERO; _++) {
+        layout_actual.expandir();
+    }
+
+    cargar_nivel(layout_1);
+    tablero_de_juego.modificar(layout_actual);
+    pyramid_heads.emplace_back(3, 5, layout_actual);
+    pyramid_heads.emplace_back(8, 3, layout_actual);
+    vector<size_t> caminito = calcular_camino_minimo(46, 4);
+    for (unsigned long &i: caminito) {
+        cout << i << " ";
+    }
+}
