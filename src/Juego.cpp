@@ -41,3 +41,20 @@ vector<Pyramid_head> Juego::pyramid_heads = std::vector<Pyramid_head>{};
 bool Juego::hay_pyramid_head(size_t casilla) {
     return pyramid_heads[0].posicion() == casilla || pyramid_heads[1].posicion() == casilla;
 }
+
+bool Juego::es_adyacente_a_pyramid_head(size_t casilla) {
+    size_t iterador_pyramid_heads = 0;
+    size_t iterador_adyacentes = 0;
+    bool es_adyacente = false;
+
+    while (!es_adyacente && iterador_pyramid_heads < pyramid_heads.size()) {
+        while (!es_adyacente && iterador_adyacentes < pyramid_heads[iterador_pyramid_heads].adyacentes().size()) {
+            es_adyacente = (pyramid_heads[iterador_pyramid_heads].adyacentes()[iterador_adyacentes] == casilla);
+            iterador_adyacentes++;
+        }
+
+        iterador_pyramid_heads++;
+    }
+
+    return es_adyacente;
+}
