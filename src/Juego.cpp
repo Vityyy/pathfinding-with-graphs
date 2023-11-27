@@ -58,3 +58,23 @@ bool Juego::es_adyacente_a_pyramid_head(size_t casilla) {
 
     return es_adyacente;
 }
+
+pair<size_t, size_t> Juego::ubicacion_en_matriz(int casilla) {
+    bool encontrado = false;
+    size_t i = 0, j = 0;
+    pair<size_t, size_t> ubicacion = {0, 0};
+    while (!encontrado && i < Tablero::TAMANIO_TABLERO) {
+        while (!encontrado && j < Tablero::TAMANIO_TABLERO) {
+            if (casilla == layout_actual.elemento(i, j)) {
+                encontrado = true;
+                ubicacion.first = j;
+                ubicacion.second = i;
+            }
+            j++;
+        }
+        j = 0;
+        i++;
+    }
+
+    return ubicacion;
+}
