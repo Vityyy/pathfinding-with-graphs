@@ -143,3 +143,37 @@ vector<size_t> Juego::calcular_camino_minimo(size_t origen, size_t destino) {
 
     return ((mejor_camino_minimo.second != INFINITO) ? (mejor_camino_minimo.first) : (vector<size_t>()));
 }
+
+void Juego::desconectar_casilla(Tablero &tablero, std::size_t casilla) {
+    pair<size_t, size_t> posicion_en_matrix = ubicacion_en_matriz(int(casilla));
+
+    //@formatter:off
+    // Desconectar abajo
+    if (posicion_en_matrix.second < Tablero::TAMANIO_TABLERO - 1 && layout_actual.elemento(posicion_en_matrix.second + 1, posicion_en_matrix.first) > 0) {
+
+        tablero.desconectar_casillas(casilla, size_t(layout_actual.elemento(posicion_en_matrix.second + 1, posicion_en_matrix.first)));
+        tablero.desconectar_casillas(size_t(layout_actual.elemento(posicion_en_matrix.second + 1, posicion_en_matrix.first)), casilla);
+    }
+
+    // Desconectar derecha
+    if (posicion_en_matrix.first < Tablero::TAMANIO_TABLERO - 1 && layout_actual.elemento(posicion_en_matrix.second, posicion_en_matrix.first + 1) > 0) {
+
+        tablero.desconectar_casillas(casilla, size_t(layout_actual.elemento(posicion_en_matrix.second, posicion_en_matrix.first + 1)));
+        tablero.desconectar_casillas(size_t(layout_actual.elemento(posicion_en_matrix.second, posicion_en_matrix.first + 1)), casilla);
+    }
+
+    // Desconectar arriba
+    if (posicion_en_matrix.second > 0 && layout_actual.elemento(posicion_en_matrix.second - 1, posicion_en_matrix.first) > 0) {
+
+        tablero.desconectar_casillas(casilla, size_t(layout_actual.elemento(posicion_en_matrix.second - 1, posicion_en_matrix.first)));
+        tablero.desconectar_casillas(size_t(layout_actual.elemento(posicion_en_matrix.second - 1, posicion_en_matrix.first)), casilla);
+    }
+
+    // Desconectar izquierda
+    if (posicion_en_matrix.first > 0 && layout_actual.elemento(posicion_en_matrix.second, posicion_en_matrix.first - 1) > 0) {
+
+        tablero.desconectar_casillas(casilla, size_t(layout_actual.elemento(posicion_en_matrix.second, posicion_en_matrix.first - 1)));
+        tablero.desconectar_casillas(size_t(layout_actual.elemento(posicion_en_matrix.second, posicion_en_matrix.first - 1)), casilla);
+    }
+    //@formatter:on
+}
