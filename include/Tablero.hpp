@@ -2,36 +2,49 @@
 #define TABLERO_HPP
 
 #include "Grafo.hpp"
+#include <string>
+#include <fstream>
+#include "CoordenadaMatriz.hpp"
 
 class Tablero {
 public:
     static const int TAMANIO_TABLERO = 9;
-    static const int PARED = -1;
+    static const int PARED = 1;
     static const std::size_t MAXIMO_TAMANIO_TABLERO = 81;
 
 private:
-    Grafo casillas{};
+    Matriz casillas{TAMANIO_TABLERO};
+    Grafo grafo_casillas{MAXIMO_TAMANIO_TABLERO};
 
     // Pre: ~
     // Pos: conecta los vertices de casillas basandose en tablero
     void conectar_vertices(Matriz tablero);
 
+    // Pre: ~
+    // Pos: devuelve un vector con las palabras separadas por el separador
+    std::vector<std::string> split(const std::string &linea, char separador);
+
 public:
 
-    // Crea un tablero de 81 casillas
-    Tablero();
-
     // Pre: ~
-    // Pos: conecta las casillas basandose en tablero
-    void modificar(Matriz tablero);
+    // Pos: Crea un tablero de 81 casillas
+    Tablero() = default;
+
+    // Pre: el archivo existe y es válido, el nombre_archivo no debe contener la extension
+    // Pos: carga un nivel en base al archivo
+    void cargar_nivel(const std::string &nombre_archivo);
 
     // Pre: ~
     // Pos: impide el paso entre dos casillas del tablero
-    void desconectar_casillas(std::size_t casilla1, std::size_t casilla2);
+    void desconectar_casillas(CoordenadaMatriz casilla1, CoordenadaMatriz casilla2);
 
     // Pre: ~
     // Pos: devuelve el camino mínimo desde el origen hasta el destino
-    std::pair<std::vector<std::size_t>, int> camino_minimo(std::size_t origen, std::size_t destino);
+    std::pair<std::vector<std::size_t>, int> camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino);
+
+    // Pre: ~
+    // Pos: devuelve la casilla en la posicion (fila, columna)
+    [[nodiscard("Se ignora el retorno de casilla()")]] int casilla(std::size_t fila, std::size_t columna);
 };
 
 #endif //TABLERO_HPP
