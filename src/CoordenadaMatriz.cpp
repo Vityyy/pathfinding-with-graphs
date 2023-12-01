@@ -8,3 +8,7 @@ CoordenadaMatriz::CoordenadaMatriz(std::size_t fila, std::size_t columna) {
 std::size_t &CoordenadaMatriz::fil() {
     return fila;
 }
+
+std::size_t &CoordenadaMatriz::col() {
+    return columna;
+}
