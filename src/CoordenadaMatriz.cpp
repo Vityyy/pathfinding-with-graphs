@@ -12,3 +12,7 @@ std::size_t &CoordenadaMatriz::fil() {
 std::size_t &CoordenadaMatriz::col() {
     return columna;
 }
+
+bool CoordenadaMatriz::operator==(const CoordenadaMatriz &coordenada) const {
+    return fila == coordenada.fila && columna == coordenada.columna;
+}
