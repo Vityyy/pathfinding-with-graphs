@@ -17,11 +17,11 @@ public:
 
     // Pre: ~
     // Pos: crea un pyramid head ubicado en (fila, columna)
-    Pyramid_head(std::size_t fila, std::size_t columna, Matriz layout_actual);
+    Pyramid_head(std::size_t fila, std::size_t columna, Tablero tablero_de_juego);
 
     // Pre: ~
     // Pos: setea al pyramid head en la posicion(fila, columna)
-    void set(std::size_t fila, std::size_t columna, Matriz layout_actual);
+    void set(std::size_t fila, std::size_t columna, Tablero tablero_de_juego);
 
     // Pre: ~
     // Pos: devuelve la localizacion del pyramid head
@@ -29,7 +29,7 @@ public:
 
     // Pre: ~
     // Pos: devuelve las casillas adyacentes al pyramid head
-    [[nodiscard("Se ignora el retorno de adyacentes")]] std::vector<CoordenadaMatriz> adyacentes();
+    [[nodiscard("Se ignora el retorno de adyacentes()")]] std::vector<CoordenadaMatriz> adyacentes();
 };
 
 #endif //PYRAMID_HEAD_HPP

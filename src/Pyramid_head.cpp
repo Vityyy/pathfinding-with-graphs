@@ -1,34 +1,34 @@
 #include "Pyramid_head.hpp"
 
+#include <utility>
+
 using namespace std;
 
-Pyramid_head::Pyramid_head(size_t fila, size_t columna, Matriz layout_actual) {
-    set(fila, columna, layout_actual);
+Pyramid_head::Pyramid_head(size_t fila, size_t columna, Tablero tablero_de_juego) {
+    set(fila, columna, std::move(tablero_de_juego));
 }
 
-void Pyramid_head::set(size_t fila, size_t columna, Matriz layout_actual) {
+void Pyramid_head::set(size_t fila, size_t columna, Tablero tablero_de_juego) {
     coordenada.fil() = fila;
     coordenada.col() = columna;
 
     // Comprobar arriba
-    if (columna != 0 && layout_actual.elemento(columna - 1, fila) != Tablero::PARED) {
+    if (columna != 0 && tablero_de_juego.casilla(columna - 1, fila) != Tablero::PARED) {
         casillas_adyacentes.emplace_back(columna - 1, fila);
     }
 
     // Comprobar izquierda
-    if (fila != 0 && layout_actual.elemento(columna, fila - 1) != Tablero::PARED) {
+    if (fila != 0 && tablero_de_juego.casilla(columna, fila - 1) != Tablero::PARED) {
         casillas_adyacentes.emplace_back(columna, fila - 1);
     }
 
     // Comprobar derecha
-    if (fila < Tablero::TAMANIO_TABLERO - 1 && layout_actual.elemento(columna, fila + 1) != Tablero::PARED) {
-
+    if (fila < Tablero::TAMANIO_TABLERO - 1 && tablero_de_juego.casilla(columna, fila + 1) != Tablero::PARED) {
         casillas_adyacentes.emplace_back(columna, fila + 1);
     }
 
     //Comprobar abajo
-    if (columna < Tablero::TAMANIO_TABLERO - 1 && layout_actual.elemento(columna + 1, fila) != Tablero::PARED) {
-
+    if (columna < Tablero::TAMANIO_TABLERO - 1 && tablero_de_juego.casilla(columna + 1, fila) != Tablero::PARED) {
         casillas_adyacentes.emplace_back(columna + 1, fila);
     }
 }
