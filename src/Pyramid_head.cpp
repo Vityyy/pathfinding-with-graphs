@@ -2,54 +2,41 @@
 
 using namespace std;
 
-Pyramid_head::Pyramid_head(size_t coordenada_x, size_t coordenada_y, Matriz layout_actual) {
-    set(coordenada_x, coordenada_y, layout_actual);
+Pyramid_head::Pyramid_head(size_t fila, size_t columna, Matriz layout_actual) {
+    set(fila, columna, layout_actual);
 }
 
-void Pyramid_head::set(size_t nueva_coordenada_x, size_t nueva_coordenada_y, Matriz layout_actual) {
-    coordenada_x = nueva_coordenada_x;
-    coordenada_y = nueva_coordenada_y;
-    localizacion = size_t(layout_actual.elemento(nueva_coordenada_y, nueva_coordenada_x));
+void Pyramid_head::set(size_t fila, size_t columna, Matriz layout_actual) {
+    coordenada.fil() = fila;
+    coordenada.col() = columna;
 
     // Comprobar arriba
-    if (nueva_coordenada_y != 0 &&
-        layout_actual.elemento(nueva_coordenada_y - 1, nueva_coordenada_x) != Tablero::PARED) {
-        casillas_adyacentes.push_back(size_t(layout_actual.elemento(nueva_coordenada_y - 1, nueva_coordenada_x)));
+    if (columna != 0 && layout_actual.elemento(columna - 1, fila) != Tablero::PARED) {
+        casillas_adyacentes.emplace_back(columna - 1, fila);
     }
 
     // Comprobar izquierda
-    if (nueva_coordenada_x != 0 &&
-        layout_actual.elemento(nueva_coordenada_y, nueva_coordenada_x - 1) != Tablero::PARED) {
-        casillas_adyacentes.push_back(size_t(layout_actual.elemento(nueva_coordenada_y, nueva_coordenada_x - 1)));
+    if (fila != 0 && layout_actual.elemento(columna, fila - 1) != Tablero::PARED) {
+        casillas_adyacentes.emplace_back(columna, fila - 1);
     }
 
     // Comprobar derecha
-    if (nueva_coordenada_x < Tablero::TAMANIO_TABLERO - 1 &&
-        layout_actual.elemento(nueva_coordenada_y, nueva_coordenada_x + 1) != Tablero::PARED) {
+    if (fila < Tablero::TAMANIO_TABLERO - 1 && layout_actual.elemento(columna, fila + 1) != Tablero::PARED) {
 
-        casillas_adyacentes.push_back(size_t(layout_actual.elemento(nueva_coordenada_y, nueva_coordenada_x + 1)));
+        casillas_adyacentes.emplace_back(columna, fila + 1);
     }
 
     //Comprobar abajo
-    if (nueva_coordenada_y < Tablero::TAMANIO_TABLERO - 1 &&
-        layout_actual.elemento(nueva_coordenada_y + 1, nueva_coordenada_x) != Tablero::PARED) {
+    if (columna < Tablero::TAMANIO_TABLERO - 1 && layout_actual.elemento(columna + 1, fila) != Tablero::PARED) {
 
-        casillas_adyacentes.push_back(size_t(layout_actual.elemento(nueva_coordenada_y + 1, nueva_coordenada_x)));
+        casillas_adyacentes.emplace_back(columna + 1, fila);
     }
 }
 
-size_t Pyramid_head::posicion() const {
-    return localizacion;
+CoordenadaMatriz Pyramid_head::posicion() const {
+    return coordenada;
 }
 
-size_t Pyramid_head::x() const {
-    return coordenada_x;
-}
-
-size_t Pyramid_head::y() const {
-    return coordenada_y;
-}
-
-vector<size_t> Pyramid_head::adyacentes() {
+vector<CoordenadaMatriz> Pyramid_head::adyacentes() {
     return casillas_adyacentes;
 }
