@@ -4,11 +4,7 @@
 
 using namespace std;
 
-InventarioDePrioridad Juego::inventario = InventarioDePrioridad();
-
 Tablero Juego::tablero_de_juego = Tablero();
-
-Arma *Juego::arma_actual = nullptr;
 
 vector<Pyramid_head> Juego::pyramid_heads = std::vector<Pyramid_head>{};
 
@@ -39,12 +35,11 @@ bool Juego::es_adyacente_a_pyramid_head(CoordenadaMatriz coordenada) {
     return es_adyacente;
 }
 
-vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino) {
+vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino, size_t cantidad_armas) {
     Tablero tablero_actual = tablero_de_juego;
-    bool tiene_arma = arma_actual;
+    size_t cantidad_armas_actual = cantidad_armas;
     pair<vector<size_t>, int> mejor_camino_minimo;
     mejor_camino_minimo.second = INFINITO;
-
     pair<vector<size_t>, int> camino_minimo;
 
     bool hay_pyramid_head_en_casilla = false;
@@ -53,12 +48,11 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
     bool hubo_cambios = false;
 
     size_t iterador_casillas = 0;
-
     CoordenadaMatriz coordenada_casilla_actual;
     bool camino_encontrado = false;
     while (!camino_encontrado) {
         camino_minimo = tablero_actual.camino_minimo(origen, destino);
-        tiene_arma = arma_actual;
+        cantidad_armas_actual = cantidad_armas;
         hay_pyramid_head_en_casilla = false;
         es_adyacente = false;
         hubo_cambios = false;
@@ -73,10 +67,10 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
 
             hay_pyramid_head_en_casilla = hay_pyramid_head(coordenada_casilla_actual);
             if (hay_pyramid_head_en_casilla) {
-                if (!tiene_arma) {
+                if (!cantidad_armas_actual) {
                     desconectar_casilla(coordenada_casilla_actual, tablero_actual);
                 } else {
-                    tiene_arma = false;
+                    cantidad_armas_actual--;
                     hay_pyramid_head_en_casilla = false;
                 }
             }
@@ -92,7 +86,7 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
 
             es_adyacente = es_adyacente_a_pyramid_head(coordenada_casilla_actual);
             if (es_adyacente) {
-                if (!tiene_arma) {
+                if (!cantidad_armas) {
                     camino_minimo.second += 40;
                 }
                 pasa_por_adyacente = true;
@@ -142,8 +136,8 @@ void Juego::desconectar_casilla(CoordenadaMatriz coordenada, Tablero &tablero) {
 void Juego::ejecutar() {
     tablero_de_juego.cargar_nivel("layout_1");
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
-    pyramid_heads.emplace_back(6, 4, tablero_de_juego);
-    vector<size_t> camino = calcular_camino_minimo({8, 0}, {0, 8});
+    pyramid_heads.emplace_back(5, 4, tablero_de_juego);
+    vector<size_t> camino = calcular_camino_minimo({8, 0}, {0, 8}, 0);
     for (unsigned long &i: camino) {
         cout << i << " ";
     }

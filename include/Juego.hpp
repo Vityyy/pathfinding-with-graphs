@@ -8,14 +8,14 @@
 
 class Juego {
 private:
-    static InventarioDePrioridad inventario;
     static Tablero tablero_de_juego;
     static std::vector<Pyramid_head> pyramid_heads;
-    static Arma *arma_actual;
 
     // Pre:~
-    // Post: devuelve el camino minimo de una casilla a otra.
-    static std::vector<std::size_t> calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino);
+    // Post: devuelve el camino minimo de una casilla a otra
+    //@formatter:off
+    static std::vector<std::size_t> calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino, std::size_t cantidad_armas);
+    //@formatter:on
 
     // Pre: ~
     // Pos: desconecta una casilla con sus adyacentes.
@@ -36,6 +36,5 @@ public:
     static void ejecutar();
 
 };
-
 
 #endif //JUEGO_HPP
