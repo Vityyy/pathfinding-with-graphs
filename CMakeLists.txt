@@ -39,6 +39,7 @@ add_executable(TP3_Grupo_Nullptrs
         src/Tablero.cpp
         src/Pyramid_head.cpp
         src/CoordenadaMatriz.cpp
+        src/James.cpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "main")
