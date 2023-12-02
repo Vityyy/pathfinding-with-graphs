@@ -48,11 +48,37 @@ std::vector<std::string> Tablero::split(const string &linea, char separador) {
     return resultado;
 }
 
+void Tablero::descargar_nivel() {
+    for (size_t i = 0; i < MAXIMO_TAMANIO_TABLERO; i++) {
+        // Comprobación "derecha"
+        if (i < MAXIMO_TAMANIO_TABLERO - 1) {
+            grafo_casillas.eliminar_arista(i, i + 1);
+        }
+
+        // Comprobación "izquierda"
+        if (i != 0) {
+            grafo_casillas.eliminar_arista(i, i - 1);
+        }
+
+        // Comprobación "abajo"
+        if (i < MAXIMO_TAMANIO_TABLERO - TAMANIO_TABLERO) {
+            grafo_casillas.eliminar_arista(i, i + TAMANIO_TABLERO);
+        }
+
+        // Comprobación "arriba"
+        if (i >= TAMANIO_TABLERO) {
+            grafo_casillas.eliminar_arista(i, i - TAMANIO_TABLERO);
+        }
+    }
+}
+
 void Tablero::cargar_nivel(const std::string &nombre_archivo) {
+    descargar_nivel();
     ifstream archivo_nivel("layouts/" + nombre_archivo + ".csv");
 
     if (!archivo_nivel.is_open()) {
-        exit(-1);
+        cout << "No se pudo abrir el archivo" << endl;
+        return;
     }
 
     string linea;
