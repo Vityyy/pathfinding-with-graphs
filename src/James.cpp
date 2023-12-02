@@ -52,6 +52,10 @@ void James::perder_arma_equipada() {
     arma_actual = nullptr;
 }
 
+std::size_t James::altura_placas() {
+    return placas.altura();
+}
+
 James::~James() {
     delete arma_actual;
     arma_actual = nullptr;

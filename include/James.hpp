@@ -3,6 +3,8 @@
 
 #include "InventarioDePrioridad.hpp"
 #include "CoordenadaMatriz.hpp"
+#include "ABB.hpp"
+#include "Placa.hpp"
 
 class James {
 private:
@@ -10,6 +12,7 @@ private:
     CoordenadaMatriz coordenada{8, 0};
     InventarioDePrioridad armas{};
     Arma *arma_actual = nullptr;
+    ABB<Placa *, Placa::menor, Placa::igual> placas{};
 
 public:
     // Constructor default
@@ -42,6 +45,10 @@ public:
     // Pre: ~
     // Pos: pierde el arma equipada
     void perder_arma_equipada();
+
+    // Pre: ~
+    // Pos: devuelve la altura de las placas
+    std::size_t altura_placas();
 
     // Destructor
     // Pre: ~
