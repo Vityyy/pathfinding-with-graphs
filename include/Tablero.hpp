@@ -24,6 +24,10 @@ private:
     // Pos: devuelve un vector con las palabras separadas por el separador
     std::vector<std::string> split(const std::string &linea, char separador);
 
+    // Pre: ~
+    // Pos: elimina las aristas que conectan a las casillas
+    void descargar_nivel();
+
 public:
 
     // Pre: ~
