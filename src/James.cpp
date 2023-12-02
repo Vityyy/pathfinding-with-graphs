@@ -18,3 +18,15 @@ void James::equipar_arma_fuerte() {
         arma_actual = new Arma(armas.baja_arma_fuerte());
     }
 }
+
+void James::equipar_arma_debil() {
+    if (armas.vacio()) {
+        cout << "No hay armas en el inventario" << endl;
+
+    } else if (tiene_arma_equipada()) {
+        cout << "Ya hay un arma equipada" << endl;
+
+    } else {
+        arma_actual = new Arma(armas.baja_arma_debil());
+    }
+}
