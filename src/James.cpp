@@ -51,3 +51,8 @@ void James::perder_arma_equipada() {
     delete arma_actual;
     arma_actual = nullptr;
 }
+
+James::~James() {
+    delete arma_actual;
+    arma_actual = nullptr;
+}
