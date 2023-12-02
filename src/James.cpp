@@ -7,6 +7,10 @@ CoordenadaMatriz &James::posicion() {
     return coordenada;
 }
 
+void James::obtener_arma(const Arma &arma) {
+    armas.alta(arma);
+}
+
 void James::equipar_arma_fuerte() {
     if (armas.vacio()) {
         cout << "No hay armas en el inventario" << endl;

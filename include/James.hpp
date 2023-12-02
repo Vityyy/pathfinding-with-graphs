@@ -23,6 +23,10 @@ public:
     CoordenadaMatriz &posicion();
 
     // Pre: ~
+    // Pos: agrega un arma al inventario
+    void obtener_arma(const Arma &arma);
+
+    // Pre: ~
     // Pos: equipa el arma más fuerte
     void equipar_arma_fuerte();
 
