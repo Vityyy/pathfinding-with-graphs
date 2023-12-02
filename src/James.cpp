@@ -32,8 +32,11 @@ void James::equipar_arma_debil() {
 }
 
 void James::desequipar_arma() {
-    delete arma_actual;
-    arma_actual = nullptr;
+    if (tiene_arma_equipada()) {
+        armas.alta(*arma_actual);
+        delete arma_actual;
+        arma_actual = nullptr;
+    }
 }
 
 std::size_t James::cantidad_de_armas() {
@@ -42,4 +45,9 @@ std::size_t James::cantidad_de_armas() {
 
 bool James::tiene_arma_equipada() {
     return arma_actual;
+}
+
+void James::perder_arma_equipada() {
+    delete arma_actual;
+    arma_actual = nullptr;
 }
