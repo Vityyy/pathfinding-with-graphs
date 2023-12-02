@@ -39,3 +39,7 @@ void James::desequipar_arma() {
 std::size_t James::cantidad_de_armas() {
     return armas.cantidad_armas();
 }
+
+bool James::tiene_arma_equipada() {
+    return arma_actual;
+}
