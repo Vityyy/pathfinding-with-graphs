@@ -28,7 +28,7 @@ public:
     void equipar_arma_debil();
 
     // Pre: ~
-    // Pos: desequipa el arma actual, si no tiene un arma equipada no hace nada
+    // Pos: desequipa el arma actual, si no tiene un arma equipada hace nada
     void desequipar_arma();
 
     // Pre: ~

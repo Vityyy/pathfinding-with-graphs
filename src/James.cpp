@@ -35,3 +35,7 @@ void James::desequipar_arma() {
     delete arma_actual;
     arma_actual = nullptr;
 }
+
+std::size_t James::cantidad_de_armas() {
+    return armas.cantidad_armas();
+}
