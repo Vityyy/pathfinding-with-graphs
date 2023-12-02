@@ -30,3 +30,8 @@ void James::equipar_arma_debil() {
         arma_actual = new Arma(armas.baja_arma_debil());
     }
 }
+
+void James::desequipar_arma() {
+    delete arma_actual;
+    arma_actual = nullptr;
+}
