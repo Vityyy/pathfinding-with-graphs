@@ -360,3 +360,7 @@ void Juego::ejecutar() {
         cout << endl;
     }
 }
+
+bool Juego::es_accion(char accion) {
+    return accion == 'e' || accion == 'q' || accion == 'r' || accion == 'f';
+}
