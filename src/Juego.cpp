@@ -309,11 +309,54 @@ char Juego::pedir_accion() {
 }
 
 void Juego::ejecutar() {
+    /*
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
     pyramid_heads.emplace_back(5, 4, tablero_de_juego);
     vector<size_t> camino = calcular_camino_minimo({8, 0}, {0, 8}, 0);
     for (unsigned long &i: camino) {
         cout << i << " ";
+    }
+     */
+    srand((unsigned int) time(nullptr));
+
+    size_t niveles_completados = 0;
+    Placa *nueva_placa = nullptr;
+    cargar_nivel();
+    generar_pyramid_heads();
+    jugador.posicion() = {8, 0};
+    bool gano = false;
+
+    while (!gano) {
+        imprimir_terreno();
+        accion_jugador(pedir_accion());
+
+
+        if (jugador.posicion() == CoordenadaMatriz(0, 8)) {
+            niveles_completados++;
+
+            if (niveles_completados < 5) {
+                do {
+                    delete nueva_placa;
+                    nueva_placa = new Placa(generar_placa());
+                } while (jugador.tiene_placa(nueva_placa));
+                jugador.agregar_placa(nueva_placa);
+                nueva_placa = nullptr;
+
+                if (numero_aleatorio_entre(1, 100) <= 20) {
+                    auto potencia_arma = (size_t) numero_aleatorio_entre(10, 100);
+                    jugador.obtener_arma(Arma("Arma: " + to_string(potencia_arma), potencia_arma));
+                }
+
+                cargar_nivel();
+
+                jugador.posicion() = CoordenadaMatriz(8, 0);
+
+                generar_pyramid_heads();
+            } else {
+                gano = true;
+            }
+        }
+        cout << endl;
     }
 }
