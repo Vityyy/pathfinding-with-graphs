@@ -136,6 +136,11 @@ int Juego::numero_aleatorio_entre(int minimo, int maximo) {
     return rand() % (maximo - minimo + 1) + minimo;
 }
 
+Placa Juego::generar_placa() {
+    int nuevo_id = numero_aleatorio_entre(100, 666);
+    return {"Placa: " + to_string(nuevo_id), "Leyenda: " + to_string(nuevo_id), nuevo_id};
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
