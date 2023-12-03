@@ -160,6 +160,10 @@ void Juego::generar_pyramid_heads() {
     }
 }
 
+bool Juego::hay_pared(CoordenadaMatriz coordenada) {
+    return tablero_de_juego.casilla(coordenada.fil(), coordenada.col()) == Tablero::PARED;
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
