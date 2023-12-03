@@ -192,6 +192,43 @@ void Juego::cargar_terreno(string terreno[Tablero::TAMANIO_TABLERO][Tablero::TAM
     }
 }
 
+void Juego::imprimir_terreno() {
+    string terreno[Tablero::TAMANIO_TABLERO][Tablero::TAMANIO_TABLERO];
+    cargar_terreno(terreno);
+    for (size_t i = 0; i < Tablero::TAMANIO_TABLERO + 2; i++) {
+        if (i == 0 || i == 10) {
+            for (size_t j = 0; j < Tablero::TAMANIO_TABLERO + 2; j++) {
+                cout << "#" << " ";
+            }
+
+        } else {
+            cout << "#" << " ";
+            for (size_t j = 0; j < Tablero::TAMANIO_TABLERO; j++) {
+                if (terreno[i - 1][j] == "4") {
+                    cout << color::rize(string(terreno[i - 1][j]), "Light Magenta", "Default", "Default", "Default")
+                         << " ";
+
+                } else if (terreno[i - 1][j] == "J") {
+                    cout << color::rize(string(terreno[i - 1][j]), "Light Yellow", "Default", "Default", "Default")
+                         << " ";
+
+                } else if (terreno[i - 1][j] == "F") {
+                    cout << color::rize(string(terreno[i - 1][j]), "Light Green", "Default", "Default", "Default")
+                         << " ";
+
+                } else if (terreno[i - 1][j] == "I") {
+                    cout << color::rize(string(terreno[i - 1][j]), "Light Red", "Default", "Default", "Default") << " ";
+
+                } else {
+                    cout << terreno[i - 1][j] << " ";
+                }
+            }
+            cout << "#" << " ";
+        }
+        cout << endl;
+    }
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
