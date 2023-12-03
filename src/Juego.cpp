@@ -364,3 +364,7 @@ void Juego::ejecutar() {
 bool Juego::es_accion(char accion) {
     return accion == 'e' || accion == 'q' || accion == 'r' || accion == 'f';
 }
+
+bool Juego::es_movimiento(char movimiento) {
+    return movimiento == 'w' || movimiento == 's' || movimiento == 'a' || movimiento == 'd';
+}
