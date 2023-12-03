@@ -126,6 +126,12 @@ void Juego::desconectar_casilla(CoordenadaMatriz coordenada, Tablero &tablero) {
     }
 }
 
+void Juego::cargar_nivel() {
+    //@formatter:off
+    (jugador.altura_placas() % 2 == 0) ? (tablero_de_juego.cargar_nivel("layout_1")) : (tablero_de_juego.cargar_nivel("layout_2"));
+    //@formatter:on
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
