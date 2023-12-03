@@ -44,7 +44,7 @@ public:
 
     // Pre: ~
     // Pos: devuelve el camino mínimo desde el origen hasta el destino
-    std::pair<std::vector<std::size_t>, int> camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino);
+    std::pair<std::vector<CoordenadaMatriz>, int> camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino);
 
     // Pre: ~
     // Pos: devuelve la casilla en la posicion (fila, columna)

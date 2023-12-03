@@ -112,10 +112,21 @@ void Tablero::desconectar_casillas(CoordenadaMatriz casilla1, CoordenadaMatriz c
                                    TAMANIO_TABLERO * casilla1.fil() + casilla1.col());
 }
 
-std::pair<std::vector<std::size_t>, int> Tablero::camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino) {
+std::pair<std::vector<CoordenadaMatriz>, int>
+Tablero::camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino) {
     grafo_casillas.usar_dijkstra();
-    return grafo_casillas.obtener_camino_minimo(TAMANIO_TABLERO * origen.fil() + origen.col(),
-                                                TAMANIO_TABLERO * destino.fil() + destino.col());
+    std::pair<std::vector<size_t>, int> camino_minimo = grafo_casillas.obtener_camino_minimo(
+            TAMANIO_TABLERO * origen.fil() + origen.col(),
+            TAMANIO_TABLERO * destino.fil() + destino.col());
+
+    std::pair<std::vector<CoordenadaMatriz>, std::size_t> coordenadas_camino_minimo;
+
+    for (unsigned long i: camino_minimo.first) {
+        coordenadas_camino_minimo.first.push_back(
+                CoordenadaMatriz((i - i % TAMANIO_TABLERO) / TAMANIO_TABLERO, i % TAMANIO_TABLERO));
+    }
+
+    return coordenadas_camino_minimo;
 }
 
 int Tablero::casilla(std::size_t fila, std::size_t columna) {
