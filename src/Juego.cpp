@@ -141,6 +141,25 @@ Placa Juego::generar_placa() {
     return {"Placa: " + to_string(nuevo_id), "Leyenda: " + to_string(nuevo_id), nuevo_id};
 }
 
+void Juego::generar_pyramid_heads() {
+    pyramid_heads.clear();
+    CoordenadaMatriz coordenada_pyramid_head;
+
+    for (size_t i = 0; i < 2; i++) {
+        if (numero_aleatorio_entre(1, 100) <= 50) {
+            do {
+                coordenada_pyramid_head = {(size_t) numero_aleatorio_entre(0, 8),
+                                           (size_t) numero_aleatorio_entre(0, 8)};
+
+            } while (hay_pared(coordenada_pyramid_head) || hay_pyramid_head(coordenada_pyramid_head) ||
+                     coordenada_pyramid_head == CoordenadaMatriz(0, 8) ||
+                     coordenada_pyramid_head == CoordenadaMatriz(8, 0));
+
+            pyramid_heads.emplace_back(coordenada_pyramid_head.fil(), coordenada_pyramid_head.col(), tablero_de_juego);
+        }
+    }
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
