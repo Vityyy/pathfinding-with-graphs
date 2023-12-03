@@ -442,3 +442,13 @@ void Juego::imprimir_camino_minimo() {
         cout << "#" << endl;
     }
 }
+
+bool Juego::esta_en_camino_minimo(CoordenadaMatriz coordenada, std::vector<CoordenadaMatriz> camino_minimo) {
+    bool esta_en_camino = false;
+    size_t iterador_camino = 0;
+    while (!esta_en_camino && iterador_camino < camino_minimo.size()) {
+        esta_en_camino = (coordenada == camino_minimo[iterador_camino]);
+        iterador_camino++;
+    }
+    return esta_en_camino;
+}
