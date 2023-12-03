@@ -229,6 +229,79 @@ void Juego::imprimir_terreno() {
     }
 }
 
+
+void Juego::accion_jugador(char accion) {
+    if (es_movimiento(accion)) {
+        switch (accion) {
+            case 'w':
+                if (jugador.posicion().fil() > 0 &&
+                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil() - 1, jugador.posicion().col())) &&
+                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil() - 1, jugador.posicion().col())) ||
+                     jugador.tiene_arma_equipada())) {
+
+                    jugador.posicion().fil()--;
+                }
+                break;
+
+            case 's':
+                if (jugador.posicion().fil() < Tablero::TAMANIO_TABLERO - 1 &&
+                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil() + 1, jugador.posicion().col())) &&
+                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil() + 1, jugador.posicion().col())) ||
+                     jugador.tiene_arma_equipada())) {
+
+                    jugador.posicion().fil()++;
+                }
+
+                break;
+
+            case 'a':
+                if (jugador.posicion().col() > 0 &&
+                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() - 1)) &&
+                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() - 1)) ||
+                     jugador.tiene_arma_equipada())) {
+
+                    jugador.posicion().col()--;
+                }
+                break;
+
+            case 'd':
+                if (jugador.posicion().col() < Tablero::TAMANIO_TABLERO - 1 &&
+                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() + 1)) &&
+                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() + 1)) ||
+                     jugador.tiene_arma_equipada())) {
+
+                    jugador.posicion().col()++;
+                }
+                break;
+
+            default:
+                break;
+        }
+    }
+    if (es_accion(accion)) {
+        switch (accion) {
+            case 'e':
+                jugador.equipar_arma_fuerte();
+                break;
+
+            case 'q':
+                jugador.equipar_arma_debil();
+                break;
+
+            case 'r':
+                jugador.desequipar_arma();
+                break;
+
+            case 'f':
+                imprimir_camino_minimo();
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
