@@ -40,6 +40,7 @@ add_executable(TP3_Grupo_Nullptrs
         src/Pyramid_head.cpp
         src/CoordenadaMatriz.cpp
         src/James.cpp
+        include/color.hpp
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "main")
