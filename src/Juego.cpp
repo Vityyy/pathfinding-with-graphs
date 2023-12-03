@@ -132,6 +132,10 @@ void Juego::cargar_nivel() {
     //@formatter:on
 }
 
+int Juego::numero_aleatorio_entre(int minimo, int maximo) {
+    return rand() % (maximo - minimo + 1) + minimo;
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
