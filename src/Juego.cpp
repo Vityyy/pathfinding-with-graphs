@@ -368,3 +368,77 @@ bool Juego::es_accion(char accion) {
 bool Juego::es_movimiento(char movimiento) {
     return movimiento == 'w' || movimiento == 's' || movimiento == 'a' || movimiento == 'd';
 }
+
+void Juego::imprimir_camino_minimo() {
+    vector<CoordenadaMatriz> camino_minimo = calcular_camino_minimo(jugador.posicion(), {0, 8},
+                                                                    jugador.tiene_arma_equipada());
+
+    for (size_t i = 0; i < Tablero::TAMANIO_TABLERO + 2; i++) {
+        if (i == 0 || i == 10) {
+            for (size_t j = 0; j < Tablero::TAMANIO_TABLERO + 2; j++) {
+                cout << "#" << " ";
+            }
+
+        } else {
+            cout << "#" << " ";
+            for (size_t j = 0; j < Tablero::TAMANIO_TABLERO; j++) {
+                if (hay_pyramid_head({i - 1, j})) {
+                    if (esta_en_camino_minimo({i - 1, j}, camino_minimo)) {
+                        cout << color::rize("4", "Light Magenta", "Blue", "Default", "Default") << " ";
+
+                    } else {
+                        cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
+
+                    }
+
+                } else if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
+                    if (esta_en_camino_minimo({i - 1, j}, camino_minimo)) {
+                        cout << color::rize("J", "Light Yellow", "Blue", "Default", "Default") << " ";
+
+                    } else {
+                        cout << color::rize("J", "Light Yellow", "Default", "Default", "Default") << " ";
+
+                    }
+
+                } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
+                    if (esta_en_camino_minimo({i - 1, j}, camino_minimo)) {
+                        cout << color::rize("F", "Light Green", "Blue", "Default", "Default") << " ";
+
+                    } else {
+                        cout << color::rize("F", "Light Green", "Default", "Default", "Default") << " ";
+
+                    }
+
+                } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(8, 0)) {
+                    if (esta_en_camino_minimo({i - 1, j}, camino_minimo)) {
+                        cout << color::rize("I", "Light Red", "Blue", "Default", "Default") << " ";
+
+                    } else {
+                        cout << color::rize("I", "Light Red", "Default", "Default", "Default") << " ";
+
+                    }
+
+                } else if (hay_pared({i - 1, j})) {
+                    if (esta_en_camino_minimo({i - 1, j}, camino_minimo)) {
+                        cout << color::rize("#", "Default", "Blue", "Default", "Default") << " ";
+
+                    } else {
+                        cout << color::rize("#", "Default", "Default", "Default", "Default") << " ";
+
+                    }
+
+                } else {
+                    if (esta_en_camino_minimo({i - 1, j}, camino_minimo)) {
+                        cout << color::rize("_", "Default", "Blue", "Default", "Default") << " ";
+
+                    } else {
+                        cout << color::rize("_", "Default", "Default", "Default", "Default") << " ";
+
+                    }
+
+                }
+            }
+        }
+        cout << "#" << endl;
+    }
+}
