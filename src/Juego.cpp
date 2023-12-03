@@ -164,6 +164,34 @@ bool Juego::hay_pared(CoordenadaMatriz coordenada) {
     return tablero_de_juego.casilla(coordenada.fil(), coordenada.col()) == Tablero::PARED;
 }
 
+void Juego::cargar_terreno(string terreno[Tablero::TAMANIO_TABLERO][Tablero::TAMANIO_TABLERO]) {
+    for (size_t i = 0; i < Tablero::TAMANIO_TABLERO; i++) {
+        for (size_t j = 0; j < Tablero::TAMANIO_TABLERO; j++) {
+            terreno[i][j] = "_";
+
+            if (hay_pared({i, j})) {
+                terreno[i][j] = "#";
+            }
+
+            if (hay_pyramid_head({i, j})) {
+                terreno[i][j] = "4";
+            }
+
+            if (i == 0 && j == 8) {
+                terreno[i][j] = "F";
+            }
+
+            if (i == 8 && j == 0) {
+                terreno[i][j] = "I";
+            }
+
+            if (CoordenadaMatriz(i, j) == jugador.posicion()) {
+                terreno[i][j] = "J";
+            }
+        }
+    }
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
