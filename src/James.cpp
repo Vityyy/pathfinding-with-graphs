@@ -56,6 +56,10 @@ void James::perder_arma_equipada() {
     arma_actual = nullptr;
 }
 
+void James::agregar_placa(Placa *placa) {
+    placas.alta(placa);
+}
+
 std::size_t James::altura_placas() {
     return placas.altura();
 }
@@ -63,4 +67,8 @@ std::size_t James::altura_placas() {
 James::~James() {
     delete arma_actual;
     arma_actual = nullptr;
+}
+
+bool James::tiene_placa(Placa *placa) {
+    return placas.consulta(placa);
 }

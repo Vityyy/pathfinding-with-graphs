@@ -50,6 +50,14 @@ public:
     // Pos: pierde el arma equipada
     void perder_arma_equipada();
 
+    // Pre: no existe una placa con ese id
+    //Pos: agrega una placa al arbol de placas
+    void agregar_placa(Placa *placa);
+
+    // Pre: ~
+    // Pos: devuelve true si tiene una placa con ese id
+    bool tiene_placa(Placa *placa);
+
     // Pre: ~
     // Pos: devuelve la altura de las placas
     std::size_t altura_placas();
