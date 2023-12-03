@@ -302,6 +302,12 @@ void Juego::accion_jugador(char accion) {
     }
 }
 
+char Juego::pedir_accion() {
+    char accion;
+    cin >> accion;
+    return accion;
+}
+
 void Juego::ejecutar() {
     cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
