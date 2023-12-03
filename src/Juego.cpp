@@ -1,8 +1,11 @@
 #include "Juego.hpp"
 #include "Dijkstra.hpp"
 #include <iostream>
+#include "color.hpp"
 
 using namespace std;
+
+James Juego::jugador = James();
 
 Tablero Juego::tablero_de_juego = Tablero();
 
@@ -35,12 +38,13 @@ bool Juego::es_adyacente_a_pyramid_head(CoordenadaMatriz coordenada) {
     return es_adyacente;
 }
 
-vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino, size_t cantidad_armas) {
+vector<CoordenadaMatriz>
+Juego::calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino, size_t cantidad_armas) {
     Tablero tablero_actual = tablero_de_juego;
     size_t cantidad_armas_actual = cantidad_armas;
-    pair<vector<size_t>, int> mejor_camino_minimo;
+    pair<vector<CoordenadaMatriz>, int> mejor_camino_minimo;
     mejor_camino_minimo.second = INFINITO;
-    pair<vector<size_t>, int> camino_minimo;
+    pair<vector<CoordenadaMatriz>, int> camino_minimo;
 
     bool hay_pyramid_head_en_casilla = false;
     bool es_adyacente = false;
@@ -48,7 +52,6 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
     bool hubo_cambios = false;
 
     size_t iterador_casillas = 0;
-    CoordenadaMatriz coordenada_casilla_actual;
     bool camino_encontrado = false;
     while (!camino_encontrado) {
         camino_minimo = tablero_actual.camino_minimo(origen, destino);
@@ -60,15 +63,10 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
 
         iterador_casillas = 0;
         while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
-            //@formatter:off
-            coordenada_casilla_actual.col() = camino_minimo.first[iterador_casillas] % Tablero::TAMANIO_TABLERO;
-            coordenada_casilla_actual.fil() = (camino_minimo.first[iterador_casillas] - coordenada_casilla_actual.col()) / Tablero::TAMANIO_TABLERO; //Siempre resulta en un numero entero positivo
-            //@formatter:on
-
-            hay_pyramid_head_en_casilla = hay_pyramid_head(coordenada_casilla_actual);
+            hay_pyramid_head_en_casilla = hay_pyramid_head(camino_minimo.first[iterador_casillas]);
             if (hay_pyramid_head_en_casilla) {
                 if (!cantidad_armas_actual) {
-                    desconectar_casilla(coordenada_casilla_actual, tablero_actual);
+                    desconectar_casilla(camino_minimo.first[iterador_casillas], tablero_actual);
                 } else {
                     cantidad_armas_actual--;
                     hay_pyramid_head_en_casilla = false;
@@ -79,12 +77,7 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
 
         iterador_casillas = 0;
         while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
-            //@formatter:off
-            coordenada_casilla_actual.col() = camino_minimo.first[iterador_casillas] % Tablero::TAMANIO_TABLERO;
-            coordenada_casilla_actual.fil() = (camino_minimo.first[iterador_casillas] - coordenada_casilla_actual.col()) / Tablero::TAMANIO_TABLERO; //Siempre resulta en un numero entero positivo
-            //@formatter:on
-
-            es_adyacente = es_adyacente_a_pyramid_head(coordenada_casilla_actual);
+            es_adyacente = es_adyacente_a_pyramid_head(camino_minimo.first[iterador_casillas]);
             if (es_adyacente) {
                 if (!cantidad_armas) {
                     camino_minimo.second += 40;
@@ -95,7 +88,7 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
         }
 
         if (pasa_por_adyacente) {
-            desconectar_casilla(coordenada_casilla_actual, tablero_actual);
+            desconectar_casilla(camino_minimo.first[iterador_casillas], tablero_actual);
         }
 
         if (!hay_pyramid_head_en_casilla && camino_minimo.second < mejor_camino_minimo.second) {
@@ -108,7 +101,7 @@ vector<size_t> Juego::calcular_camino_minimo(CoordenadaMatriz origen, Coordenada
         }
     }
 
-    return ((mejor_camino_minimo.second != INFINITO) ? (mejor_camino_minimo.first) : (vector<size_t>()));
+    return ((mejor_camino_minimo.second != INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
 }
 
 void Juego::desconectar_casilla(CoordenadaMatriz coordenada, Tablero &tablero) {
@@ -134,7 +127,7 @@ void Juego::desconectar_casilla(CoordenadaMatriz coordenada, Tablero &tablero) {
 }
 
 void Juego::ejecutar() {
-    tablero_de_juego.cargar_nivel("layout_1");
+    cargar_nivel();
     pyramid_heads.emplace_back(2, 6, tablero_de_juego);
     pyramid_heads.emplace_back(5, 4, tablero_de_juego);
     vector<size_t> camino = calcular_camino_minimo({8, 0}, {0, 8}, 0);
