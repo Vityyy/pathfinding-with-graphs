@@ -14,14 +14,14 @@ Pyramid_head::Pyramid_head(CoordenadaMatriz coordenada, Tablero tablero_de_juego
     }
 
     // Comprobar izquierda
-    if (coordenada.col() < Tablero::TAMANIO_TABLERO - 1 &&
-        tablero_de_juego.casilla(coordenada.fil(), coordenada.col() + 1) != Tablero::PARED) {
+    if (coordenada.col() > 0 && tablero_de_juego.casilla(coordenada.fil(), coordenada.col() - 1) != Tablero::PARED) {
 
-        casillas_adyacentes.emplace_back(coordenada.fil(), coordenada.col() + 1);
+        casillas_adyacentes.emplace_back(coordenada.fil(), coordenada.col() - 1);
     }
 
     // Comprobar derecha
-    if (coordenada.col() > 0 && tablero_de_juego.casilla(coordenada.fil(), coordenada.col() - 1) != Tablero::PARED) {
+    if (coordenada.col() < Tablero::TAMANIO_TABLERO - 1 &&
+        tablero_de_juego.casilla(coordenada.fil(), coordenada.col() + 1) != Tablero::PARED) {
         casillas_adyacentes.emplace_back(coordenada.fil(), coordenada.col() + 1);
     }
 
