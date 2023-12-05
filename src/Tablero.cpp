@@ -85,7 +85,7 @@ void Tablero::cargar_nivel(const std::string &nombre_archivo) {
     ifstream archivo_nivel("layouts/" + nombre_archivo + ".csv");
 
     if (!archivo_nivel.is_open()) {
-        cout << "No se pudo abrir el archivo" << endl;
+        cout << "No se cargar el nivel" << endl;
         return;
     }
 
@@ -100,13 +100,6 @@ void Tablero::cargar_nivel(const std::string &nombre_archivo) {
             casillas.elemento(i, j) = stoi(linea_separada[j]);
         }
         i++;
-    }
-
-    for (size_t j = 0; j < TAMANIO_TABLERO; j++) {
-        for (size_t k = 0; k < TAMANIO_TABLERO; k++) {
-            cout << casillas.elemento(j, k);
-        }
-        cout << endl;
     }
 
     conectar_vertices(casillas);
