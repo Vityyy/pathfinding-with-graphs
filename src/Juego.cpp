@@ -2,6 +2,7 @@
 #include "Dijkstra.hpp"
 #include <iostream>
 #include "color.hpp"
+#include <unistd.h>
 
 using namespace std;
 
@@ -26,7 +27,8 @@ const unsigned short int Juego::EQUIPAR_ARMA_DEBIL = 5;
 const unsigned short int Juego::DESEQUIPAR_ARMA = 6;
 const unsigned short int Juego::MOSTRAR_CAMINO_MINIMO = 7;
 const unsigned short int Juego::IMPRIMIR_CAMINO_MINIMO_GENERAL = 8;
-const unsigned short int Juego::NO_EXISTE = 9;
+const unsigned short int Juego::COMPLETAR_NIVEL = 9;
+const unsigned short int Juego::NO_EXISTE = 10;
 
 const map<string, unsigned short int> Juego::inputs_jugador = {
         pair<string, unsigned short int>("w", MOVER_ARRIBA),
@@ -59,6 +61,9 @@ const map<string, unsigned short int> Juego::inputs_jugador = {
 
         pair<string, unsigned short int>("z", IMPRIMIR_CAMINO_MINIMO_GENERAL),
         pair<string, unsigned short int>("camino minimo general", IMPRIMIR_CAMINO_MINIMO_GENERAL),
+
+        pair<string, unsigned short int>("x", COMPLETAR_NIVEL),
+        pair<string, unsigned short int>("completar nivel", COMPLETAR_NIVEL)
 };
 
 const CoordenadaMatriz Juego::INICIO = {8, 0};
@@ -159,6 +164,7 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
     camino_minimo.second = INFINITO;
 
     bool hay_pyramid_head_en_casilla = false;
+    bool paso_por_pyramid_head = false;
     bool es_adyacente = false;
     bool pasa_por_adyacente = false;
     bool hubo_cambios = false;
@@ -179,11 +185,12 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
         while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
             hay_pyramid_head_en_casilla = hay_pyramid_head(camino_minimo.first[iterador_casillas]);
             if (hay_pyramid_head_en_casilla) {
-                if (!cantidad_armas_aux) {
+                if (!cantidad_armas_aux && !paso_por_pyramid_head) {
                     tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[iterador_casillas]);
                 } else {
                     cantidad_armas_aux--;
                     hay_pyramid_head_en_casilla = false;
+                    paso_por_pyramid_head = true;
                 }
             }
             iterador_casillas++;
@@ -255,7 +262,7 @@ void Juego::generar_pyramid_heads() {
     CoordenadaMatriz coordenada_pyramid_head;
 
     for (size_t i = 0; i < 2; i++) {
-        if (numero_aleatorio_entre(1, 100) <= 100) {
+        if (numero_aleatorio_entre(1, 100) <= 50) {
             do {
                 coordenada_pyramid_head = {(size_t) numero_aleatorio_entre(0, 8),
                                            (size_t) numero_aleatorio_entre(0, 8)};
@@ -293,6 +300,9 @@ bool Juego::puede_caminar(CoordenadaMatriz nueva_posicion) {
 void Juego::accion_jugador(unsigned short int accion) {
     vector<CoordenadaMatriz> coordenadas_camino_minimo;
     CoordenadaMatriz nueva_posicion;
+    bool completado = false;
+    size_t iterador = 0;
+
     switch (accion) {
         case MOVER_ARRIBA:
             nueva_posicion = CoordenadaMatriz(jugador.posicion().fil() - 1, jugador.posicion().col());
@@ -339,7 +349,7 @@ void Juego::accion_jugador(unsigned short int accion) {
                 jugador.posicion().col()++;
 
             } else {
-                cout << "Moviento invalido" << endl;
+                cout << "Movimiento invalido" << endl;
             }
 
             (es_adyacente_a_pyramid_head(nueva_posicion)) ? (puntaje_actual += 50) : (puntaje_actual += 10);
@@ -369,6 +379,26 @@ void Juego::accion_jugador(unsigned short int accion) {
             mostrar_informacion();
             break;
 
+        case COMPLETAR_NIVEL:
+            coordenadas_camino_minimo = calcular_camino_minimo(jugador.posicion(), META, jugador.tiene_arma_equipada());
+            if (coordenadas_camino_minimo.empty()) {
+                cout << "No es posible completar el nivel" << endl;
+            } else {
+                while (!completado && iterador < coordenadas_camino_minimo.size()) {
+                    completado = (hay_pyramid_head(coordenadas_camino_minimo[iterador]));
+
+                    if(completado){
+                        jugador.perder_arma_equipada();
+                    }
+
+                    iterador++;
+                }
+                puntaje_actual += costo_camino_minimo;
+                jugador.posicion() = META;
+            }
+
+            break;
+
         default:
             cout << "Opcion invalida" << endl;
             cout << "Controles: " << endl;
@@ -379,6 +409,7 @@ void Juego::accion_jugador(unsigned short int accion) {
             cout << "r: desequipar arma" << endl;
             cout << "f: mostrar camino minimo" << endl;
             cout << "z: mostrar mejor camino minimo general" << endl;
+            cout << "x: completar nivel de ser posible" << endl;
             cout << endl;
             break;
     }
@@ -500,7 +531,7 @@ void Juego::mostrar_informacion() {
     cout << "Tiene arma equipada: " << respuesta << endl;
     cout << "Costo total hasta el momento: " << puntaje_actual << endl;
     if (mostrar_camino_minimo) {
-        if (costo_camino_minimo == INFINITO) {
+        if (costo_camino_minimo >= INFINITO) {
             cout << "No existe camino minimo" << endl;
 
         } else {
@@ -509,29 +540,17 @@ void Juego::mostrar_informacion() {
     }
 }
 
-void Juego::eliminar_pyramid_head(CoordenadaMatriz posicion_pyramid_head) {
-    bool encontrado = false;
-    auto iterador = pyramid_heads.begin();
-
-    while (!encontrado && iterador != pyramid_heads.end()) {
-        encontrado = (posicion_pyramid_head == iterador->posicion());
-        if (encontrado) {
-            pyramid_heads.erase(iterador);
-        }
-        iterador++;
-    }
-}
-
 void Juego::ejecutar() {
-    /*
-    cargar_nivel();
-    pyramid_heads.emplace_back(2, 6, tablero_de_juego);
-    pyramid_heads.emplace_back(5, 4, tablero_de_juego);
-    vector<size_t> camino = calcular_camino_minimo({8, 0}, {0, 8}, 0);
-    for (unsigned long &i: camino) {
-        cout << i << " ";
-    }
-     */
+    cout << "Controles: " << endl;
+    cout << "wasd para moverte" << endl;
+    cout << "e: equipar tu arma mas fuerte" << endl;
+    cout << "q: equipar arma debil" << endl;
+    cout << "r: desequipar arma" << endl;
+    cout << "f: mostrar camino minimo" << endl;
+    cout << "z: mostrar mejor camino minimo general" << endl;
+    cout << "x: completar nivel de ser posible" << endl;
+    cout << endl;
+
     srand((unsigned int) time(nullptr));
 
     size_t niveles_completados = 0;
@@ -542,6 +561,12 @@ void Juego::ejecutar() {
     bool gano = false;
     string accion;
 
+    auto potencia_del_arma = (size_t) numero_aleatorio_entre(10, 100);
+    jugador.obtener_arma({"Arma: " + to_string(potencia_del_arma), potencia_del_arma});
+
+    potencia_del_arma = (size_t) numero_aleatorio_entre(10, 100);
+    jugador.obtener_arma({"Arma: " + to_string(potencia_del_arma), potencia_del_arma});
+
     while (!gano) {
         imprimir_terreno(mostrar_camino_minimo);
         mostrar_informacion();
@@ -550,7 +575,7 @@ void Juego::ejecutar() {
 
         if (hay_pyramid_head(jugador.posicion())) {
             jugador.perder_arma_equipada();
-            eliminar_pyramid_head(jugador.posicion());
+            pyramid_heads.clear();
         }
 
 
@@ -565,7 +590,7 @@ void Juego::ejecutar() {
                 jugador.agregar_placa(nueva_placa);
                 nueva_placa = nullptr;
 
-                if (numero_aleatorio_entre(1, 100) <= 100) {
+                if (numero_aleatorio_entre(1, 100) <= 20) {
                     auto potencia_arma = (size_t) numero_aleatorio_entre(10, 100);
                     jugador.obtener_arma(Arma("Arma: " + to_string(potencia_arma), potencia_arma));
                 }
@@ -579,6 +604,7 @@ void Juego::ejecutar() {
                 gano = true;
                 std::cout << endl;
                 std::cout << "Felicidades! Has completado los 5 niveles." << endl;
+                std::cout << "Costo final: " << puntaje_actual << endl;
             }
         }
         cout << endl;

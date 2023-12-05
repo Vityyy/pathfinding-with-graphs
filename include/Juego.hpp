@@ -29,6 +29,7 @@ private:
     static const unsigned short int DESEQUIPAR_ARMA;
     static const unsigned short int MOSTRAR_CAMINO_MINIMO;
     static const unsigned short int IMPRIMIR_CAMINO_MINIMO_GENERAL;
+    static const unsigned short int COMPLETAR_NIVEL;
     static const unsigned short int NO_EXISTE;
 
     static const std::map<std::string, unsigned short int> inputs_jugador;
@@ -112,10 +113,6 @@ private:
     // Pre: ~
     // Pos: muestra la informacion del juego en pantalla
     static void mostrar_informacion();
-
-    // Pre: ~
-    // Pos: elimina un pyramid head del tablero
-    static void eliminar_pyramid_head(CoordenadaMatriz posicion_pyramid_head);
 
 public:
 
