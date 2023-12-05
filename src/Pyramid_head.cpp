@@ -4,32 +4,32 @@
 
 using namespace std;
 
-Pyramid_head::Pyramid_head(size_t fila, size_t columna, Tablero tablero_de_juego) {
-    set(fila, columna, std::move(tablero_de_juego));
-}
-
-void Pyramid_head::set(size_t fila, size_t columna, Tablero tablero_de_juego) {
-    coordenada.fil() = fila;
-    coordenada.col() = columna;
+Pyramid_head::Pyramid_head(CoordenadaMatriz coordenada, Tablero tablero_de_juego) {
+    this->coordenada.fil() = coordenada.fil();
+    this->coordenada.col() = coordenada.col();
 
     // Comprobar arriba
-    if (columna != 0 && tablero_de_juego.casilla(columna - 1, fila) != Tablero::PARED) {
-        casillas_adyacentes.emplace_back(columna - 1, fila);
+    if (coordenada.fil() > 0 && tablero_de_juego.casilla(coordenada.fil() - 1, coordenada.col()) != Tablero::PARED) {
+        casillas_adyacentes.emplace_back(coordenada.fil() - 1, coordenada.col());
     }
 
     // Comprobar izquierda
-    if (fila != 0 && tablero_de_juego.casilla(columna, fila - 1) != Tablero::PARED) {
-        casillas_adyacentes.emplace_back(columna, fila - 1);
+    if (coordenada.col() < Tablero::TAMANIO_TABLERO - 1 &&
+        tablero_de_juego.casilla(coordenada.fil(), coordenada.col() + 1) != Tablero::PARED) {
+
+        casillas_adyacentes.emplace_back(coordenada.fil(), coordenada.col() + 1);
     }
 
     // Comprobar derecha
-    if (fila < Tablero::TAMANIO_TABLERO - 1 && tablero_de_juego.casilla(columna, fila + 1) != Tablero::PARED) {
-        casillas_adyacentes.emplace_back(columna, fila + 1);
+    if (coordenada.col() > 0 && tablero_de_juego.casilla(coordenada.fil(), coordenada.col() - 1) != Tablero::PARED) {
+        casillas_adyacentes.emplace_back(coordenada.fil(), coordenada.col() + 1);
     }
 
     //Comprobar abajo
-    if (columna < Tablero::TAMANIO_TABLERO - 1 && tablero_de_juego.casilla(columna + 1, fila) != Tablero::PARED) {
-        casillas_adyacentes.emplace_back(columna + 1, fila);
+    if (coordenada.fil() < Tablero::TAMANIO_TABLERO - 1 &&
+        tablero_de_juego.casilla(coordenada.fil() + 1, coordenada.col()) != Tablero::PARED) {
+
+        casillas_adyacentes.emplace_back(coordenada.fil() + 1, coordenada.col());
     }
 }
 

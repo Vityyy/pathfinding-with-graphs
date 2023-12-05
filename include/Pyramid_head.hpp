@@ -12,16 +12,9 @@ private:
 
 public:
 
-    // Constructores
-    Pyramid_head() = default;
-
     // Pre: ~
     // Pos: crea un pyramid head ubicado en (fila, columna)
-    Pyramid_head(std::size_t fila, std::size_t columna, Tablero tablero_de_juego);
-
-    // Pre: ~
-    // Pos: setea al pyramid head en la posicion(fila, columna)
-    void set(std::size_t fila, std::size_t columna, Tablero tablero_de_juego);
+    Pyramid_head(CoordenadaMatriz coordenada, Tablero tablero_de_juego);
 
     // Pre: ~
     // Pos: devuelve la localizacion del pyramid head
