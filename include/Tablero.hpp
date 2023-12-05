@@ -39,8 +39,8 @@ public:
     void cargar_nivel(const std::string &nombre_archivo);
 
     // Pre: ~
-    // Pos: impide el paso entre dos casillas del tablero
-    void desconectar_casillas(CoordenadaMatriz casilla1, CoordenadaMatriz casilla2);
+    // Pos: desconecta una casilla de sus casillas adyacentes
+    void desconectar_casilla(CoordenadaMatriz casilla);
 
     // Pre: ~
     // Pos: devuelve el camino mínimo desde el origen hasta el destino

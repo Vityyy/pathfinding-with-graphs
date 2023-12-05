@@ -12,21 +12,25 @@ void Tablero::conectar_vertices(Matriz tablero) {
                 // Comprobación derecha
                 if (j < (TAMANIO_TABLERO - 1) && tablero.elemento(i, j + 1) != PARED) {
                     grafo_casillas.cambiar_arista(vertice, vertice + 1, 10);
+                    grafo_casillas.cambiar_arista(vertice + 1, vertice, 10);
                 }
 
                 // Comprobación izquierda
                 if (j != 0 && tablero.elemento(i, j - 1) != PARED) {
                     grafo_casillas.cambiar_arista(vertice, vertice - 1, 10);
+                    grafo_casillas.cambiar_arista(vertice - 1, vertice, 10);
                 }
 
                 // Comprobación abajo
                 if (i < (TAMANIO_TABLERO - 1) && tablero.elemento(i + 1, j) != PARED) {
                     grafo_casillas.cambiar_arista(vertice, vertice + TAMANIO_TABLERO, 10);
+                    grafo_casillas.cambiar_arista(vertice + TAMANIO_TABLERO, vertice, 10);
                 }
 
                 // Comprobación arriba
                 if (i != 0 && tablero.elemento(i - 1, j) != PARED) {
                     grafo_casillas.cambiar_arista(vertice, vertice - TAMANIO_TABLERO, 10);
+                    grafo_casillas.cambiar_arista(vertice - TAMANIO_TABLERO, vertice, 10);
                 }
             }
         }
@@ -53,21 +57,25 @@ void Tablero::descargar_nivel() {
         // Comprobación "derecha"
         if (i < MAXIMO_TAMANIO_TABLERO - 1) {
             grafo_casillas.eliminar_arista(i, i + 1);
+            grafo_casillas.eliminar_arista(i + 1, i);
         }
 
         // Comprobación "izquierda"
         if (i != 0) {
             grafo_casillas.eliminar_arista(i, i - 1);
+            grafo_casillas.eliminar_arista(i - 1, i);
         }
 
         // Comprobación "abajo"
         if (i < MAXIMO_TAMANIO_TABLERO - TAMANIO_TABLERO) {
             grafo_casillas.eliminar_arista(i, i + TAMANIO_TABLERO);
+            grafo_casillas.eliminar_arista(i + TAMANIO_TABLERO, i);
         }
 
         // Comprobación "arriba"
         if (i >= TAMANIO_TABLERO) {
             grafo_casillas.eliminar_arista(i, i - TAMANIO_TABLERO);
+            grafo_casillas.eliminar_arista(i - TAMANIO_TABLERO, i);
         }
     }
 }
@@ -104,12 +112,33 @@ void Tablero::cargar_nivel(const std::string &nombre_archivo) {
     conectar_vertices(casillas);
 }
 
-void Tablero::desconectar_casillas(CoordenadaMatriz casilla1, CoordenadaMatriz casilla2) {
-    grafo_casillas.eliminar_arista(TAMANIO_TABLERO * casilla1.fil() + casilla1.col(),
-                                   TAMANIO_TABLERO * casilla2.fil() + casilla2.col());
+void Tablero::desconectar_casilla(CoordenadaMatriz casilla) {
 
-    grafo_casillas.eliminar_arista(TAMANIO_TABLERO * casilla2.fil() + casilla2.col(),
-                                   TAMANIO_TABLERO * casilla1.fil() + casilla1.col());
+    const size_t id_casilla = TAMANIO_TABLERO * casilla.fil() + casilla.col();
+
+    // Desconectar "arriba""
+    if (id_casilla > TAMANIO_TABLERO - 1) {
+        grafo_casillas.eliminar_arista(id_casilla, id_casilla - TAMANIO_TABLERO);
+        grafo_casillas.eliminar_arista(id_casilla - TAMANIO_TABLERO, id_casilla);
+    }
+
+    // Desconectar "abajo"
+    if (id_casilla < MAXIMO_TAMANIO_TABLERO - TAMANIO_TABLERO) {
+        grafo_casillas.eliminar_arista(id_casilla, id_casilla + TAMANIO_TABLERO);
+        grafo_casillas.eliminar_arista(id_casilla + TAMANIO_TABLERO, id_casilla);
+    }
+
+    // Desconectar "izquierda"
+    if (id_casilla > 0) {
+        grafo_casillas.eliminar_arista(id_casilla, id_casilla - 1);
+        grafo_casillas.eliminar_arista(id_casilla - 1, id_casilla);
+    }
+
+    // Desconectar "derecha"
+    if (id_casilla < MAXIMO_TAMANIO_TABLERO - 1) {
+        grafo_casillas.eliminar_arista(id_casilla, id_casilla + 1);
+        grafo_casillas.eliminar_arista(id_casilla + 1, id_casilla);
+    }
 }
 
 std::pair<std::vector<CoordenadaMatriz>, int>
@@ -122,8 +151,7 @@ Tablero::camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino) {
     std::pair<std::vector<CoordenadaMatriz>, std::size_t> coordenadas_camino_minimo;
 
     for (unsigned long i: camino_minimo.first) {
-        coordenadas_camino_minimo.first.push_back(
-                CoordenadaMatriz((i - i % TAMANIO_TABLERO) / TAMANIO_TABLERO, i % TAMANIO_TABLERO));
+        coordenadas_camino_minimo.first.emplace_back((i - i % TAMANIO_TABLERO) / TAMANIO_TABLERO, i % TAMANIO_TABLERO);
     }
 
     return coordenadas_camino_minimo;
