@@ -154,6 +154,8 @@ Tablero::camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino) {
         coordenadas_camino_minimo.first.emplace_back((i - i % TAMANIO_TABLERO) / TAMANIO_TABLERO, i % TAMANIO_TABLERO);
     }
 
+    coordenadas_camino_minimo.second = (size_t) camino_minimo.second;
+
     return coordenadas_camino_minimo;
 }
 
