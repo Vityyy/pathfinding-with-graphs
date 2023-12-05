@@ -40,6 +40,8 @@ void James::desequipar_arma() {
         armas.alta(*arma_actual);
         delete arma_actual;
         arma_actual = nullptr;
+    } else {
+        std::cout << "Ningun arma disponible/equipada." << endl;
     }
 }
 
