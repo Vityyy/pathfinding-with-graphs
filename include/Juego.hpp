@@ -14,9 +14,22 @@ private:
     static Tablero tablero_de_juego;
     static std::vector<Pyramid_head> pyramid_heads;
     static bool mostrar_camino_minimo;
+    static size_t puntaje_actual;
+    static size_t costo_camino_minimo;
 
     static const CoordenadaMatriz INICIO;
     static const CoordenadaMatriz META;
+
+    static const unsigned short int MOVER_ARRIBA;
+    static const unsigned short int MOVER_ABAJO;
+    static const unsigned short int MOVER_DERECHA;
+    static const unsigned short int MOVER_IZQUIERDA;
+    static const unsigned short int EQUIPAR_ARMA_FUERTE;
+    static const unsigned short int EQUIPAR_ARMA_DEBIL;
+    static const unsigned short int DESEQUIPAR_ARMA;
+    static const unsigned short int MOSTRAR_CAMINO_MINIMO;
+    static const unsigned short int IMPRIMIR_CAMINO_MINIMO_GENERAL;
+    static const unsigned short int NO_EXISTE;
 
     static const std::map<std::string, unsigned short int> inputs_jugador;
 
@@ -66,27 +79,27 @@ private:
 
     // Pre: ~
     // Pos: pide una accion y la devuelve
-    static char pedir_accion();
+    static void pedir_accion(std::string &accion);
 
     // Pre: ~
-    // Pos: devuelve true si la accion no es un movimiento
-    static bool es_accion(char accion);
+    // Pos: procesa la accion y devuelve un id de la misma, si no la encuentra devuelve el máximo de accion
+    static unsigned short int procesar_accion(std::string accion);
 
     // Pre: ~
-    // Pos: devuelve true si el movimiento es un movimiento
-    static bool es_movimiento(char movimiento);
+    // Pos: devuelve true si el jugador puede caminar a la nueva posicion
+    static bool puede_caminar(CoordenadaMatriz nueva_posicion);
 
     // Pre: ~
     // Pos: realiza una accion del jugador en base a la accion enviada
-    static void accion_jugador(char accion);
+    static void accion_jugador(unsigned short int accion);
 
     // Pre: ~
     // Pos: devuelve true si la coordenada está en el camino minimo
     static bool esta_en_camino_minimo(CoordenadaMatriz coordenada, std::vector<CoordenadaMatriz> camino_minimo);
 
     // Pre: ~
-    // Pos: imprime el terreno por pantalla con el camino minimo a la meta
-    static void imprimir_terreno_con_camino_minimo();
+    // Pos: imprime el terreno con el camino minimo que se le envíe
+    static void imprimir_terreno_con_camino_minimo(const std::vector<CoordenadaMatriz> &);
 
     // Pre: ~
     // Pos: imprime el terreno por pantalla sin el camino minimo a la meta
@@ -95,6 +108,14 @@ private:
     // Pre: ~
     // Pos: imprime el terreno en pantalla, si camino_minimo es true, imprime el camino minimo
     static void imprimir_terreno(bool camino_minimo);
+
+    // Pre: ~
+    // Pos: muestra la informacion del juego en pantalla
+    static void mostrar_informacion();
+
+    // Pre: ~
+    // Pos: elimina un pyramid head del tablero
+    static void eliminar_pyramid_head(CoordenadaMatriz posicion_pyramid_head);
 
 public:
 

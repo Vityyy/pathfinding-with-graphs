@@ -13,6 +13,54 @@ vector<Pyramid_head> Juego::pyramid_heads = std::vector<Pyramid_head>{};
 
 bool Juego::mostrar_camino_minimo = false;
 
+size_t Juego::puntaje_actual = 0;
+
+size_t Juego::costo_camino_minimo = 0;
+
+const unsigned short int Juego::MOVER_ARRIBA = 0;
+const unsigned short int Juego::MOVER_ABAJO = 1;
+const unsigned short int Juego::MOVER_DERECHA = 2;
+const unsigned short int Juego::MOVER_IZQUIERDA = 3;
+const unsigned short int Juego::EQUIPAR_ARMA_FUERTE = 4;
+const unsigned short int Juego::EQUIPAR_ARMA_DEBIL = 5;
+const unsigned short int Juego::DESEQUIPAR_ARMA = 6;
+const unsigned short int Juego::MOSTRAR_CAMINO_MINIMO = 7;
+const unsigned short int Juego::IMPRIMIR_CAMINO_MINIMO_GENERAL = 8;
+const unsigned short int Juego::NO_EXISTE = 9;
+
+const map<string, unsigned short int> Juego::inputs_jugador = {
+        pair<string, unsigned short int>("w", MOVER_ARRIBA),
+        pair<string, unsigned short int>("arriba", MOVER_ARRIBA),
+
+        pair<string, unsigned short int>("s", MOVER_ABAJO),
+        pair<string, unsigned short int>("abajo", MOVER_ABAJO),
+
+        pair<string, unsigned short int>("a", MOVER_IZQUIERDA),
+        pair<string, unsigned short int>("izquierda", MOVER_IZQUIERDA),
+        pair<string, unsigned short int>("izq", MOVER_IZQUIERDA),
+
+        pair<string, unsigned short int>("d", MOVER_DERECHA),
+        pair<string, unsigned short int>("derecha", MOVER_DERECHA),
+        pair<string, unsigned short int>("der", MOVER_DERECHA),
+
+        pair<string, unsigned short int>("e", EQUIPAR_ARMA_FUERTE),
+        pair<string, unsigned short int>("arma fuerte", EQUIPAR_ARMA_FUERTE),
+        pair<string, unsigned short int>("fuerte", EQUIPAR_ARMA_FUERTE),
+
+        pair<string, unsigned short int>("q", EQUIPAR_ARMA_DEBIL),
+        pair<string, unsigned short int>("arma debil", EQUIPAR_ARMA_DEBIL),
+        pair<string, unsigned short int>("debil", EQUIPAR_ARMA_DEBIL),
+
+        pair<string, unsigned short int>("r", DESEQUIPAR_ARMA),
+        pair<string, unsigned short int>("desequipar", DESEQUIPAR_ARMA),
+
+        pair<string, unsigned short int>("f", MOSTRAR_CAMINO_MINIMO),
+        pair<string, unsigned short int>("camino minimo", MOSTRAR_CAMINO_MINIMO),
+
+        pair<string, unsigned short int>("z", IMPRIMIR_CAMINO_MINIMO_GENERAL),
+        pair<string, unsigned short int>("camino minimo general", IMPRIMIR_CAMINO_MINIMO_GENERAL),
+};
+
 const CoordenadaMatriz Juego::INICIO = {8, 0};
 const CoordenadaMatriz Juego::META = {0, 8};
 
@@ -94,7 +142,8 @@ Juego::calcular_camino_minimo_sin_armas(CoordenadaMatriz origen, CoordenadaMatri
         }
     }
 
-    return ((mejor_camino_minimo.second < INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
+    costo_camino_minimo = (size_t) mejor_camino_minimo.second;
+    return ((mejor_camino_minimo.second <= INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
 }
 
 std::vector<CoordenadaMatriz>
@@ -124,6 +173,7 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
         es_adyacente = false;
         hubo_cambios = false;
         pasa_por_adyacente = false;
+        size_t indice_ultimo_adyacente = 0;
 
         iterador_casillas = 0;
         while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
@@ -147,12 +197,13 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
                     camino_minimo.second += 40;
                 }
                 pasa_por_adyacente = true;
+                indice_ultimo_adyacente = iterador_casillas;
             }
             iterador_casillas++;
         }
 
         if (pasa_por_adyacente) {
-            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[iterador_casillas]);
+            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[indice_ultimo_adyacente]);
         }
 
         if (!hay_pyramid_head_en_casilla && camino_minimo.second < mejor_camino_minimo.second) {
@@ -165,13 +216,16 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
         }
     }
 
-    return ((mejor_camino_minimo.second != INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
+    costo_camino_minimo = (size_t) mejor_camino_minimo.second;
+    return ((mejor_camino_minimo.second <= INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
 }
 
 vector<CoordenadaMatriz>
 Juego::calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino, size_t cantidad_armas) {
     if (cantidad_armas >= pyramid_heads.size()) {
-        return tablero_de_juego.camino_minimo(origen, destino).first;
+        pair<vector<CoordenadaMatriz>, int> camino_minimo = tablero_de_juego.camino_minimo(origen, destino);
+        costo_camino_minimo = (size_t) camino_minimo.second;
+        return camino_minimo.first;
     }
 
     if (cantidad_armas == 0) {
@@ -201,7 +255,7 @@ void Juego::generar_pyramid_heads() {
     CoordenadaMatriz coordenada_pyramid_head;
 
     for (size_t i = 0; i < 2; i++) {
-        if (numero_aleatorio_entre(1, 100) <= 50) {
+        if (numero_aleatorio_entre(1, 100) <= 100) {
             do {
                 coordenada_pyramid_head = {(size_t) numero_aleatorio_entre(0, 8),
                                            (size_t) numero_aleatorio_entre(0, 8)};
@@ -219,92 +273,116 @@ bool Juego::hay_pared(CoordenadaMatriz coordenada) {
     return tablero_de_juego.casilla(coordenada.fil(), coordenada.col()) == Tablero::PARED;
 }
 
-char Juego::pedir_accion() {
-    char accion;
-    cin >> accion;
-    return accion;
+void Juego::pedir_accion(string &accion) {
+    cout << "Movimiento: ";
+    getline(cin >> ws, accion);
 }
 
-bool Juego::es_accion(char accion) {
-    return accion == 'e' || accion == 'q' || accion == 'r' || accion == 'f';
-}
-
-bool Juego::es_movimiento(char movimiento) {
-    return movimiento == 'w' || movimiento == 's' || movimiento == 'a' || movimiento == 'd';
-}
-
-void Juego::accion_jugador(char accion) {
-    if (es_movimiento(accion)) {
-        switch (accion) {
-            case 'w':
-                if (jugador.posicion().fil() > 0 &&
-                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil() - 1, jugador.posicion().col())) &&
-                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil() - 1, jugador.posicion().col())) ||
-                     jugador.tiene_arma_equipada())) {
-
-                    jugador.posicion().fil()--;
-                }
-                break;
-
-            case 's':
-                if (jugador.posicion().fil() < Tablero::TAMANIO_TABLERO - 1 &&
-                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil() + 1, jugador.posicion().col())) &&
-                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil() + 1, jugador.posicion().col())) ||
-                     jugador.tiene_arma_equipada())) {
-
-                    jugador.posicion().fil()++;
-                }
-
-                break;
-
-            case 'a':
-                if (jugador.posicion().col() > 0 &&
-                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() - 1)) &&
-                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() - 1)) ||
-                     jugador.tiene_arma_equipada())) {
-
-                    jugador.posicion().col()--;
-                }
-                break;
-
-            case 'd':
-                if (jugador.posicion().col() < Tablero::TAMANIO_TABLERO - 1 &&
-                    !hay_pared(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() + 1)) &&
-                    (!hay_pyramid_head(CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() + 1)) ||
-                     jugador.tiene_arma_equipada())) {
-
-                    jugador.posicion().col()++;
-                }
-                break;
-
-            default:
-                break;
-        }
+unsigned short int Juego::procesar_accion(string accion) {
+    for (char &letra: accion) {
+        letra = (char) tolower(letra);
     }
-    if (es_accion(accion)) {
-        switch (accion) {
-            case 'e':
-                jugador.equipar_arma_fuerte();
-                break;
 
-            case 'q':
-                jugador.equipar_arma_debil();
-                break;
-
-            case 'r':
-                jugador.desequipar_arma();
-                break;
-
-            case 'f':
-                mostrar_camino_minimo = !mostrar_camino_minimo;
-                break;
-
-            default:
-                break;
-        }
-    }
+    return (inputs_jugador.find(accion) == inputs_jugador.end()) ? (NO_EXISTE) : (inputs_jugador.find(accion)->second);
 }
 
+bool Juego::puede_caminar(CoordenadaMatriz nueva_posicion) {
+    return !hay_pared(nueva_posicion) && (!hay_pyramid_head(nueva_posicion) || jugador.tiene_arma_equipada());
+}
+
+void Juego::accion_jugador(unsigned short int accion) {
+    vector<CoordenadaMatriz> coordenadas_camino_minimo;
+    CoordenadaMatriz nueva_posicion;
+    switch (accion) {
+        case MOVER_ARRIBA:
+            nueva_posicion = CoordenadaMatriz(jugador.posicion().fil() - 1, jugador.posicion().col());
+            if (jugador.posicion().fil() > 0 && puede_caminar(nueva_posicion)) {
+                jugador.posicion().fil()--;
+
+            } else {
+                cout << "Movimiento invalido" << endl;
+            }
+
+            (es_adyacente_a_pyramid_head(nueva_posicion)) ? (puntaje_actual += 50) : (puntaje_actual += 10);
+
+            break;
+
+        case MOVER_ABAJO:
+            nueva_posicion = CoordenadaMatriz(jugador.posicion().fil() + 1, jugador.posicion().col());
+            if (jugador.posicion().fil() < Tablero::TAMANIO_TABLERO - 1 && puede_caminar(nueva_posicion)) {
+                jugador.posicion().fil()++;
+
+            } else {
+                cout << "Movimiento invalido" << endl;
+            }
+
+            (es_adyacente_a_pyramid_head(nueva_posicion)) ? (puntaje_actual += 50) : (puntaje_actual += 10);
+
+            break;
+
+        case MOVER_IZQUIERDA:
+            nueva_posicion = CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() - 1);
+            if (jugador.posicion().col() > 0 && puede_caminar(nueva_posicion)) {
+                jugador.posicion().col()--;
+
+            } else {
+                cout << "Movimiento invalido" << endl;
+            }
+
+            (es_adyacente_a_pyramid_head(nueva_posicion)) ? (puntaje_actual += 50) : (puntaje_actual += 10);
+
+            break;
+
+        case MOVER_DERECHA:
+            nueva_posicion = CoordenadaMatriz(jugador.posicion().fil(), jugador.posicion().col() + 1);
+            if (jugador.posicion().col() < Tablero::TAMANIO_TABLERO - 1 && puede_caminar(nueva_posicion)) {
+                jugador.posicion().col()++;
+
+            } else {
+                cout << "Moviento invalido" << endl;
+            }
+
+            (es_adyacente_a_pyramid_head(nueva_posicion)) ? (puntaje_actual += 50) : (puntaje_actual += 10);
+
+            break;
+
+        case EQUIPAR_ARMA_FUERTE:
+            jugador.equipar_arma_fuerte();
+            break;
+
+        case EQUIPAR_ARMA_DEBIL:
+            jugador.equipar_arma_debil();
+            break;
+
+        case DESEQUIPAR_ARMA:
+            jugador.desequipar_arma();
+            break;
+
+        case MOSTRAR_CAMINO_MINIMO:
+            mostrar_camino_minimo = !mostrar_camino_minimo;
+            break;
+
+        case IMPRIMIR_CAMINO_MINIMO_GENERAL:
+            cout << "Mejor camino minimo en general: " << endl;
+            coordenadas_camino_minimo = calcular_camino_minimo(INICIO, META, jugador.cantidad_de_armas());
+            imprimir_terreno_con_camino_minimo(coordenadas_camino_minimo);
+            mostrar_informacion();
+            break;
+
+        default:
+            cout << "Opcion invalida" << endl;
+            cout << "Controles: " << endl;
+            cout << endl;
+            cout << "wasd para moverte" << endl;
+            cout << "e: equipar tu arma mas fuerte" << endl;
+            cout << "q: equipar arma debil" << endl;
+            cout << "r: desequipar arma" << endl;
+            cout << "f: mostrar camino minimo" << endl;
+            cout << "z: mostrar mejor camino minimo general" << endl;
+            cout << endl;
+            break;
+    }
+}
 
 bool Juego::esta_en_camino_minimo(CoordenadaMatriz coordenada, std::vector<CoordenadaMatriz> camino_minimo) {
     bool esta_en_camino = false;
@@ -316,10 +394,7 @@ bool Juego::esta_en_camino_minimo(CoordenadaMatriz coordenada, std::vector<Coord
     return esta_en_camino;
 }
 
-void Juego::imprimir_terreno_con_camino_minimo() {
-    vector<CoordenadaMatriz> coordenadas_camino_minimo = calcular_camino_minimo(jugador.posicion(), META,
-                                                                                jugador.tiene_arma_equipada());
-
+void Juego::imprimir_terreno_con_camino_minimo(const vector<CoordenadaMatriz> &coordenadas_camino_minimo) {
     for (size_t i = 0; i < Tablero::TAMANIO_TABLERO + 2; i++) {
         if (i == 0 || i == 10) {
             for (size_t j = 0; j < Tablero::TAMANIO_TABLERO + 1; j++) {
@@ -332,11 +407,11 @@ void Juego::imprimir_terreno_con_camino_minimo() {
             for (size_t j = 0; j < Tablero::TAMANIO_TABLERO; j++) {
 
                 if (esta_en_camino_minimo({i - 1, j}, coordenadas_camino_minimo)) {
-                    if (hay_pyramid_head({i - 1, j})) {
-                        cout << color::rize("4", "Light Magenta", "Blue", "Default", "Default") << " ";
-
-                    } else if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
+                    if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
                         cout << color::rize("J", "Light Yellow", "Blue", "Default", "Default") << " ";
+
+                    } else if (hay_pyramid_head({i - 1, j})) {
+                        cout << color::rize("4", "Light Magenta", "Blue", "Default", "Default") << " ";
 
                     } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
                         cout << color::rize("F", "Light Green", "Blue", "Default", "Default") << " ";
@@ -348,11 +423,11 @@ void Juego::imprimir_terreno_con_camino_minimo() {
                         cout << color::rize("_", "Default", "Blue", "Default", "Default") << " ";
                     }
                 } else {
-                    if (hay_pyramid_head({i - 1, j})) {
-                        cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
-
-                    } else if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
+                    if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
                         cout << color::rize("J", "Light Yellow", "Default", "Default", "Default") << " ";
+
+                    } else if (hay_pyramid_head({i - 1, j})) {
+                        cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
 
                     } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
                         cout << color::rize("F", "Light Green", "Default", "Default", "Default") << " ";
@@ -384,11 +459,11 @@ void Juego::imprimir_terreno_sin_camino_minimo() {
         } else {
             cout << "#" << " ";
             for (size_t j = 0; j < Tablero::TAMANIO_TABLERO; j++) {
-                if (hay_pyramid_head({i - 1, j})) {
-                    cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
-
-                } else if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
+                if (jugador.posicion() == CoordenadaMatriz(i - 1, j)) {
                     cout << color::rize("J", "Light Yellow", "Default", "Default", "Default") << " ";
+
+                } else if (hay_pyramid_head({i - 1, j})) {
+                    cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
 
                 } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
                     cout << color::rize("F", "Light Green", "Default", "Default", "Default") << " ";
@@ -409,7 +484,42 @@ void Juego::imprimir_terreno_sin_camino_minimo() {
 }
 
 void Juego::imprimir_terreno(bool camino_minimo) {
-    (camino_minimo) ? (imprimir_terreno_con_camino_minimo()) : (imprimir_terreno_sin_camino_minimo());
+    if (camino_minimo) {
+        vector<CoordenadaMatriz> coordenadas_camino_minimo = calcular_camino_minimo(jugador.posicion(), META,
+                                                                                    jugador.tiene_arma_equipada());
+        imprimir_terreno_con_camino_minimo(coordenadas_camino_minimo);
+
+    } else {
+        imprimir_terreno_sin_camino_minimo();
+    }
+}
+
+void Juego::mostrar_informacion() {
+    cout << "Cantidad de armas: " << jugador.cantidad_de_armas() << endl;
+    string respuesta = (jugador.tiene_arma_equipada()) ? ("Si") : ("No");
+    cout << "Tiene arma equipada: " << respuesta << endl;
+    cout << "Costo total hasta el momento: " << puntaje_actual << endl;
+    if (mostrar_camino_minimo) {
+        if (costo_camino_minimo == INFINITO) {
+            cout << "No existe camino minimo" << endl;
+
+        } else {
+            cout << "Costo camino minimo: " << costo_camino_minimo << endl;
+        }
+    }
+}
+
+void Juego::eliminar_pyramid_head(CoordenadaMatriz posicion_pyramid_head) {
+    bool encontrado = false;
+    auto iterador = pyramid_heads.begin();
+
+    while (!encontrado && iterador != pyramid_heads.end()) {
+        encontrado = (posicion_pyramid_head == iterador->posicion());
+        if (encontrado) {
+            pyramid_heads.erase(iterador);
+        }
+        iterador++;
+    }
 }
 
 void Juego::ejecutar() {
@@ -430,10 +540,18 @@ void Juego::ejecutar() {
     generar_pyramid_heads();
     jugador.posicion() = {8, 0};
     bool gano = false;
+    string accion;
 
     while (!gano) {
         imprimir_terreno(mostrar_camino_minimo);
-        accion_jugador(pedir_accion());
+        mostrar_informacion();
+        pedir_accion(accion);
+        accion_jugador(procesar_accion(accion));
+
+        if (hay_pyramid_head(jugador.posicion())) {
+            jugador.perder_arma_equipada();
+            eliminar_pyramid_head(jugador.posicion());
+        }
 
 
         if (jugador.posicion() == CoordenadaMatriz(0, 8)) {
@@ -447,7 +565,7 @@ void Juego::ejecutar() {
                 jugador.agregar_placa(nueva_placa);
                 nueva_placa = nullptr;
 
-                if (numero_aleatorio_entre(1, 100) <= 20) {
+                if (numero_aleatorio_entre(1, 100) <= 100) {
                     auto potencia_arma = (size_t) numero_aleatorio_entre(10, 100);
                     jugador.obtener_arma(Arma("Arma: " + to_string(potencia_arma), potencia_arma));
                 }
@@ -459,8 +577,11 @@ void Juego::ejecutar() {
                 generar_pyramid_heads();
             } else {
                 gano = true;
+                std::cout << endl;
+                std::cout << "Felicidades! Has completado los 5 niveles." << endl;
             }
         }
         cout << endl;
     }
 }
+
