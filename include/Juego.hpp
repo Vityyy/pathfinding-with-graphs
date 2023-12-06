@@ -32,6 +32,22 @@ private:
     static const unsigned short int COMPLETAR_NIVEL;
     static const unsigned short int NO_EXISTE;
 
+    static const int COSTO_CAMINAR;
+    static const int COSTO_CAMINAR_ADYACENTE;
+
+    static const int MINIMO_ID_PLACA;
+    static const int MAXIMO_ID_PLACA;
+
+    static const int CANTIDAD_DE_PYRAMID_HEADS;
+
+    static const int FILA_SUPERIOR;
+    static const int FILA_INFERIOR;
+
+    static const int MINIMA_POTENCIA_ARMA;
+    static const int MAXIMA_POTENCIA_ARMA;
+
+    static const int CANTIDAD_INICIAL_DE_ARMAS;
+
     static const std::map<std::string, unsigned short int> inputs_jugador;
 
     // Pre: ~
@@ -89,6 +105,10 @@ private:
     // Pre: ~
     // Pos: devuelve true si el jugador puede caminar a la nueva posicion
     static bool puede_caminar(CoordenadaMatriz nueva_posicion);
+
+    // Pre: ~
+    // Pos: imprime los controles por pantalla
+    static void mostrar_controles();
 
     // Pre: ~
     // Pos: realiza una accion del jugador en base a la accion enviada
