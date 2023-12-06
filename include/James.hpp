@@ -14,6 +14,10 @@ private:
     Arma *arma_actual = nullptr;
     ABB<Placa *, Placa::menor, Placa::igual> placas{};
 
+    // Pre: ~
+    // Pos: libera la memoria de las placas
+    void liberar_placas();
+
 public:
     // Constructor default
     James() = default;

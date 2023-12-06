@@ -3,6 +3,15 @@
 
 using namespace std;
 
+void James::liberar_placas() {
+    vector<Placa *> placas_a_liberar = placas.inorder();
+
+    for (auto &placa: placas_a_liberar) {
+        delete placa;
+        placa = nullptr;
+    }
+}
+
 CoordenadaMatriz &James::posicion() {
     return coordenada;
 }
@@ -69,6 +78,7 @@ std::size_t James::altura_placas() {
 James::~James() {
     delete arma_actual;
     arma_actual = nullptr;
+    liberar_placas();
 }
 
 bool James::tiene_placa(Placa *placa) {
