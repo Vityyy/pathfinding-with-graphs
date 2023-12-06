@@ -22,6 +22,7 @@ Grafo::Grafo(size_t cantidad_vertices) {
 
 void Grafo::agrandar_matriz_adyacencia() {
     matriz_adyacencia.expandir();
+    vertices++;
     for (size_t i = 0; i < vertices - 1; i++) {
         matriz_adyacencia.elemento(vertices - 1, i) = INFINITO;
         matriz_adyacencia.elemento(i, vertices - 1) = INFINITO;
@@ -40,7 +41,6 @@ int Grafo::obtener_peso_camino(std::vector<size_t> camino) {
 
 void Grafo::agregar_vertice() {
     agrandar_matriz_adyacencia();
-    vertices++;
     hay_cambios = true;
 }
 
@@ -86,14 +86,14 @@ std::pair<std::vector<size_t>, int> Grafo::obtener_camino_minimo(size_t origen, 
     return camino;
 }
 
-Grafo::Grafo(const Grafo& grafo1) {
+Grafo::Grafo(const Grafo &grafo1) {
     matriz_adyacencia = grafo1.matriz_adyacencia;
     vertices = grafo1.vertices;
     hay_cambios = grafo1.hay_cambios;
     algoritmo_camino_minimo = nullptr;
 }
 
-Grafo& Grafo::operator=(const Grafo& grafo1) {
+Grafo &Grafo::operator=(const Grafo &grafo1) {
     if (this != &grafo1) {
         delete algoritmo_camino_minimo;
         algoritmo_camino_minimo = nullptr;
