@@ -559,71 +559,118 @@ void Juego::mostrar_informacion() {
     }
 }
 
-void Juego::ejecutar() {
-    mostrar_controles();
+bool Juego::seguir_jugando() {
+    string seguir_jugando;
 
+    while(seguir_jugando != "no" && seguir_jugando != "si"){
+        cout << "Quiere jugar otra vez?: ";
+        getline(cin >> ws, seguir_jugando);
+
+        for (char & letra : seguir_jugando) {
+            letra = (char) tolower(letra);
+        }
+
+        if(seguir_jugando != "no" && seguir_jugando != "si"){
+            cout << "Esa opcion no es válida" << endl;
+        }
+    }
+
+    return !(seguir_jugando == "si");
+}
+
+void Juego::borrar_armas() {
+    if (jugador.tiene_arma_equipada()) {
+        jugador.perder_arma_equipada();
+    }
+
+    size_t cantidad_armas = jugador.cantidad_de_armas();
+    for (size_t i = 0 ; i < cantidad_armas ; i++) {
+        jugador.equipar_arma_fuerte();
+        jugador.perder_arma_equipada();
+    }
+}
+
+void Juego::ejecutar() {
     srand((unsigned int) time(nullptr));
 
-    size_t niveles_completados = 0;
-    Placa *nueva_placa = nullptr;
+    size_t niveles_completados;
+    Placa *nueva_placa;
     cargar_nivel();
     generar_pyramid_heads();
-    jugador.posicion() = INICIO;
+    jugador.posicion();
+    bool juego_terminado;
     bool finalizado = false;
     string accion;
 
     size_t potencia_del_arma;
-    for (size_t i = 0; i < CANTIDAD_INICIAL_DE_ARMAS; i++) {
-        potencia_del_arma = (size_t) numero_aleatorio_entre(MINIMA_POTENCIA_ARMA, MAXIMA_POTENCIA_ARMA);
-        jugador.obtener_arma({"Arma: " + to_string(potencia_del_arma), potencia_del_arma});
-    }
 
-    while (!finalizado) {
-        if (calcular_camino_minimo(INICIO, META, jugador.cantidad_de_armas()).empty()) {
-            cout << "No es posible completar el nivel" << endl;
-            cout << "Perdiste :(" << endl;
+    while(!finalizado){
 
-        } else {
-            imprimir_terreno(mostrar_camino_minimo);
-            mostrar_informacion();
-            pedir_accion(accion);
-            accion_jugador(procesar_accion(accion));
+        mostrar_controles();
+        niveles_completados = 0;
+        nueva_placa = nullptr;
+        cargar_nivel();
+        generar_pyramid_heads();
+        jugador.posicion() = INICIO;
+        puntaje_actual = 0;
+        juego_terminado = false;
+        borrar_armas();
 
-            if (hay_pyramid_head(jugador.posicion())) {
-                jugador.perder_arma_equipada();
-                pyramid_heads.clear();
-            }
-
-
-            if (jugador.posicion() == META) {
-                niveles_completados++;
-
-                if (niveles_completados < 5) {
-                    do {
-                        delete nueva_placa;
-                        nueva_placa = new Placa(generar_placa());
-                    } while (jugador.tiene_placa(nueva_placa));
-                    jugador.agregar_placa(nueva_placa);
-                    nueva_placa = nullptr;
-
-                    if (numero_aleatorio_entre(1, 100) <= 20) {
-                        auto potencia_arma = (size_t) numero_aleatorio_entre(10, 100);
-                        jugador.obtener_arma(Arma("Arma: " + to_string(potencia_arma), potencia_arma));
-                    }
-
-                    cargar_nivel();
-
-                    jugador.posicion() = CoordenadaMatriz(8, 0);
-
-                    generar_pyramid_heads();
-                } else {
-                    finalizado = true;
-                    std::cout << endl;
-                    std::cout << "Felicidades! Has completado los 5 niveles." << endl;
-                    std::cout << "Costo final: " << puntaje_actual << endl;
-                }
-            }
-            cout << endl;
+        for (size_t i = 0; i < CANTIDAD_INICIAL_DE_ARMAS; i++) {
+            potencia_del_arma = (size_t) numero_aleatorio_entre(MINIMA_POTENCIA_ARMA, MAXIMA_POTENCIA_ARMA);
+            jugador.obtener_arma({"Arma: " + to_string(potencia_del_arma), potencia_del_arma});
         }
+
+        while (!juego_terminado) {
+            if (calcular_camino_minimo(INICIO, META, jugador.cantidad_de_armas()).empty()) {
+                cout << "No es posible completar el nivel" << endl;
+                cout << "Perdiste :(" << endl;
+                juego_terminado = true;
+
+            } else {
+                imprimir_terreno(mostrar_camino_minimo);
+                mostrar_informacion();
+                pedir_accion(accion);
+                accion_jugador(procesar_accion(accion));
+
+                if (hay_pyramid_head(jugador.posicion())) {
+                    jugador.perder_arma_equipada();
+                    pyramid_heads.clear();
+                }
+
+
+                if (jugador.posicion() == META) {
+                    niveles_completados++;
+
+                    if (niveles_completados < 5) {
+                        do {
+                            delete nueva_placa;
+                            nueva_placa = new Placa(generar_placa());
+                        } while (jugador.tiene_placa(nueva_placa));
+                        jugador.agregar_placa(nueva_placa);
+                        nueva_placa = nullptr;
+
+                        if (numero_aleatorio_entre(1, 100) <= 20) {
+                            auto potencia_arma = (size_t) numero_aleatorio_entre(MINIMA_POTENCIA_ARMA, MAXIMA_POTENCIA_ARMA);
+                            jugador.obtener_arma(Arma("Arma: " + to_string(potencia_arma), potencia_arma));
+                        }
+
+                        cargar_nivel();
+
+                        jugador.posicion() = CoordenadaMatriz(8, 0);
+
+                        generar_pyramid_heads();
+                    } else {
+                        juego_terminado = true;
+                        std::cout << endl;
+                        std::cout << "Felicidades! Has completado los 5 niveles." << endl;
+                        std::cout << "Costo final: " << puntaje_actual << endl;
+                    }
+                }
+                cout << endl;
+            }
+        }
+        finalizado = seguir_jugando();
+        cout << endl;
     }
 }

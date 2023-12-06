@@ -134,6 +134,14 @@ private:
     // Pos: muestra la informacion del juego en pantalla
     static void mostrar_informacion();
 
+    // Pre: ~
+    // Pos: retorna true si el jugador quiere seguir jugando
+    static bool seguir_jugando();
+
+    // Pre: ~
+    //Pos: borra las armas en el inventario del jugador para que comience una nueva partida
+    static void borrar_armas();
+
 public:
 
     // Pre: ~
