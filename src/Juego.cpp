@@ -27,7 +27,8 @@ const unsigned short int Juego::DESEQUIPAR_ARMA = 6;
 const unsigned short int Juego::MOSTRAR_CAMINO_MINIMO = 7;
 const unsigned short int Juego::IMPRIMIR_CAMINO_MINIMO_GENERAL = 8;
 const unsigned short int Juego::COMPLETAR_NIVEL = 9;
-const unsigned short int Juego::NO_EXISTE = 10;
+const unsigned short int Juego::MOSTRAR_CONTROLES = 10;
+const unsigned short int Juego::NO_EXISTE = 11;
 
 const int Juego::COSTO_CAMINAR = 10;
 const int Juego::COSTO_CAMINAR_ADYACENTE = 50;
@@ -78,7 +79,10 @@ const map<string, unsigned short int> Juego::inputs_jugador = {
         pair<string, unsigned short int>("camino minimo general", IMPRIMIR_CAMINO_MINIMO_GENERAL),
 
         pair<string, unsigned short int>("x", COMPLETAR_NIVEL),
-        pair<string, unsigned short int>("completar nivel", COMPLETAR_NIVEL)
+        pair<string, unsigned short int>("completar nivel", COMPLETAR_NIVEL),
+
+        pair<string, unsigned short int>("c", MOSTRAR_CONTROLES),
+        pair<string, unsigned short int>("mostrar constroles", MOSTRAR_CONTROLES)
 };
 
 const CoordenadaMatriz Juego::INICIO = {8, 0};
@@ -130,7 +134,7 @@ Juego::calcular_camino_minimo_sin_armas(CoordenadaMatriz origen, CoordenadaMatri
     bool es_adyacente;
     bool pasa_por_adyacente;
 
-    size_t indice_ultimo_adyacente = 0;
+    size_t indice_primer_adyacente = 0;
 
     bool hubo_cambios;
 
@@ -143,13 +147,15 @@ Juego::calcular_camino_minimo_sin_armas(CoordenadaMatriz origen, CoordenadaMatri
             es_adyacente = es_adyacente_a_pyramid_head(camino_minimo.first[i]);
             if (es_adyacente) {
                 camino_minimo.second += COSTO_CAMINAR_ADYACENTE - COSTO_CAMINAR;
-                indice_ultimo_adyacente = i;
+                if(!pasa_por_adyacente){
+                    indice_primer_adyacente = i;
+                }
                 pasa_por_adyacente = true;
             }
         }
 
         if (pasa_por_adyacente) {
-            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[indice_ultimo_adyacente]);
+            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[indice_primer_adyacente]);
         }
 
         if (camino_minimo.second < mejor_camino_minimo.second) {
@@ -194,7 +200,7 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
         es_adyacente = false;
         hubo_cambios = false;
         pasa_por_adyacente = false;
-        size_t indice_ultimo_adyacente = 0;
+        size_t indice_primer_adyacente = 0;
 
         iterador_casillas = 0;
         while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
@@ -218,14 +224,20 @@ Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz 
                 if (!cantidad_armas_aux) {
                     camino_minimo.second += COSTO_CAMINAR_ADYACENTE - COSTO_CAMINAR;
                 }
+
+                if(!pasa_por_adyacente){
+                    indice_primer_adyacente = iterador_casillas;
+                }
+
                 pasa_por_adyacente = true;
-                indice_ultimo_adyacente = iterador_casillas;
+
+
             }
             iterador_casillas++;
         }
 
         if (pasa_por_adyacente) {
-            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[indice_ultimo_adyacente]);
+            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[indice_primer_adyacente]);
         }
 
         if (!hay_pyramid_head_en_casilla && camino_minimo.second < mejor_camino_minimo.second) {
@@ -277,7 +289,7 @@ void Juego::generar_pyramid_heads() {
     CoordenadaMatriz coordenada_pyramid_head;
 
     for (size_t i = 0; i < CANTIDAD_DE_PYRAMID_HEADS; i++) {
-        if (numero_aleatorio_entre(1, 100) <= 50) {
+        if (numero_aleatorio_entre(1, 100) <= 20) {
             do {
                 coordenada_pyramid_head = {(size_t) numero_aleatorio_entre(0, 8),
                                            (size_t) numero_aleatorio_entre(0, 8)};
@@ -321,6 +333,7 @@ void Juego::mostrar_controles() {
     cout << "f: mostrar camino minimo" << endl;
     cout << "z: mostrar mejor camino minimo general" << endl;
     cout << "x: completar nivel de ser posible" << endl;
+    cout << "c: mostrar controles" << endl;
     cout << endl;
 }
 
@@ -386,14 +399,20 @@ void Juego::accion_jugador(unsigned short int accion) {
 
         case EQUIPAR_ARMA_FUERTE:
             jugador.equipar_arma_fuerte();
+            cout << endl;
+            cout << "Equipaste tu arma mas fuerte" << endl;
             break;
 
         case EQUIPAR_ARMA_DEBIL:
             jugador.equipar_arma_debil();
+            cout << endl;
+            cout << "Equipaste tu arma mas debil" << endl;
             break;
 
         case DESEQUIPAR_ARMA:
             jugador.desequipar_arma();
+            cout << endl;
+            cout << "Desequipaste el arma" << endl;
             break;
 
         case MOSTRAR_CAMINO_MINIMO:
@@ -425,6 +444,11 @@ void Juego::accion_jugador(unsigned short int accion) {
                 jugador.posicion() = META;
             }
 
+            break;
+
+        case MOSTRAR_CONTROLES:
+            cout << endl;
+            mostrar_controles();
             break;
 
         default:
@@ -571,7 +595,7 @@ bool Juego::seguir_jugando() {
         }
 
         if(seguir_jugando != "no" && seguir_jugando != "si"){
-            cout << "Esa opcion no es válida" << endl;
+            cout << "Esa opcion no es valida" << endl;
         }
     }
 
@@ -636,6 +660,8 @@ void Juego::ejecutar() {
                 if (hay_pyramid_head(jugador.posicion())) {
                     jugador.perder_arma_equipada();
                     pyramid_heads.clear();
+                    cout << "Ahuyentaste a los pyramid heads" << endl;
+                    cout << "Perdiste un arma" << endl;
                 }
 
 

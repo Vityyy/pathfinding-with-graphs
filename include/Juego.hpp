@@ -30,6 +30,7 @@ private:
     static const unsigned short int MOSTRAR_CAMINO_MINIMO;
     static const unsigned short int IMPRIMIR_CAMINO_MINIMO_GENERAL;
     static const unsigned short int COMPLETAR_NIVEL;
+    static const unsigned short int MOSTRAR_CONTROLES;
     static const unsigned short int NO_EXISTE;
 
     static const int COSTO_CAMINAR;
