@@ -8,11 +8,13 @@
 class Menu {
 private:
 
-    static const unsigned int DESCIFRAR_MENSAJE;
-    static const unsigned int INVENTARIO_DE_PRIORIDAD;
-    static const unsigned int SALIR;
+    static const unsigned short int DESCIFRAR_MENSAJE;
+    static const unsigned short int INVENTARIO_DE_PRIORIDAD;
+    static const unsigned short int JUGAR_LABERINTO;
+    static const unsigned short int SALIR;
+    static const unsigned short int OPCION_INVALIDA;
 
-    static const std::map<std::string, unsigned int> opciones_menu;
+    static const std::map<std::string, unsigned short int> opciones_menu;
 
     // Pre: ~
     // Pos: imprime las opciones del menu
