@@ -172,101 +172,15 @@ Juego::calcular_camino_minimo_sin_armas(CoordenadaMatriz origen, CoordenadaMatri
     return ((mejor_camino_minimo.second <= INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
 }
 
-std::vector<CoordenadaMatriz>
-Juego::calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz destino, std::size_t cantidad_armas) {
-    Tablero tablero_de_juego_aux = tablero_de_juego;
-
-    size_t cantidad_armas_aux;
-
-    pair<vector<CoordenadaMatriz>, int> mejor_camino_minimo;
-    mejor_camino_minimo.second = INFINITO;
-
-    pair<vector<CoordenadaMatriz>, int> camino_minimo;
-    camino_minimo.second = INFINITO;
-
-    bool hay_pyramid_head_en_casilla;
-    bool paso_por_pyramid_head = false;
-    bool es_adyacente;
-    bool pasa_por_adyacente;
-    bool hubo_cambios;
-    bool camino_encontrado = false;
-
-    size_t iterador_casillas;
-
-    while (!camino_encontrado) {
-        camino_minimo = tablero_de_juego_aux.camino_minimo(origen, destino);
-        cantidad_armas_aux = cantidad_armas;
-        hay_pyramid_head_en_casilla = false;
-        es_adyacente = false;
-        hubo_cambios = false;
-        pasa_por_adyacente = false;
-        size_t indice_primer_adyacente = 0;
-
-        iterador_casillas = 0;
-        while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
-            hay_pyramid_head_en_casilla = hay_pyramid_head(camino_minimo.first[iterador_casillas]);
-            if (hay_pyramid_head_en_casilla) {
-                if (!cantidad_armas_aux && !paso_por_pyramid_head) {
-                    tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[iterador_casillas]);
-                } else {
-                    cantidad_armas_aux--;
-                    hay_pyramid_head_en_casilla = false;
-                    paso_por_pyramid_head = true;
-                }
-            }
-            iterador_casillas++;
-        }
-
-        iterador_casillas = 0;
-        while (iterador_casillas < camino_minimo.first.size() && !hay_pyramid_head_en_casilla) {
-            es_adyacente = es_adyacente_a_pyramid_head(camino_minimo.first[iterador_casillas]);
-            if (es_adyacente) {
-                if (!cantidad_armas_aux) {
-                    camino_minimo.second += COSTO_CAMINAR_ADYACENTE - COSTO_CAMINAR;
-                }
-
-                if(!pasa_por_adyacente){
-                    indice_primer_adyacente = iterador_casillas;
-                }
-
-                pasa_por_adyacente = true;
-
-
-            }
-            iterador_casillas++;
-        }
-
-        if (pasa_por_adyacente) {
-            tablero_de_juego_aux.desconectar_casilla(camino_minimo.first[indice_primer_adyacente]);
-        }
-
-        if (!hay_pyramid_head_en_casilla && camino_minimo.second < mejor_camino_minimo.second) {
-            mejor_camino_minimo = camino_minimo;
-            hubo_cambios = true;
-        }
-
-        if (!hay_pyramid_head_en_casilla && camino_minimo.second >= mejor_camino_minimo.second && !hubo_cambios) {
-            camino_encontrado = true;
-        }
-    }
-
-    costo_camino_minimo = (size_t) mejor_camino_minimo.second;
-    return ((mejor_camino_minimo.second <= INFINITO) ? (mejor_camino_minimo.first) : (vector<CoordenadaMatriz>()));
-}
-
 vector<CoordenadaMatriz>
 Juego::calcular_camino_minimo(CoordenadaMatriz origen, CoordenadaMatriz destino, size_t cantidad_armas) {
-    if (cantidad_armas >= pyramid_heads.size()) {
-        pair<vector<CoordenadaMatriz>, int> camino_minimo = tablero_de_juego.camino_minimo(origen, destino);
-        costo_camino_minimo = (size_t) camino_minimo.second;
-        return camino_minimo.first;
-    }
-
     if (cantidad_armas == 0) {
         return calcular_camino_minimo_sin_armas(origen, destino);
     }
 
-    return calcular_camino_minimo_general(origen, destino, cantidad_armas);
+    pair<vector<CoordenadaMatriz>, int> camino_minimo = tablero_de_juego.camino_minimo(origen, destino);
+    costo_camino_minimo = (size_t) camino_minimo.second;
+    return camino_minimo.first;
 }
 
 void Juego::cargar_nivel() {
@@ -640,10 +554,8 @@ void Juego::ejecutar() {
         juego_terminado = false;
         borrar_armas();
 
-        for (size_t i = 0; i < CANTIDAD_INICIAL_DE_ARMAS; i++) {
-            potencia_del_arma = (size_t) numero_aleatorio_entre(MINIMA_POTENCIA_ARMA, MAXIMA_POTENCIA_ARMA);
-            jugador.obtener_arma({"Arma: " + to_string(potencia_del_arma), potencia_del_arma});
-        }
+        potencia_del_arma = (size_t) numero_aleatorio_entre(MINIMA_POTENCIA_ARMA, MAXIMA_POTENCIA_ARMA);
+        jugador.obtener_arma({"Arma: " + to_string(potencia_del_arma), potencia_del_arma});
 
         while (!juego_terminado) {
             if (calcular_camino_minimo(INICIO, META, jugador.cantidad_de_armas()).empty()) {

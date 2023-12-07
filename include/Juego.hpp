@@ -47,8 +47,6 @@ private:
     static const int MINIMA_POTENCIA_ARMA;
     static const int MAXIMA_POTENCIA_ARMA;
 
-    static const int CANTIDAD_INICIAL_DE_ARMAS;
-
     static const std::map<std::string, unsigned short int> inputs_jugador;
 
     // Pre: ~
@@ -63,12 +61,6 @@ private:
     // Pos: devuelve el camino minimo desde origen hasta destino sin armas
     static std::vector<CoordenadaMatriz>
     calcular_camino_minimo_sin_armas(CoordenadaMatriz origen, CoordenadaMatriz destino);
-
-    // Pre: ~
-    // Pos: devuelve el camino minimo en general
-    // NOTA: sirve también para el caso sin armas y el caso con más o igual armas que pyramid heads pero es menos eficiente
-    static std::vector<CoordenadaMatriz>
-    calcular_camino_minimo_general(CoordenadaMatriz origen, CoordenadaMatriz destino, std::size_t cantidad_armas);
 
     // Pre: ~
     // Post: devuelve el camino minimo de una casilla a otra
@@ -146,7 +138,7 @@ private:
 public:
 
     // Pre: ~
-    // Pos: (cambiará en el futuro) calcula e imprime el camino minimo desde el inicio al final del nivel
+    // Pos: ejecuta y controla el flujo del juego
     static void ejecutar();
 
 };
