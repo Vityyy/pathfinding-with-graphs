@@ -7,19 +7,20 @@
 
 using namespace std;
 
-const unsigned int MenuDescifrarMensaje::DESCIFRAR_MENSAJE = 0;
-const unsigned int MenuDescifrarMensaje::IMPRIMIR_MENSAJE = 1;
-const unsigned int MenuDescifrarMensaje::VOLVER = 2;
+const unsigned short int MenuDescifrarMensaje::DESCIFRAR_MENSAJE = 0;
+const unsigned short int MenuDescifrarMensaje::IMPRIMIR_MENSAJE = 1;
+const unsigned short int MenuDescifrarMensaje::VOLVER = 2;
+const unsigned short int MenuDescifrarMensaje::OPCION_INVALIDA= 3;
 
-const map<string, unsigned int> MenuDescifrarMensaje::opciones_menu{
-        pair<string, unsigned int>("descifrar mensaje", DESCIFRAR_MENSAJE),
-        pair<string, unsigned int>("0", DESCIFRAR_MENSAJE),
+const map<string, unsigned short int> MenuDescifrarMensaje::opciones_menu{
+        pair<string, unsigned short int>("descifrar mensaje", DESCIFRAR_MENSAJE),
+        pair<string, unsigned short int>("0", DESCIFRAR_MENSAJE),
 
-        pair<string, unsigned int>("imprimir_mensaje", IMPRIMIR_MENSAJE),
-        pair<string, unsigned int>("1", IMPRIMIR_MENSAJE),
+        pair<string, unsigned short int>("imprimir_mensaje", IMPRIMIR_MENSAJE),
+        pair<string, unsigned short int>("1", IMPRIMIR_MENSAJE),
 
-        pair<string, unsigned int>("volver", VOLVER),
-        pair<string, unsigned int>("2", VOLVER)
+        pair<string, unsigned short int>("volver", VOLVER),
+        pair<string, unsigned short int>("2", VOLVER)
 };
 
 void MenuDescifrarMensaje::imprimir() {
@@ -39,7 +40,8 @@ unsigned int MenuDescifrarMensaje::procesar_opcion(string &opcion) {
         i = (char) tolower(i);
     }
 
-    return opciones_menu.find(opcion)->second;
+    auto opcion_procesada = opciones_menu.find(opcion);
+    return (opcion_procesada != opciones_menu.end()) ? (opcion_procesada->second) : (OPCION_INVALIDA);
 }
 
 void MenuDescifrarMensaje::descifrar_mensaje(string &mensaje_descifrado) {

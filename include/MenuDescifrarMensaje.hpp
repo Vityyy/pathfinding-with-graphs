@@ -7,11 +7,12 @@
 class MenuDescifrarMensaje {
 private:
 
-    static const unsigned int DESCIFRAR_MENSAJE;
-    static const unsigned int IMPRIMIR_MENSAJE;
-    static const unsigned int VOLVER;
+    static const unsigned short int DESCIFRAR_MENSAJE;
+    static const unsigned short int IMPRIMIR_MENSAJE;
+    static const unsigned short int VOLVER;
+    static const unsigned short int OPCION_INVALIDA;
 
-    static const std::map<std::string, unsigned int> opciones_menu;
+    static const std::map<std::string, unsigned short int> opciones_menu;
 
     // Pre: ~
     // Pos: imprime las opciones del menu de descifrado de mensaje
