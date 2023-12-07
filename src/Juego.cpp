@@ -44,8 +44,6 @@ const int Juego::FILA_INFERIOR = 10;
 const int Juego::MINIMA_POTENCIA_ARMA = 10;
 const int Juego::MAXIMA_POTENCIA_ARMA = 100;
 
-const int Juego::CANTIDAD_INICIAL_DE_ARMAS = 2;
-
 const map<string, unsigned short int> Juego::inputs_jugador = {
         pair<string, unsigned short int>("w", MOVER_ARRIBA),
         pair<string, unsigned short int>("arriba", MOVER_ARRIBA),
@@ -203,7 +201,7 @@ void Juego::generar_pyramid_heads() {
     CoordenadaMatriz coordenada_pyramid_head;
 
     for (size_t i = 0; i < CANTIDAD_DE_PYRAMID_HEADS; i++) {
-        if (numero_aleatorio_entre(1, 100) <= 20) {
+        if (numero_aleatorio_entre(1, 100) <= 50) {
             do {
                 coordenada_pyramid_head = {(size_t) numero_aleatorio_entre(0, 8),
                                            (size_t) numero_aleatorio_entre(0, 8)};
@@ -399,7 +397,7 @@ void Juego::imprimir_terreno_con_camino_minimo(const vector<CoordenadaMatriz> &c
                         cout << color::rize("J", "Light Yellow", "Blue", "Default", "Default") << " ";
 
                     } else if (hay_pyramid_head({i - 1, j})) {
-                        cout << color::rize("4", "Light Magenta", "Blue", "Default", "Default") << " ";
+                        cout << color::rize("▲", "Light Magenta", "Blue", "Default", "Default") << " ";
 
                     } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
                         cout << color::rize("F", "Light Green", "Blue", "Default", "Default") << " ";
@@ -415,7 +413,7 @@ void Juego::imprimir_terreno_con_camino_minimo(const vector<CoordenadaMatriz> &c
                         cout << color::rize("J", "Light Yellow", "Default", "Default", "Default") << " ";
 
                     } else if (hay_pyramid_head({i - 1, j})) {
-                        cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
+                        cout << color::rize("▲", "Light Magenta", "Default", "Default", "Default") << " ";
 
                     } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
                         cout << color::rize("F", "Light Green", "Default", "Default", "Default") << " ";
@@ -451,7 +449,7 @@ void Juego::imprimir_terreno_sin_camino_minimo() {
                     cout << color::rize("J", "Light Yellow", "Default", "Default", "Default") << " ";
 
                 } else if (hay_pyramid_head({i - 1, j})) {
-                    cout << color::rize("4", "Light Magenta", "Default", "Default", "Default") << " ";
+                    cout << color::rize("▲", "Light Magenta", "Default", "Default", "Default") << " ";
 
                 } else if (CoordenadaMatriz(i - 1, j) == CoordenadaMatriz(0, 8)) {
                     cout << color::rize("F", "Light Green", "Default", "Default", "Default") << " ";
@@ -501,7 +499,7 @@ bool Juego::seguir_jugando() {
     string seguir_jugando;
 
     while(seguir_jugando != "no" && seguir_jugando != "si"){
-        cout << "Quiere jugar otra vez?: ";
+        cout << "Quiere jugar otra vez? (si/no): ";
         getline(cin >> ws, seguir_jugando);
 
         for (char & letra : seguir_jugando) {

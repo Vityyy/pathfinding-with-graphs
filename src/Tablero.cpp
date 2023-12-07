@@ -85,7 +85,7 @@ void Tablero::cargar_nivel(const std::string &nombre_archivo) {
     ifstream archivo_nivel("layouts/" + nombre_archivo + ".csv");
 
     if (!archivo_nivel.is_open()) {
-        cout << "No se cargar el nivel" << endl;
+        cout << "No se pudo cargar el nivel" << endl;
         return;
     }
 
@@ -103,6 +103,8 @@ void Tablero::cargar_nivel(const std::string &nombre_archivo) {
     }
 
     conectar_vertices(casillas);
+
+    archivo_nivel.close();
 }
 
 void Tablero::desconectar_casilla(CoordenadaMatriz casilla) {
