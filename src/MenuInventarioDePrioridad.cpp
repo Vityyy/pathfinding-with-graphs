@@ -3,31 +3,32 @@
 
 using namespace std;
 
-const unsigned int MenuInventarioDePrioridad::ALTA = 0;
-const unsigned int MenuInventarioDePrioridad::BAJA_ARMA_FUERTE = 1;
-const unsigned int MenuInventarioDePrioridad::BAJA_ARMA_DEBIL = 2;
-const unsigned int MenuInventarioDePrioridad::CONSULTA_ARMA_FUERTE = 3;
-const unsigned int MenuInventarioDePrioridad::CONSULTA_ARMA_DEBIL = 4;
-const unsigned int MenuInventarioDePrioridad::VOLVER = 5;
+const unsigned short int MenuInventarioDePrioridad::ALTA = 0;
+const unsigned short int MenuInventarioDePrioridad::BAJA_ARMA_FUERTE = 1;
+const unsigned short int MenuInventarioDePrioridad::BAJA_ARMA_DEBIL = 2;
+const unsigned short int MenuInventarioDePrioridad::CONSULTA_ARMA_FUERTE = 3;
+const unsigned short int MenuInventarioDePrioridad::CONSULTA_ARMA_DEBIL = 4;
+const unsigned short int MenuInventarioDePrioridad::VOLVER = 5;
+const unsigned short int MenuInventarioDePrioridad::OPCION_INVALIDA = 6;
 
-const map<string, unsigned int> MenuInventarioDePrioridad::opciones_menu = {
-        pair<string, unsigned int>("alta", ALTA),
-        pair<string, unsigned int>("0", ALTA),
+const map<string, unsigned short int> MenuInventarioDePrioridad::opciones_menu = {
+        pair<string, unsigned short int>("alta", ALTA),
+        pair<string, unsigned short int>("0", ALTA),
 
-        pair<string, unsigned int>("baja arma fuerte", BAJA_ARMA_FUERTE),
-        pair<string, unsigned int>("1", BAJA_ARMA_FUERTE),
+        pair<string, unsigned short int>("baja arma fuerte", BAJA_ARMA_FUERTE),
+        pair<string, unsigned short int>("1", BAJA_ARMA_FUERTE),
 
-        pair<string, unsigned int>("baja arma debil", BAJA_ARMA_DEBIL),
-        pair<string, unsigned int>("2", BAJA_ARMA_DEBIL),
+        pair<string, unsigned short int>("baja arma debil", BAJA_ARMA_DEBIL),
+        pair<string, unsigned short int>("2", BAJA_ARMA_DEBIL),
 
-        pair<string, unsigned int>("consulta arma fuerte", CONSULTA_ARMA_FUERTE),
-        pair<string, unsigned int>("3", CONSULTA_ARMA_FUERTE),
+        pair<string, unsigned short int>("consulta arma fuerte", CONSULTA_ARMA_FUERTE),
+        pair<string, unsigned short int>("3", CONSULTA_ARMA_FUERTE),
 
-        pair<string, unsigned int>("consulta arma debil", CONSULTA_ARMA_DEBIL),
-        pair<string, unsigned int>("4", CONSULTA_ARMA_DEBIL),
+        pair<string, unsigned short int>("consulta arma debil", CONSULTA_ARMA_DEBIL),
+        pair<string, unsigned short int>("4", CONSULTA_ARMA_DEBIL),
 
-        pair<string, unsigned int>("volver", VOLVER),
-        pair<string, unsigned int>("5", VOLVER)
+        pair<string, unsigned short int>("volver", VOLVER),
+        pair<string, unsigned short int>("5", VOLVER)
 };
 
 void MenuInventarioDePrioridad::imprimir() {
@@ -50,7 +51,8 @@ unsigned int MenuInventarioDePrioridad::procesar_opcion(string &opcion) {
         i = (char) tolower(i);
     }
 
-    return opciones_menu.find(opcion)->second;
+    auto opcion_procesada = opciones_menu.find(opcion);
+    return (opcion_procesada != opciones_menu.end()) ? (opcion_procesada->second) : (OPCION_INVALIDA);
 }
 
 void MenuInventarioDePrioridad::pedir_arma(string &nombre_nuevo_arma, size_t &potencia_nuevo_arma) {

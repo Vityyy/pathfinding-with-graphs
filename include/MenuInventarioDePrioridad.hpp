@@ -8,16 +8,17 @@
 class MenuInventarioDePrioridad {
 private:
 
-    static const unsigned int ALTA;
-    static const unsigned int BAJA_ARMA_FUERTE;
-    static const unsigned int BAJA_ARMA_DEBIL;
-    static const unsigned int CONSULTA_ARMA_FUERTE;
-    static const unsigned int CONSULTA_ARMA_DEBIL;
-    static const unsigned int VOLVER;
+    static const unsigned short int ALTA;
+    static const unsigned short int BAJA_ARMA_FUERTE;
+    static const unsigned short int BAJA_ARMA_DEBIL;
+    static const unsigned short int CONSULTA_ARMA_FUERTE;
+    static const unsigned short int CONSULTA_ARMA_DEBIL;
+    static const unsigned short int VOLVER;
+    static const unsigned short int OPCION_INVALIDA;
 
     static const std::string MENSAJE_INVENTARIO_VACIO;
 
-    static const std::map<std::string, unsigned int> opciones_menu;
+    static const std::map<std::string, unsigned short int> opciones_menu;
 
     // Pre: ~
     // Pos: imprime las opciones del menu de inventario de prioridad
